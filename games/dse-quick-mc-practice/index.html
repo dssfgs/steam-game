@@ -42,6 +42,9 @@ th{background:#f0f0f5}
 .weak{color:#e53935;font-weight:600}
 .ok{color:#34a853;font-weight:600}
 .mid{color:#f57c00;font-weight:600}
+.topic-toggle{cursor:pointer;padding:4px 12px;border:1px solid #ccc;border-radius:16px;background:#fff;font-size:13px;margin-left:8px}
+#topicBox.collapsed{display:none}
+#totalLine.collapsed{display:none}
 </style>
 <script>
 window.MathJax={tex:{inlineMath:[['\\(','\\)']]}};
@@ -52,7 +55,10 @@ window.MathJax={tex:{inlineMath:[['\\(','\\)']]}};
 <h1>📝 MC 練習</h1>
 
 <div class="card">
-  <div style="margin-bottom:10px"><strong>選擇主題（可多選，做混合練習）</strong></div>
+  <div style="margin-bottom:10px">
+    <strong>選擇主題（可多選，做混合練習）</strong>
+    <button class="topic-toggle" id="topicToggle" onclick="toggleTopics()">收起 ▴</button>
+  </div>
   <div id="topicBox"></div>
   <div class="total-line" id="totalLine"></div>
   <div class="controls">
@@ -193,6 +199,16 @@ function toggleAll(){ const on=document.getElementById("topicAll").checked; docu
 function syncAll(){ const all=document.querySelectorAll(".topicChk"), checked=document.querySelectorAll(".topicChk:checked"); document.getElementById("topicAll").checked=(all.length===checked.length); }
 function selectedTopics(){ return Array.from(document.querySelectorAll(".topicChk:checked")).map(c=>c.value); }
 function updateTotal(){ const t=selectedTopics(); const total=QUESTIONS.filter(q=>t.includes(q.category)).length; document.getElementById("totalLine").textContent=t.length===0?"未選課題":("可出題數："+total); }
+
+/* ===== 收起／展開主題選擇 ===== */
+function toggleTopics(){
+  const box=document.getElementById("topicBox");
+  const line=document.getElementById("totalLine");
+  const btn=document.getElementById("topicToggle");
+  const collapsed=box.classList.toggle("collapsed");
+  line.classList.toggle("collapsed", collapsed);
+  btn.textContent=collapsed ? "展開 ▾" : "收起 ▴";
+}
 
 /* ===== 出題流程 ===== */
 function attachShuffle(q){ const idxs=shuffle([0,1,2,3]); q.order=idxs; q.answerPos=idxs.indexOf(q.answer); return q; }
