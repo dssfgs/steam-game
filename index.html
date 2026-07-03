@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>佛梁中學 STEAM 趣味互動遊戲</title>
+<style>
+  :root{
+    --primary:#1b6ca8; --primary-dark:#13507d; --accent:#f4a261;
+    --bg:#f4f7fb; --card:#ffffff; --text:#222; --muted:#667085;
+    --line:#d9e2ec; --shadow:0 4px 14px rgba(0,0,0,.08); --shadow-hover:0 10px 28px rgba(0,0,0,.16);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:"Noto Sans HK","Microsoft JhengHei","PingFang HK",sans-serif;background:var(--bg);color:var(--text);line-height:1.6}
+  header{background:linear-gradient(135deg,var(--primary),var(--primary-dark));color:#fff;padding:30px 20px;text-align:center}
+  header h1{font-size:1.7rem;margin-bottom:6px}
+  header p{font-size:.95rem;opacity:.9}
+  header a{color:#ffe;text-decoration:underline}
+  .wrap{max-width:1180px;margin:0 auto;padding:20px}
+
+  .filters{display:flex;flex-wrap:wrap;gap:8px;margin:20px 0 8px;align-items:center}
+  .filters select,.filters input,.filters button{padding:10px 12px;border:1px solid #cdd6e0;border-radius:10px;font-size:.95rem;background:#fff}
+  .filters input{flex:1;min-width:180px}
+  .filters button{cursor:pointer;background:var(--primary);color:#fff;border-color:var(--primary);white-space:nowrap}
+  .filters button:hover{background:var(--primary-dark)}
+  .count{width:100%;color:var(--muted);font-size:.88rem;margin-bottom:12px}
+  .count strong{color:var(--primary-dark)}
+
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:18px}
+  .card{position:relative;background:var(--card);border-radius:14px;overflow:hidden;box-shadow:var(--shadow);cursor:pointer;display:flex;flex-direction:column;transition:transform .15s,box-shadow .15s;border:1px solid rgba(0,0,0,.04)}
+  .card:hover,.card:focus{transform:translateY(-4px);box-shadow:var(--shadow-hover);outline:none}
+  .thumb{width:100%;aspect-ratio:16/9;object-fit:cover;background:#dce6f0;display:flex;align-items:center;justify-content:center;color:#7b8794;font-size:2.5rem;overflow:hidden}
+  .thumb img{width:100%;height:100%;object-fit:cover;display:block}
+  .card-body{padding:14px;flex:1;display:flex;flex-direction:column}
+  .badges{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px}
+  .badge{background:#e7f1f9;color:var(--primary-dark);font-size:.76rem;padding:3px 10px;border-radius:999px}
+  .badge.year{background:#fff3e0;color:#9a4f00}
+  .card h3{font-size:1.05rem;margin-bottom:6px}
+  .card .author{font-size:.8rem;color:var(--primary);margin-bottom:6px}
+  .card p{font-size:.88rem;color:var(--muted);flex:1}
+  .tags{display:flex;flex-wrap:wrap;gap:5px;margin-top:8px}
+  .tag{font-size:.72rem;background:#f2f4f7;color:#475467;padding:2px 7px;border-radius:999px}
+  .play{margin-top:10px;background:var(--accent);color:#fff;border:0;padding:8px;border-radius:8px;font-size:.9rem;cursor:pointer;text-align:center}
+
+  .empty{text-align:center;color:var(--muted);padding:50px 10px;grid-column:1/-1;background:#fff;border-radius:14px;border:1px dashed #ccd6e0}
+
+  .modal{position:fixed;inset:0;background:rgba(0,0,0,.72);display:none;flex-direction:column;z-index:50}
+  .modal.open{display:flex}
+  .modal-bar{display:flex;align-items:center;gap:10px;background:var(--primary-dark);color:#fff;padding:10px 14px;flex-wrap:wrap}
+  .modal-bar strong{flex:1;font-size:1rem;min-width:120px}
+  .modal-bar button{background:rgba(255,255,255,.18);color:#fff;border:0;padding:8px 12px;border-radius:8px;cursor:pointer;font-size:.88rem}
+  .modal-bar button:hover{background:rgba(255,255,255,.32)}
+  .loader{color:#fff;text-align:center;padding:40px;font-size:1.05rem;display:none}
+  .modal iframe{flex:1;width:100%;border:0;background:#fff}
+
+  footer{text-align:center;padding:24px;color:var(--muted);font-size:.85rem}
+  @media(max-width:480px){header h1{font-size:1.3rem}}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>🎮 佛梁中學 STEAM 趣味互動遊戲</h1>
+  <p>香海正覺蓮社佛教梁植偉中學　|　
+     <a href="https://www.blcwc.edu.hk/" target="_blank" rel="noopener">學校網站</a></p>
+</header>
+
+<div class="wrap">
+  <div class="filters">
+    <select id="subjectFilter"><option value="">全部科目</option></select>
+    <select id="sortBy">
+      <option value="date">排序：最新</option>
+      <option value="title">排序：標題 A→Z</option>
+      <option value="subject">排序：科目</option>
+    </select>
+    <input id="searchBox" type="search" placeholder="🔍 搜尋標題、簡介、學生姓名…">
+    <button id="shareAll" type="button">🔗 複製本頁連結</button>
+    <div class="count" id="count"></div>
+  </div>
+  <div class="grid" id="grid"><div class="empty">載入中…⏳</div></div>
+</div>
+
+<div class="modal" id="modal" aria-hidden="true">
+  <div class="modal-bar">
+    <strong id="modalTitle"></strong>
+    <button id="copyLink" type="button">🔗 複製遊戲連結</button>
+    <button id="openNew" type="button">↗ 新分頁開啟</button>
+    <button id="closeModal" type="button">✕ 關閉</button>
+  </div>
+  <div id="iframeLoader" class="loader">⏳ 遊戲載入中，請稍候…</div>
+  <iframe id="gameFrame" src="" title="遊戲畫面" allowfullscreen
+          sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-pointer-lock allow-downloads"></iframe>
+</div>
+
+<footer>
+  © <span id="year"></span> 香海正覺蓮社佛教梁植偉中學 · STEAM 教育課程<br>
+  本頁面適用於 HKDSE 師生 · 響應式設計
+</footer>
+
+<script>
+const SUBJECTS = [
+  "中國語文","英國語文","數學","數學 M1","數學 M2","公民與社會發展",
+  "生物","化學","物理",
+  "企業、會計與財務概論 (BAFS)","經濟","旅遊與款待",
+  "中國歷史","地理","歷史","倫理與宗教",
+  "中國文學","英語文學","音樂","視覺藝術","體育",
+  "設計與應用科技","資訊及通訊科技 (ICT)","科技與生活","健康管理與社會關懷"
+];
+
+const grid = document.getElementById('grid');
+const subjectFilter = document.getElementById('subjectFilter');
+const sortBy = document.getElementById('sortBy');
+const searchBox = document.getElementById('searchBox');
+const modal = document.getElementById('modal');
+const gameFrame = document.getElementById('gameFrame');
+const iframeLoader = document.getElementById('iframeLoader');
+const modalTitle = document.getElementById('modalTitle');
+let games = [];
+
+document.getElementById('year').textContent = new Date().getFullYear();
+SUBJECTS.forEach(s=>{ const o=document.createElement('option');o.value=s;o.textContent=s;subjectFilter.appendChild(o); });
+
+fetch('games.json')
+  .then(r=>{ if(!r.ok) throw new Error('讀取 games.json 失敗'); return r.json(); })
+  .then(data=>{ games = Array.isArray(data)?data:(data.games||[]); addExtraSubjects(); render(); handleDeepLink(); })
+  .catch(err=>{
+    grid.innerHTML = '<div class="empty">⚠️ 無法載入 games.json：'+err.message+
+      '<br><br>💡 請確認 games.json 與 index.html 在同一資料夾，並用伺服器（Live Server / GitHub Pages）開啟，不要直接雙擊。</div>';
+  });
+
+function addExtraSubjects(){
+  const extra = new Set();
+  games.forEach(g=>{ (Array.isArray(g.subject)?g.subject:[g.subject]).forEach(s=>{ if(s && !SUBJECTS.includes(s)) extra.add(s); }); });
+  extra.forEach(s=>{ const o=document.createElement('option');o.value=s;o.textContent=s;subjectFilter.appendChild(o); });
+}
+
+function gamePath(g){ return g.url ? g.url : 'games/'+(g.folder||g.id)+'/index.html'; }
+
+function render(){
+  const subj = subjectFilter.value;
+  const kw = searchBox.value.trim().toLowerCase();
+  let list = games.filter(g=>{
+    const subs = Array.isArray(g.subject)?g.subject:[g.subject];
+    const okSubj = !subj || subs.includes(subj);
+    const text = [g.title,g.desc,g.author,(g.tags||[]).join(' '),subs.join(' ')].join(' ').toLowerCase();
+    const okKw = !kw || text.includes(kw);
+    return okSubj && okKw;
+  });
+
+  list.sort((a,b)=>{
+    if(sortBy.value==='title') return (a.title||'').localeCompare(b.title||'','zh-Hant');
+    if(sortBy.value==='subject'){
+      const sa=Array.isArray(a.subject)?a.subject[0]:(a.subject||'');
+      const sb=Array.isArray(b.subject)?b.subject[0]:(b.subject||'');
+      return sa.localeCompare(sb,'zh-Hant');
+    }
+    return (b.updated||b.year||'').localeCompare(a.updated||a.year||'');
+  });
+
+  document.getElementById('count').innerHTML = '共 <strong>'+list.length+'</strong> / '+games.length+' 個遊戲';
+
+  if(!list.length){ grid.innerHTML='<div class="empty">沒有符合條件的遊戲 🙈</div>'; return; }
+
+  grid.innerHTML='';
+  list.forEach(g=>{
+    const subjLabel = Array.isArray(g.subject)?g.subject.join(' · '):(g.subject||'其他');
+    const card=document.createElement('div');
+    card.className='card'; card.tabIndex=0; card.setAttribute('role','button');
+    card.innerHTML = `
+      ${g.thumb
+        ? `<div class="thumb"><img src="${g.thumb}" alt="${g.title||''}" loading="lazy"
+             onerror="this.parentNode.textContent='🎲'"></div>`
+        : `<div class="thumb">🎲</div>`}
+      <div class="card-body">
+        <div class="badges">
+          <span class="badge">${subjLabel}</span>
+          ${g.year?`<span class="badge year">${g.year}</span>`:''}
+        </div>
+        <h3>${g.title||'未命名遊戲'}</h3>
+        ${g.author?`<div class="author">👤 ${g.author}</div>`:''}
+        <p>${g.desc||''}</p>
+        ${(g.tags&&g.tags.length)?`<div class="tags">${g.tags.map(t=>`<span class="tag">#${t}</span>`).join('')}</div>`:''}
+        <div class="play">▶ 立即遊玩</div>
+      </div>`;
+    const open=()=>openGame(g);
+    card.addEventListener('click',open);
+    card.addEventListener('keydown',e=>{ if(e.key==='Enter'||e.key===' '){e.preventDefault();open();} });
+    grid.appendChild(card);
+  });
+}
+
+function openGame(g){
+  const path = gamePath(g);
+  modalTitle.textContent = g.title||'遊戲';
+  iframeLoader.style.display='block';
+  gameFrame.style.opacity='0';
+  gameFrame.src = path;
+  modal.classList.add('open');
+  modal.setAttribute('aria-hidden','false');
+  document.body.style.overflow='hidden';
+
+  document.getElementById('openNew').onclick=()=>window.open(path,'_blank','noopener');
+  document.getElementById('copyLink').onclick=async()=>{
+    const link=shareLink(g);
+    try{ await navigator.clipboard.writeText(link); alert('已複製遊戲連結：\n'+link); }
+    catch(e){ prompt('請複製此連結：',link); }
+  };
+
+  const url=new URL(location.href); url.searchParams.set('game',g.id||g.folder);
+  history.replaceState(null,'',url.toString());
+}
+
+gameFrame.onload=function(){
+  if(gameFrame.src && gameFrame.src!==location.href){ iframeLoader.style.display='none'; gameFrame.style.opacity='1'; }
+};
+
+function closeGame(){
+  modal.classList.remove('open'); modal.setAttribute('aria-hidden','true');
+  gameFrame.src=''; document.body.style.overflow='';
+  const url=new URL(location.href); url.searchParams.delete('game');
+  history.replaceState(null,'',url.toString());
+}
+
+function shareLink(g){ const url=new URL(location.href); url.searchParams.set('game',g.id||g.folder); return url.toString(); }
+
+function handleDeepLink(){
+  const id=new URLSearchParams(location.search).get('game');
+  if(!id) return;
+  const g=games.find(x=>(x.id||x.folder)===id);
+  if(g) openGame(g);
+}
+
+document.getElementById('closeModal').addEventListener('click',closeGame);
+document.getElementById('shareAll').addEventListener('click',async()=>{
+  try{ await navigator.clipboard.writeText(location.origin+location.pathname); alert('已複製本頁連結'); }
+  catch(e){ prompt('請複製本頁連結：',location.origin+location.pathname); }
+});
+modal.addEventListener('click',e=>{ if(e.target===modal) closeGame(); });
+subjectFilter.addEventListener('change',render);
+sortBy.addEventListener('change',render);
+searchBox.addEventListener('input',render);
+document.addEventListener('keydown',e=>{ if(e.key==='Escape'&&modal.classList.contains('open'))closeGame(); });
+</script>
+</body>
+</html>

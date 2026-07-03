@@ -1,0 +1,12 @@
+[{
+  "id": "dse-quick-mc-practice",
+  "folder": "dse-quick-mc-practice",
+  "title": "數學 MC 練習系統",
+  "subject": "數學",
+  "author": "GRF(teacher)",
+  "year": "2026",
+  "tags": ["選擇題", "計時", "錯題重溫", "成績分析"],
+  "desc": "學生自製的多選題練習系統，支援計時、錯題重溫、按科目分析，並可上傳成績到老師 Google Sheet。",
+  "thumb": "games/dse-quick-mc-practice/thumb.png",
+  "updated": "2026-07-03"
+}]

@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MC 練習</title>
+<style>
+body{font-family:-apple-system,"Microsoft JhengHei",sans-serif;max-width:720px;margin:0 auto;padding:16px;background:#f5f5f7;color:#1d1d1f}
+h1{font-size:22px}
+.card{background:#fff;border-radius:12px;padding:20px;box-shadow:0 1px 4px rgba(0,0,0,.08);margin-bottom:16px}
+.cat{color:#666;font-size:13px;margin-bottom:6px}
+.q{font-size:18px;font-weight:600;margin-bottom:14px;white-space:pre-wrap}
+.opt{display:block;width:100%;text-align:left;padding:12px 14px;margin:8px 0;border:1px solid #ccc;border-radius:10px;background:#fff;cursor:pointer;font-size:16px}
+.opt:hover{background:#f0f0f5}
+.opt.correct{background:#d8f5d8;border-color:#4caf50}
+.opt.wrong{background:#ffd8d8;border-color:#e53935}
+.opt:disabled{cursor:default}
+.controls{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:16px}
+button.act{padding:10px 16px;border:none;border-radius:10px;background:#0071e3;color:#fff;font-size:15px;cursor:pointer}
+button.act.gray{background:#8e8e93}
+button.act.red{background:#e53935}
+button.act.green{background:#34a853}
+.progress{font-size:14px;color:#555;margin-bottom:8px}
+.explain{margin-top:12px;font-size:14px;color:#444;background:#fafafa;padding:10px;border-radius:8px;white-space:pre-wrap}
+select{padding:8px;border-radius:8px;border:1px solid #ccc;font-size:15px}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th,td{border:1px solid #e0e0e0;padding:6px 8px;text-align:center}
+th{background:#f0f0f5}
+.hist-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+#topicBox{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:10px}
+#topicBox label{background:#f0f0f5;padding:6px 12px;border-radius:20px;font-size:14px;cursor:pointer}
+#topicBox input{margin-right:4px}
+.cnt{color:#0071e3;font-weight:600}
+.total-line{font-size:13px;color:#555;margin-bottom:10px}
+.field{margin-bottom:10px}
+.field label{display:block;margin-bottom:4px;font-size:14px}
+.field input{width:100%;padding:8px;border-radius:8px;border:1px solid #ccc;font-size:15px;box-sizing:border-box}
+#uploadStatus{margin-top:10px;font-size:13px;color:#555;white-space:pre-wrap}
+.review-wrong{border-left:4px solid #e53935}
+.chosen{color:#e53935;font-size:14px;margin:4px 0}
+.rightans{color:#34a853;font-size:14px;margin:4px 0}
+.weak{color:#e53935;font-weight:600}
+.ok{color:#34a853;font-weight:600}
+.mid{color:#f57c00;font-weight:600}
+</style>
+<script>
+window.MathJax={tex:{inlineMath:[['\\(','\\)']]}};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" async></script>
+</head>
+<body>
+<h1>📝 MC 練習</h1>
+
+<div class="card">
+  <div style="margin-bottom:10px"><strong>選擇主題（可多選，做混合練習）</strong></div>
+  <div id="topicBox"></div>
+  <div class="total-line" id="totalLine"></div>
+  <div class="controls">
+    <label>題數：
+      <select id="countSelect">
+        <option value="10">10 題</option>
+        <option value="15">15 題</option>
+        <option value="20">20 題</option>
+        <option value="all">全部</option>
+      </select>
+    </label>
+    <button class="act" onclick="startNormal()">開始練習</button>
+    <button class="act gray" onclick="startWrong()">錯題重溫 (<span id="wrongCount">0</span>)</button>
+    <button class="act green" onclick="renderAnalysisPage()">📊 我的分析</button>
+  </div>
+  <div class="progress" id="progress"></div>
+  <div class="progress" id="scoreBar"></div>
+  <div class="progress" id="timerBar"></div>
+</div>
+
+<div id="quiz"></div>
+
+<div class="card" id="uploadCard" style="display:none">
+  <div style="margin-bottom:10px"><strong>學生資料與成績上傳</strong></div>
+  <div class="field"><label>姓名：</label><input id="stuName" type="text" placeholder=""></div>
+  <div class="field"><label>班別（例如：1A、2B、3C）：</label><input id="stuClass" type="text" placeholder="1A"></div>
+  <div class="field"><label>學號：</label><input id="stuNo" type="text" placeholder=""></div>
+  <button class="act green" onclick="uploadResultToSheet()">上傳本次作答成績到老師 Google Sheet</button>
+  <div id="uploadStatus"></div>
+</div>
+
+<div class="card">
+  <div class="hist-head"><strong>📈 歷史紀錄</strong><button class="act red" onclick="clearHistory()">清空紀錄</button></div>
+  <div id="historyBox"></div>
+</div>
+
+<script src="questions.js"></script>
+<script>
+let pool, idx = 0, mode = "normal", curCat = "";
+let wrongMap = loadWrong();          // { id: {streak, wrongCount, lastWrong} }
+let history = loadHistory();
+let answered = 0, correct = 0;
+let startTime = 0, elapsed = 0, timerId = null;
+let sessionLog = [];
+let qStart = 0;
+const MASTERSTREAK = 2;
+
+function typeset(){ if(window.MathJax && MathJax.typesetPromise) MathJax.typesetPromise(); }
+function fmt(sec){ const m=Math.floor(sec/60), s=sec%60; return (m>0? m+"分":"")+s+"秒"; }
+function shuffle(arr){ const a=arr.slice(); for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];} return a; }
+
+/* ===== 題庫 ID 與驗證 ===== */
+function makeId(q,i){ let s=q.category+q.question, h=0; for(let c=0;c<s.length;c++){h=(h*31+s.charCodeAt(c))|0;} return "q"+Math.abs(h).toString(36)+"-"+i; }
+function keyOf(q){ return q.id; }
+function validateBank(list){
+  const errs=[], ids=new Set(), qmap=new Map();
+  list.forEach((q,i)=>{
+    if(!q.id) q.id=makeId(q,i);
+    if(ids.has(q.id)) errs.push(i+": 重複 id "+q.id); ids.add(q.id);
+    if(!Array.isArray(q.options)||q.options.length!==4) errs.push(i+" "+q.id+": options 非 4");
+    if(!Number.isInteger(q.answer)||q.answer<0||q.answer>3) errs.push(i+" "+q.id+": answer 需 0-3，現為 "+q.answer);
+    if(!q.explain) errs.push(i+" "+q.id+": 缺 explain");
+    if(!q.category) errs.push(i+" "+q.id+": 缺 category");
+    const o=(q.question.match(/\\\(/g)||[]).length, c2=(q.question.match(/\\\)/g)||[]).length;
+    if(o!==c2) errs.push(i+" "+q.id+": LaTeX 括號不對稱");
+    const k=q.category+"|"+q.question;
+    if(qmap.has(k)) errs.push(i+" 與 "+qmap.get(k)+" 重複"); else qmap.set(k,i);
+  });
+  if(errs.length) console.warn(errs.join("\n")); else console.log("題庫 OK，共 "+list.length+" 題");
+  return errs;
+}
+
+/* ===== 錯題本 ===== */
+function loadWrong(){ try{ return JSON.parse(localStorage.getItem("mc_wrong2"))||{}; }catch(e){ return {}; } }
+function saveWrong(){ localStorage.setItem("mc_wrong2",JSON.stringify(wrongMap)); const el=document.getElementById("wrongCount"); if(el) el.textContent=Object.keys(wrongMap).length; }
+function markAnswer(q,correctChosen){
+  const id=keyOf(q); let rec=wrongMap[id]||{streak:0,wrongCount:0,lastWrong:null};
+  if(correctChosen){
+    if(wrongMap[id]){ rec.streak++; if(rec.streak>=MASTERSTREAK) delete wrongMap[id]; else wrongMap[id]=rec; }
+  } else {
+    rec.streak=0; rec.wrongCount++; rec.lastWrong=new Date().toISOString(); wrongMap[id]=rec;
+  }
+  saveWrong();
+}
+
+/* ===== 歷史紀錄 ===== */
+function loadHistory(){ try{ return JSON.parse(localStorage.getItem("mc_history"))||[]; }catch(e){ return []; } }
+function saveHistory(){ localStorage.setItem("mc_history",JSON.stringify(history)); }
+function addHistory(){
+  if(answered===0) return;
+  const n=new Date();
+  const stamp=n.getFullYear()+"-"+String(n.getMonth()+1).padStart(2,"0")+"-"+String(n.getDate()).padStart(2,"0")+" "+String(n.getHours()).padStart(2,"0")+":"+String(n.getMinutes()).padStart(2,"0");
+  const rate=answered===0?0:Math.round(correct/answered*100);
+  history.unshift({timestamp:stamp,mode:mode==="wrong"?"錯題":"練習",cat:mode==="wrong"?"錯題重溫":curCat,correct:correct,total:answered,rate:rate,secs:elapsed});
+  saveHistory(); renderHistory();
+}
+function clearHistory(){ if(!confirm("確定清空歷史紀錄？")) return; history=[]; saveHistory(); renderHistory(); }
+function renderHistory(){
+  const box=document.getElementById("historyBox");
+  if(history.length===0){ box.innerHTML='<div style="color:#888">尚無紀錄</div>'; return; }
+  let trend="";
+  if(history.length>=2){
+    const d=history[0].rate-history[1].rate;
+    if(d>0) trend='<div style="color:#2e7d32;margin-bottom:8px">▲ 較上次進步 '+d+'%</div>';
+    else if(d<0) trend='<div style="color:#c62828;margin-bottom:8px">▼ 較上次退步 '+(-d)+'%</div>';
+    else trend='<div style="color:#666;margin-bottom:8px">＝ 與上次相同</div>';
+  }
+  const rows=history.map(h=>'<tr><td>'+h.timestamp+'</td><td>'+h.mode+'</td><td>'+h.cat+'</td><td>'+h.correct+'/'+h.total+'</td><td>'+h.rate+'%</td><td>'+fmt(h.secs)+'</td></tr>').join("");
+  box.innerHTML=trend+'<table><tr><th>時間</th><th>模式</th><th>課題</th><th>得分</th><th>正確率</th><th>用時</th></tr>'+rows+'</table>';
+}
+
+/* ===== 計時與計分 ===== */
+function startTimer(){ startTime=Date.now(); elapsed=0; clearInterval(timerId); timerId=setInterval(()=>{ elapsed=Math.floor((Date.now()-startTime)/1000); document.getElementById("timerBar").textContent="⏱ "+fmt(elapsed); },1000); document.getElementById("timerBar").textContent="⏱ 0秒"; }
+function stopTimer(){ clearInterval(timerId); timerId=null; elapsed=Math.floor((Date.now()-startTime)/1000); }
+function updateScore(){ const rate=answered===0?0:Math.round(correct/answered*100); document.getElementById("scoreBar").textContent="得分："+correct+"/"+answered+"（"+rate+"%）"; }
+
+/* ===== 學習統計（本機，按課題累積） ===== */
+function loadStats(){ try{ return JSON.parse(localStorage.getItem('mc_stats'))||{}; }catch(e){ return {}; } }
+function saveStats(s){ localStorage.setItem('mc_stats',JSON.stringify(s)); }
+function updateStats(category, correctChosen, sec){
+  const s=loadStats();
+  const c=s[category]||{attempts:0,correct:0,totalSec:0,lastSeen:null};
+  c.attempts++; if(correctChosen) c.correct++; c.totalSec+=(sec||0); c.lastSeen=new Date().toISOString();
+  s[category]=c; saveStats(s);
+}
+
+/* ===== 主題選擇 ===== */
+function countByCat(){ const m={}; QUESTIONS.forEach(q=>{ m[q.category]=(m[q.category]||0)+1; }); return m; }
+function initCategories(){
+  if(typeof QUESTIONS==="undefined"){ document.body.innerHTML="<h2>找不到 questions.js</h2>"; return; }
+  validateBank(QUESTIONS);
+  const counts=countByCat(), cats=Object.keys(counts), box=document.getElementById("topicBox");
+  box.innerHTML='<label><input type="checkbox" id="topicAll" checked onchange="toggleAll()">全選</label>'+
+    cats.map(c=>'<label><input type="checkbox" class="topicChk" value="'+c+'" checked onchange="syncAll();updateTotal()">'+c+' <span class="cnt">'+counts[c]+'</span></label>').join("");
+  saveWrong(); renderHistory(); updateTotal(); updateScore();
+}
+function toggleAll(){ const on=document.getElementById("topicAll").checked; document.querySelectorAll(".topicChk").forEach(c=>c.checked=on); updateTotal(); }
+function syncAll(){ const all=document.querySelectorAll(".topicChk"), checked=document.querySelectorAll(".topicChk:checked"); document.getElementById("topicAll").checked=(all.length===checked.length); }
+function selectedTopics(){ return Array.from(document.querySelectorAll(".topicChk:checked")).map(c=>c.value); }
+function updateTotal(){ const t=selectedTopics(); const total=QUESTIONS.filter(q=>t.includes(q.category)).length; document.getElementById("totalLine").textContent=t.length===0?"未選課題":("可出題數："+total); }
+
+/* ===== 出題流程 ===== */
+function attachShuffle(q){ const idxs=shuffle([0,1,2,3]); q.order=idxs; q.answerPos=idxs.indexOf(q.answer); return q; }
+function beginSession(list){ pool=list.map(attachShuffle); idx=0; answered=0; correct=0; sessionLog=[]; updateScore(); startTimer(); render(); }
+function startNormal(){
+  mode="normal"; document.getElementById("uploadCard").style.display="none";
+  const st=document.getElementById("uploadStatus"); if(st) st.textContent="";
+  const topics=selectedTopics(); if(topics.length===0){ alert("請至少選一個課題"); return; }
+  const allCats=Object.keys(countByCat());
+  curCat=topics.length===1?topics[0]:(topics.length===allCats.length?"全部混合":topics.join("、"));
+  let list=shuffle(QUESTIONS.filter(q=>topics.includes(q.category)));
+  const want=document.getElementById("countSelect").value;
+  if(want!=="all"){ const n=parseInt(want,10); if(list.length<n){ alert("題目不足，只有 "+list.length+" 題"); } list=list.slice(0,n); }
+  beginSession(list);
+}
+function startWrong(){
+  mode="wrong"; document.getElementById("uploadCard").style.display="none";
+  const st=document.getElementById("uploadStatus"); if(st) st.textContent="";
+  let list=QUESTIONS.filter(q=>wrongMap[keyOf(q)]);
+  if(list.length===0){ alert("目前沒有錯題"); return; }
+  curCat="錯題重溫"; beginSession(shuffle(list));
+}
+function render(){
+  const quiz=document.getElementById("quiz");
+  if(idx>=pool.length){ stopTimer(); addHistory(); renderReview(); return; }
+  const q=pool[idx];
+  document.getElementById("progress").textContent="第 "+(idx+1)+" / "+pool.length+" 題"+(mode==="wrong"?"（錯題重溫）":"");
+  let html='<div class="card"><div class="cat">'+q.category+'</div><div class="q">'+q.question+'</div>';
+  q.order.forEach((origIdx,pos)=>{ html+='<button class="opt" onclick="answer('+pos+',this)">'+q.options[origIdx]+'</button>'; });
+  html+='<div id="exp"></div></div>';
+  quiz.innerHTML=html; qStart=Date.now(); typeset();
+}
+function answer(pos,btn){
+  const q=pool[idx];
+  const buttons=document.querySelectorAll(".opt");
+  buttons.forEach((b,i)=>{ b.disabled=true; if(i===q.answerPos) b.classList.add("correct"); });
+  const correctChosen=(pos===q.answerPos);
+  if(!correctChosen) btn.classList.add("wrong");
+  answered++; if(correctChosen) correct++;
+  markAnswer(q,correctChosen); updateScore();
+  const sec=Math.max(0,Math.round((Date.now()-qStart)/1000));
+  sessionLog.push({id:q.id,category:q.category,question:q.question,chosenOrig:q.order[pos],answerOrig:q.answer,correct:correctChosen,sec:sec});
+  updateStats(q.category, correctChosen, sec);   // ← 新增：累積各課題統計
+  if(q.explain) document.getElementById("exp").innerHTML='<div class="explain"><strong>解說</strong><br>'+q.explain+'</div>';
+  typeset();
+  const card=document.getElementById("quiz").querySelector(".card");
+  const nextBtn=document.createElement("button"); nextBtn.className="act"; nextBtn.style.marginTop="12px";
+  nextBtn.textContent=idx+1<pool.length?"下一題":"完成"; nextBtn.onclick=()=>{ idx++; render(); };
+  card.appendChild(nextBtn);
+}
+function renderReview(){
+  const rate=answered?Math.round(correct/answered*100):0;
+  const avg=answered?Math.round(sessionLog.reduce((s,r)=>s+r.sec,0)/answered):0;
+  const byCat={};
+  sessionLog.forEach(r=>{ const c=byCat[r.category]||(byCat[r.category]={n:0,ok:0,sec:0}); c.n++; if(r.correct) c.ok++; c.sec+=r.sec; });
+  const catRows=Object.entries(byCat).map(([c,v])=>{
+    const rr=Math.round(v.ok/v.n*100);
+    const tag=rr<60?'<span class="weak">弱</span>':rr<80?'<span class="mid">中</span>':'<span class="ok">強</span>';
+    return '<tr><td>'+c+'</td><td>'+v.ok+'/'+v.n+'</td><td>'+rr+'%</td><td>'+Math.round(v.sec/v.n)+'s</td><td>'+tag+'</td></tr>';
+  }).join("");
+  const wrongItems=sessionLog.filter(r=>!r.correct).map(r=>{
+    const q=QUESTIONS.find(x=>x.id===r.id);
+    return '<div class="card review-wrong"><div class="cat">'+r.category+'</div><div class="q">'+r.question+'</div>'+
+      '<div class="chosen">你選：'+q.options[r.chosenOrig]+'</div>'+
+      '<div class="rightans">正解：'+q.options[r.answerOrig]+'</div>'+
+      (q.explain?'<div class="explain"><strong>解說</strong><br>'+q.explain+'</div>':'')+'</div>';
+  }).join("");
+  let html='<div class="card"><h2 style="margin-top:0">📋 本次結果</h2>'+
+    '<div class="q">答對 '+correct+'/'+answered+'（'+rate+'%）</div>'+
+    '<div class="progress">用時 '+fmt(elapsed)+'，平均每題 '+avg+'s</div>'+
+    '<h3>各課題表現</h3><table><tr><th>課題</th><th>答對</th><th>正確率</th><th>平均</th><th>評級</th></tr>'+catRows+'</table>'+
+    '<div style="margin-top:14px;display:flex;gap:8px;flex-wrap:wrap">'+
+    (wrongItems?'<button class="act gray" onclick="redoSessionWrong()">重做本次錯題 ('+sessionLog.filter(r=>!r.correct).length+')</button>':'')+
+    '<button class="act" onclick="backHome()">返回首頁</button></div></div>';
+  html+=wrongItems?'<h3 style="margin:8px 4px">錯題回顧</h3>'+wrongItems:'<div class="card ok" style="text-align:center">全對，太厲害了！</div>';
+  document.getElementById("quiz").innerHTML=html;
+  document.getElementById("uploadCard").style.display="block";
+  document.getElementById("progress").textContent="";
+  typeset();
+}
+function redoSessionWrong(){
+  const ids=new Set(sessionLog.filter(r=>!r.correct).map(r=>r.id));
+  const list=QUESTIONS.filter(q=>ids.has(q.id));
+  if(list.length===0){ alert("沒有錯題"); return; }
+  mode="normal"; curCat="重做錯題"; document.getElementById("uploadCard").style.display="none";
+  beginSession(shuffle(list));
+}
+function backHome(){
+  document.getElementById("quiz").innerHTML="";
+  document.getElementById("progress").textContent="";
+  document.getElementById("scoreBar").textContent="";
+  document.getElementById("timerBar").textContent="";
+  document.getElementById("uploadCard").style.display="none";
+  window.scrollTo(0,0);
+}
+
+/* ===== 我的學習分析頁 ===== */
+function renderAnalysisPage(){
+  const quiz=document.getElementById("quiz");
+  document.getElementById("uploadCard").style.display="none";
+  document.getElementById("progress").textContent="";
+  document.getElementById("scoreBar").textContent="";
+  document.getElementById("timerBar").textContent="";
+
+  const stats=loadStats();
+  const cats=Object.keys(stats);
+  if(!cats.length){
+    quiz.innerHTML='<div class="card"><h2 style="margin-top:0">📊 我的學習分析</h2>'+
+      '<p>暫時未有足夠作答紀錄。先完成一次練習，系統便會分析你的強項和弱項。</p>'+
+      '<button class="act" onclick="backHome()">返回</button></div>';
+    window.scrollTo(0,0); return;
+  }
+
+  const rows=cats.map(cat=>{
+    const v=stats[cat];
+    const rate=v.attempts?Math.round(v.correct/v.attempts*100):0;
+    const avg=v.attempts?Math.round(v.totalSec/v.attempts):0;
+    return {cat,rate,attempts:v.attempts,avg,wrongBook:0};
+  });
+
+  const wrongByCat={};
+  Object.keys(wrongMap||{}).forEach(id=>{ const q=QUESTIONS.find(x=>x.id===id); if(q) wrongByCat[q.category]=(wrongByCat[q.category]||0)+1; });
+  rows.forEach(r=>{ r.wrongBook=wrongByCat[r.cat]||0; });
+
+  rows.forEach(r=>{
+    if(r.attempts<5){ r.cls="mid"; r.tag="資料不足"; }
+    else if(r.rate>=80 && r.wrongBook<=1){ r.cls="ok"; r.tag="🟢 強項"; }
+    else if(r.rate<60 || r.wrongBook>=3){ r.cls="weak"; r.tag="🔴 弱項"; }
+    else if(r.rate>=70 && r.avg>=80){ r.cls="mid"; r.tag="🟠 偏慢"; }
+    else { r.cls="mid"; r.tag="🟠 尚可"; }
+  });
+  rows.sort((a,b)=>a.rate-b.rate);
+
+  const totA=rows.reduce((s,r)=>s+r.attempts,0);
+  const totC=cats.reduce((s,c)=>s+stats[c].correct,0);
+  const totS=cats.reduce((s,c)=>s+stats[c].totalSec,0);
+  const overall=totA?Math.round(totC/totA*100):0;
+  const wrongCount=Object.keys(wrongMap||{}).length;
+
+  const withData=rows.filter(r=>r.attempts>=3);
+  let summary="繼續多做幾題，系統就能給你更準確的強弱分析。";
+  if(withData.length){
+    const weakest=withData[0], strongest=withData[withData.length-1];
+    summary="你最強的課題是 <b>"+strongest.cat+" ("+strongest.rate+"%)</b>，最需要加強的是 <b style='color:#c62828'>"+weakest.cat+" ("+weakest.rate+"%)</b>。"+
+      (weakest.rate<60?"建議先重溫此課題的錯題再繼續。":weakest.avg>=80?"答對率不錯，但速度偏慢，可做限時練習。":"再多做 10 題鞏固一下。");
+  }
+
+  const tableRows=rows.map(r=>'<tr><td style="text-align:left">'+r.cat+'</td><td>'+r.attempts+'</td><td class="'+r.cls+'">'+r.rate+'%</td><td>'+r.avg+'s</td><td>'+r.wrongBook+'</td><td>'+r.tag+'</td><td><button class="act gray" onclick="startCategoryPractice(\''+r.cat+'\',10)">練習</button></td></tr>').join("");
+
+  let trend='<p style="color:#888">完成多幾次練習後會顯示趨勢。</p>';
+  if(history && history.length>=2){
+    const recent=history.slice(0,10).reverse();
+    const bars=recent.map(h=>{ const col=h.rate<60?"#e53935":h.rate<80?"#f57c00":"#34a853"; return '<div title="'+h.timestamp+': '+h.rate+'%" style="flex:1;height:'+Math.max(6,h.rate)+'%;background:'+col+';border-radius:4px 4px 0 0"></div>'; }).join("");
+    trend='<div style="display:flex;align-items:flex-end;gap:4px;height:120px">'+bars+'</div>';
+  }
+
+  const topWrong=Object.entries(wrongMap||{}).map(([id,rec])=>({id,rec,q:QUESTIONS.find(x=>x.id===id)})).filter(x=>x.q).sort((a,b)=>(b.rec.wrongCount||0)-(a.rec.wrongCount||0)).slice(0,8);
+  const wrongHtml=topWrong.length?
+    '<table><tr><th>課題</th><th style="text-align:left">題目</th><th>錯次</th><th></th></tr>'+
+    topWrong.map(x=>'<tr><td>'+x.q.category+'</td><td style="text-align:left">'+x.q.question+'</td><td>'+(x.rec.wrongCount||0)+'</td><td><button class="act gray" onclick="redoOneQuestion(\''+x.id+'\')">重做</button></td></tr>').join("")+'</table>'
+    :'<p style="color:#888">暫時沒有錯題，做得很好！</p>';
+
+  quiz.innerHTML=
+    '<div class="card"><h2 style="margin-top:0">📊 我的學習分析</h2>'+
+    '<p style="color:#555;font-size:13px">此分析只儲存在本機瀏覽器，不會上傳。</p>'+
+    '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:12px;margin:12px 0">'+
+      '<div class="card" style="margin:0"><div style="font-size:13px;color:#666">累計作答</div><div style="font-size:24px;font-weight:700;color:#0071e3">'+totA+'</div></div>'+
+      '<div class="card" style="margin:0"><div style="font-size:13px;color:#666">整體正確率</div><div style="font-size:24px;font-weight:700;color:#0071e3">'+overall+'%</div></div>'+
+      '<div class="card" style="margin:0"><div style="font-size:13px;color:#666">練習時間</div><div style="font-size:24px;font-weight:700;color:#0071e3">'+fmt(totS)+'</div></div>'+
+      '<div class="card" style="margin:0"><div style="font-size:13px;color:#666">錯題本</div><div style="font-size:24px;font-weight:700;color:#0071e3">'+wrongCount+'</div></div>'+
+    '</div>'+
+    '<div class="explain"><strong>下一步：</strong><br>'+summary+'</div></div>'+
+    '<div class="card"><h3 style="margin-top:0">最近趨勢</h3>'+trend+'</div>'+
+    '<div class="card"><h3 style="margin-top:0">各課題表現（弱項置頂）</h3>'+
+      '<table><tr><th style="text-align:left">課題</th><th>已做</th><th>正確率</th><th>平均</th><th>錯題</th><th>狀態</th><th></th></tr>'+tableRows+'</table></div>'+
+    '<div class="card"><h3 style="margin-top:0">最常錯題目</h3>'+wrongHtml+'</div>'+
+    '<div class="card"><button class="act" onclick="backHome()">返回首頁</button> <button class="act gray" onclick="startWrong()">重溫全部錯題</button></div>';
+  typeset(); window.scrollTo(0,0);
+}
+function startCategoryPractice(cat,n){
+  document.querySelectorAll(".topicChk").forEach(chk=>chk.checked=(chk.value===cat));
+  document.getElementById("topicAll").checked=false;
+  document.getElementById("countSelect").value=String(n||10);
+  startNormal();
+}
+function redoOneQuestion(id){
+  const q=QUESTIONS.find(x=>x.id===id);
+  if(!q){ alert("找不到題目"); return; }
+  mode="normal"; curCat=q.category;
+  document.getElementById("uploadCard").style.display="none";
+  beginSession([q]);
+}
+
+/* ===== 上傳成績到 Google Sheet ===== */
+const SHEET_WEBAPP_URL="https://script.google.com/macros/s/AKfycbwpIpECyQ-BNoLPwLTl9jedbJI-rn-q6QnDQVUO_Ud1K9D20OxxWsT4yvqvGxiL5g/exec";
+function uploadResultToSheet(){
+  const name=document.getElementById("stuName").value.trim();
+  const className=document.getElementById("stuClass").value.trim();
+  const classNo=document.getElementById("stuNo").value.trim();
+  const status=document.getElementById("uploadStatus");
+  if(!name||!className||!classNo){ status.textContent="請填寫姓名、班別、學號。"; status.style.color="#c62828"; return; }
+  if(answered===0){ status.textContent="沒有可上傳的成績。"; status.style.color="#c62828"; return; }
+  if(SHEET_WEBAPP_URL.includes("XXXX")){ status.textContent="請先在 index.html 設定 SHEET_WEBAPP_URL 為你的 Apps Script Web App URL。"; status.style.color="#c62828"; return; }
+  const rate=answered===0?0:Math.round(correct/answered*100);
+  const payload={name,className,classNo,mode,category:curCat,answered,correct,rate,elapsedSeconds:elapsed};
+  status.textContent="上傳中…"; status.style.color="#555";
+fetch(SHEET_WEBAPP_URL, {
+  method: "POST",
+  mode: "no-cors",
+  headers: { "Content-Type": "text/plain;charset=utf-8" },
+  body: JSON.stringify(payload)
+})
+.then(() => {
+  status.textContent = "✅ 已送出成績（請老師核對 Google Sheet 是否收到）";
+  status.style.color = "#2e7d32";
+  const card = document.getElementById("uploadCard");
+  if (card) card.style.display = "none";
+})
+.catch(() => {
+  status.textContent = "上傳失敗（網絡問題），請重試";
+  status.style.color = "#c62828";
+});
+}
+initCategories();
+</script>
+</body>
+</html>
