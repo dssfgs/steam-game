@@ -95,7 +95,8 @@ window.MathJax={tex:{inlineMath:[['\\(','\\)']]}};
   <div id="historyBox"></div>
 </div>
 
-<script src="questions.js"></script>
+<!-- 修正後（加入 charset） -->
+<script src="questions.js" charset="UTF-8"></script>
 <script>
 let pool, idx = 0, mode = "normal", curCat = "";
 let wrongMap = loadWrong();          // { id: {streak, wrongCount, lastWrong} }
