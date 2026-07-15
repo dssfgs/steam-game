@@ -21,4 +21,21 @@
   "desc": "TSA 中三數學甲部選擇題溫習系統，收錄 2024 及 2025 共 160 題（已對照官方評卷參考），支援分題練習、按卷練習、計時測驗、錯題簿，並可匯出／匯入進度於不同裝置間轉移。",
   "thumb": "games/TSA 中三數學 MC 溫習 App/thumb.png",
   "updated": "2026-07-04"
-}]
+}
+{
+  "id": "DSE Maths mc",
+  "folder": "DSE Maths mc",
+  "title": "記錄你數學DSE卷二的成績",
+  "subject": "數學",
+  "author": "GRF(teacher)",
+  "year": "2026",
+  "tags": ["選擇題", "計時", "錯題重溫", "成績分析"],
+  "desc": "一個輕量級、純前端的多項選擇題（MC）數學練習網頁應用程式。它能夠從 JavaScript 檔案動態載入題庫，並使用本機儲存（Local Storage）來追蹤使用者的學習進度與錯題紀錄。",
+  "thumb": "games/DSE Maths mc/image_1784102526543771.png",
+  "updated": "2026-07-15"
+}
+
+
+
+
+]
