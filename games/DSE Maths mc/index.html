@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MC 練習</title>
+<style>
+  body { font-family: -apple-system, "Microsoft JhengHei", sans-serif; max-width: 720px; margin: 0 auto; padding: 16px; background:#f5f5f7; color:#1d1d1f; }
+  h1 { font-size: 22px; }
+  .card { background:#fff; border-radius:12px; padding:20px; box-shadow:0 1px 4px rgba(0,0,0,.08); margin-bottom:16px; }
+  .cat { color:#666; font-size:13px; margin-bottom:6px; }
+  .q { font-size:18px; font-weight:600; margin-bottom:14px; white-space:pre-wrap; }
+  .opt { display:block; width:100%; text-align:left; padding:12px 14px; margin:8px 0; border:1px solid #ccc; border-radius:10px; background:#fff; cursor:pointer; font-size:16px; }
+  .opt:hover { background:#f0f0f5; }
+  .opt.correct { background:#d8f5d8; border-color:#4caf50; }
+  .opt.wrong { background:#ffd8d8; border-color:#e53935; }
+  .opt:disabled { cursor:default; }
+  .controls { display:flex; gap:8px; flex-wrap:wrap; align-items:center; margin-bottom:16px; }
+  button.act { padding:10px 16px; border:none; border-radius:10px; background:#0071e3; color:#fff; font-size:15px; cursor:pointer; }
+  button.act.gray { background:#8e8e93; }
+  button.act.red { background:#e53935; }
+  .progress { font-size:14px; color:#555; margin-bottom:8px; }
+  .explain { margin-top:12px; font-size:14px; color:#444; background:#fafafa; padding:10px; border-radius:8px; white-space:pre-wrap; }
+  select { padding:8px; border-radius:8px; border:1px solid #ccc; font-size:15px; }
+  table { width:100%; border-collapse:collapse; font-size:13px; }
+  th, td { border:1px solid #e0e0e0; padding:6px 8px; text-align:center; }
+  th { background:#f0f0f5; }
+  .hist-head { display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; }
+  #topicBox label { background:#f0f0f5; padding:6px 12px; border-radius:20px; font-size:14px; cursor:pointer; }
+  .cnt { color:#0071e3; font-weight:600; }
+  .total-line { font-size:13px; color:#555; margin-bottom:10px; }
+</style>
+
+<!-- MathJax：讓 \( ... \) 數學式排成上標與分數 -->
+<script>
+  window.MathJax = { tex: { inlineMath: [['\\(', '\\)']] } };
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" async></script>
+</head>
+<body>
+
+<!-- 把題庫接進來；之後只改 questions.js -->
+<script src="questions.js"></script>
+
+<h1>📝 MC 練習</h1>
+
+<div class="card">
+  <div style="margin-bottom:10px"><strong>選擇主題（可多選，做混合練習）</strong></div>
+  <div id="topicBox" style="display:flex; flex-wrap:wrap; gap:10px; margin-bottom:10px"></div>
+  <div class="total-line" id="totalLine"></div>
+
+  <div class="controls">
+    <label>題數：
+      <select id="countSelect">
+        <option value="10">10 題</option>
+        <option value="15">15 題</option>
+        <option value="20">20 題</option>
+        <option value="all">全部</option>
+      </select>
+    </label>
+    <button class="act" onclick="startNormal()">開始練習</button>
+    <button class="act gray" onclick="startWrong()">錯題重溫 (<span id="wrongCount">0</span>)</button>
+  </div>
+  <div class="progress" id="progress"></div>
+  <div class="progress" id="scoreBar"></div>
+  <div class="progress" id="timerBar"></div>
+</div>
+
+<div id="quiz"></div>
+
+<div class="card">
+  <div class="hist-head">
+    <strong>📈 歷史紀錄</strong>
+    <button class="act red" onclick="clearHistory()">清空紀錄</button>
+  </div>
+  <div id="historyBox"></div>
+</div>
+
+<script>
+let pool = [], idx = 0, mode = "normal", curCat = "全部";
+let wrongList = loadWrong();
+let history = loadHistory();
+let answered = 0, correct = 0;
+let startTime = 0, elapsed = 0, timerId = null;
+
+function typeset(){ if(window.MathJax && MathJax.typesetPromise) MathJax.typesetPromise(); }
+function fmt(sec){ const m=Math.floor(sec/60), s=sec%60; return (m>0?m+" 分 ":"")+s+" 秒"; }
+
+function startTimer(){
+  startTime=Date.now(); elapsed=0; clearInterval(timerId);
+  timerId=setInterval(()=>{ elapsed=Math.floor((Date.now()-startTime)/1000);
+    document.getElementById("timerBar").textContent=`⏱ 用時：${fmt(elapsed)}`; },1000);
+  document.getElementById("timerBar").textContent=`⏱ 用時：0 秒`;
+}
+function stopTimer(){ clearInterval(timerId); timerId=null; elapsed=Math.floor((Date.now()-startTime)/1000); }
+function updateScore(){
+  const rate=answered===0?0:Math.round(correct/answered*100);
+  document.getElementById("scoreBar").textContent=`得分：${correct} / ${answered}　|　正確率：${rate}%`;
+}
+
+function loadWrong(){ try{return JSON.parse(localStorage.getItem("mc_wrong")||"[]");}catch(e){return[];} }
+function saveWrong(){ localStorage.setItem("mc_wrong",JSON.stringify(wrongList));
+  document.getElementById("wrongCount").textContent=wrongList.length; }
+function keyOf(q){ return q.question; }
+
+function loadHistory(){ try{return JSON.parse(localStorage.getItem("mc_history")||"[]");}catch(e){return[];} }
+function saveHistory(){ localStorage.setItem("mc_history",JSON.stringify(history)); }
+function addHistory(){
+  if(answered===0) return;
+  const n=new Date();
+  const stamp=n.getFullYear()+"-"+String(n.getMonth()+1).padStart(2,"0")+"-"+String(n.getDate()).padStart(2,"0")+" "+String(n.getHours()).padStart(2,"0")+":"+String(n.getMinutes()).padStart(2,"0");
+  history.unshift({time:stamp, mode:mode==="wrong"?"錯題重溫":"一般練習", cat:mode==="wrong"?"—":curCat,
+    correct:correct, total:answered, rate:Math.round(correct/answered*100), secs:elapsed});
+  saveHistory(); renderHistory();
+}
+function clearHistory(){ if(confirm("確定要清空所有歷史紀錄嗎？")){ history=[]; saveHistory(); renderHistory(); } }
+function renderHistory(){
+  const box=document.getElementById("historyBox");
+  if(history.length===0){ box.innerHTML=`<div style="color:#888">尚無紀錄，做一次練習就會出現在這裡。</div>`; return; }
+  let trend="";
+  if(history.length>=2){
+    const d=history[0].rate-history[1].rate;
+    if(d>0) trend=`<div style="color:#2e7d32;margin-bottom:8px">⬆ 最近一次正確率比上次提升 ${d}%</div>`;
+    else if(d<0) trend=`<div style="color:#c62828;margin-bottom:8px">⬇ 最近一次正確率比上次下降 ${-d}%</div>`;
+    else trend=`<div style="color:#666;margin-bottom:8px">➖ 最近一次正確率與上次相同</div>`;
+  }
+  let rows=history.map(h=>`<tr><td>${h.time}</td><td>${h.mode}</td><td>${h.cat}</td><td>${h.correct}/${h.total}</td><td>${h.rate}%</td><td>${fmt(h.secs)}</td></tr>`).join("");
+  box.innerHTML=trend+`<table><tr><th>日期時間</th><th>模式</th><th>分類</th><th>得分</th><th>正確率</th><th>用時</th></tr>${rows}</table>`;
+}
+
+function shuffle(arr){ const a=arr.slice(); for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; }
+
+// ---- 計算各主題題數 ----
+function countByCat(){
+  const m={};
+  QUESTIONS.forEach(q=>{ m[q.category]=(m[q.category]||0)+1; });
+  return m;
+}
+
+// ---- 建立可多選的主題勾選框（含題數顯示） ----
+function initCategories(){
+  if(typeof QUESTIONS==="undefined"){ document.body.innerHTML="<h2>找不到 questions.js，請確認檔案與 index.html 放在同一資料夾。</h2>"; return; }
+  const counts=countByCat();
+  const cats=Object.keys(counts);
+  const box=document.getElementById("topicBox");
+  box.innerHTML =
+    `<label><input type="checkbox" id="topicAll" checked onchange="toggleAll()"> 全部</label>` +
+    cats.map(c=>`<label><input type="checkbox" class="topicChk" value="${c}" checked onchange="syncAll();updateTotal()"> ${c} <span class="cnt">(${counts[c]})</span></label>`).join("");
+  saveWrong(); renderHistory(); updateTotal();
+}
+
+function toggleAll(){
+  const on=document.getElementById("topicAll").checked;
+  document.querySelectorAll(".topicChk").forEach(c=>c.checked=on);
+  updateTotal();
+}
+function syncAll(){
+  const all=document.querySelectorAll(".topicChk");
+  const checked=document.querySelectorAll(".topicChk:checked");
+  document.getElementById("topicAll").checked=(all.length===checked.length);
+}
+function selectedTopics(){
+  return [...document.querySelectorAll(".topicChk:checked")].map(c=>c.value);
+}
+// ---- 顯示目前已選主題的可用題數 ----
+function updateTotal(){
+  const topics=selectedTopics();
+  const total=QUESTIONS.filter(q=>topics.includes(q.category)).length;
+  document.getElementById("totalLine").textContent=
+    topics.length===0 ? "尚未選擇主題" : `已選 ${topics.length} 個主題，共 ${total} 題可用`;
+}
+
+// ---- 開始練習（混合主題 + 自訂題數，隨機抽題） ----
+function startNormal(){
+  mode="normal";
+  const topics=selectedTopics();
+  if(topics.length===0){ alert("請至少勾選一個主題！"); return; }
+  const allCats=Object.keys(countByCat());
+  curCat=(topics.length===allCats.length) ? "全部" :
+         (topics.length<=2 ? topics.join("、") : `混合 ${topics.length} 主題`);
+  let list=QUESTIONS.filter(q=>topics.includes(q.category));
+  list=shuffle(list);
+  const want=document.getElementById("countSelect").value;
+  if(want!=="all"){
+    const n=parseInt(want);
+    if(list.length<n){ alert(`所選主題共有 ${list.length} 題，少於 ${n} 題，將用全部 ${list.length} 題。`); }
+    list=list.slice(0,n);
+  }
+  pool=list; idx=0; answered=0; correct=0; updateScore(); startTimer(); render();
+}
+
+function startWrong(){
+  mode="wrong";
+  let list=QUESTIONS.filter(q=>wrongList.includes(keyOf(q)));
+  if(list.length===0){ alert("目前沒有錯題！"); return; }
+  pool=shuffle(list); idx=0; answered=0; correct=0; updateScore(); startTimer(); render();
+}
+
+function render(){
+  const quiz=document.getElementById("quiz");
+  if(idx>=pool.length){
+    stopTimer(); addHistory();
+    const rate=answered?Math.round(correct/answered*100):0;
+    const avg=answered?Math.round(elapsed/answered*10)/10:0;
+    quiz.innerHTML=`<div class="card"><div class="q">✅ 完成！</div>
+      <div>答對 ${correct} / ${answered} 題，正確率 ${rate}%</div>
+      <div>⏱ 總用時 ${fmt(elapsed)}，平均每題 ${avg} 秒</div>
+      <button class="act" style="margin-top:12px" onclick="${mode==='wrong'?'startWrong()':'startNormal()'}">再做一次</button></div>`;
+    document.getElementById("progress").textContent=""; return;
+  }
+  const q=pool[idx];
+  document.getElementById("progress").textContent=`第 ${idx+1} / ${pool.length} 題　|　模式：${mode==='wrong'?'錯題重溫':'一般練習'}`;
+  let html=`<div class="card"><div class="cat">${q.category}</div><div class="q">${q.question}</div>`;
+  q.options.forEach((opt,i)=>{ html+=`<button class="opt" onclick="answer(${i})">${opt}</button>`; });
+  html+=`<div id="exp"></div></div>`;
+  quiz.innerHTML=html;
+  typeset();
+}
+
+function answer(choice){
+  const q=pool[idx];
+  document.querySelectorAll(".opt").forEach((b,i)=>{ b.disabled=true;
+    if(i===q.answer) b.classList.add("correct");
+    if(i===choice && choice!==q.answer) b.classList.add("wrong"); });
+  const k=keyOf(q); answered++;
+  if(choice===q.answer){ correct++; wrongList=wrongList.filter(x=>x!==k); }
+  else { if(!wrongList.includes(k)) wrongList.push(k); }
+  saveWrong(); updateScore();
+  if(q.explain){ document.getElementById("exp").innerHTML=`<div class="explain">💡 ${q.explain}</div>`; }
+  document.getElementById("quiz").querySelector(".card").innerHTML+=`<button class="act" style="margin-top:12px" onclick="idx++;render()">下一題 ➜</button>`;
+  typeset();
+}
+
+initCategories();
+</script>
+
+</body>
+</html>
