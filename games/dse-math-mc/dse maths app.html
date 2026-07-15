@@ -1,0 +1,1280 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HKDSE 歷屆試題進度追蹤及等級估算器</title>
+<style>
+/* ============================================================
+   CSS 樣式區（深色模式 / 響應式 / 卡片式）
+   ============================================================ */
+:root{
+  --bg:#f4f6f9; --card:#ffffff; --text:#1f2933; --muted:#6b7280;
+  --primary:#2563eb; --primary-dark:#1e40af; --border:#e2e8f0;
+  --ok:#16a34a; --bad:#dc2626; --warn:#d97706; --none:#9ca3af;
+  --shadow:0 1px 3px rgba(0,0,0,.1);
+}
+[data-theme="dark"]{
+  --bg:#0f172a; --card:#1e293b; --text:#e2e8f0; --muted:#94a3b8;
+  --primary:#3b82f6; --primary-dark:#60a5fa; --border:#334155;
+  --ok:#22c55e; --bad:#ef4444; --warn:#f59e0b; --none:#64748b;
+  --shadow:0 1px 3px rgba(0,0,0,.4);
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:"Segoe UI","PingFang HK","Microsoft JhengHei",sans-serif;
+  background:var(--bg);color:var(--text);line-height:1.6;font-size:16px}
+header.app-header{background:var(--primary-dark);color:#fff;padding:12px 16px;
+  position:sticky;top:0;z-index:100;box-shadow:var(--shadow)}
+.app-header h1{margin:0;font-size:1.15rem}
+.disclaimer{background:#fef3c7;color:#92400e;padding:10px 16px;font-size:.85rem;
+  border-bottom:1px solid #fcd34d}
+[data-theme="dark"] .disclaimer{background:#422006;color:#fde68a}
+nav.top-nav{display:flex;flex-wrap:wrap;gap:4px;background:var(--card);
+  padding:8px;border-bottom:1px solid var(--border);position:sticky;top:52px;z-index:99}
+nav.top-nav button{background:transparent;border:none;color:var(--text);
+  padding:8px 12px;border-radius:8px;cursor:pointer;font-size:.9rem}
+nav.top-nav button:hover{background:var(--bg)}
+nav.top-nav button.active{background:var(--primary);color:#fff}
+nav.top-nav button:focus-visible{outline:3px solid var(--warn);outline-offset:2px}
+main{max-width:1100px;margin:0 auto;padding:16px}
+.page{display:none} .page.active{display:block}
+.card{background:var(--card);border:1px solid var(--border);border-radius:12px;
+  padding:16px;margin-bottom:16px;box-shadow:var(--shadow)}
+h2{font-size:1.3rem;margin-top:0} h3{font-size:1.05rem}
+button.btn{background:var(--primary);color:#fff;border:none;padding:10px 16px;
+  border-radius:8px;cursor:pointer;font-size:.95rem;margin:4px 4px 4px 0}
+button.btn:hover{background:var(--primary-dark)}
+button.btn.secondary{background:var(--border);color:var(--text)}
+button.btn.danger{background:var(--bad)}
+button.btn:disabled{opacity:.5;cursor:not-allowed}
+button.btn:focus-visible{outline:3px solid var(--warn);outline-offset:2px}
+input,select,textarea{font-family:inherit;font-size:.95rem;padding:8px;
+  border:1px solid var(--border);border-radius:6px;background:var(--card);
+  color:var(--text);width:100%;max-width:100%}
+input:focus-visible,select:focus-visible,textarea:focus-visible{
+  outline:3px solid var(--warn);outline-offset:1px}
+label{display:block;font-weight:600;margin:8px 0 4px;font-size:.9rem}
+.grid{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(180px,1fr))}
+.stat{background:var(--bg);border-radius:10px;padding:14px;text-align:center}
+.stat .num{font-size:1.8rem;font-weight:700;color:var(--primary)}
+.stat .lbl{font-size:.8rem;color:var(--muted)}
+table{width:100%;border-collapse:collapse;font-size:.88rem}
+th,td{border:1px solid var(--border);padding:6px 8px;text-align:left}
+th{background:var(--bg)}
+.mcq-q{display:flex;align-items:center;gap:8px;flex-wrap:wrap;
+  padding:8px;border-bottom:1px solid var(--border)}
+.mcq-q .qno{font-weight:700;min-width:48px}
+.opt-btn{min-width:46px;min-height:46px;border:2px solid var(--border);
+  background:var(--card);color:var(--text);border-radius:8px;cursor:pointer;
+  font-size:1rem;font-weight:600}
+.opt-btn:hover{border-color:var(--primary)}
+.opt-btn.selected{background:var(--primary);color:#fff;border-color:var(--primary)}
+.opt-btn.na{color:var(--muted);font-size:.8rem;min-width:70px}
+.opt-btn.na.selected{background:var(--none);border-color:var(--none)}
+.opt-btn:focus-visible{outline:3px solid var(--warn);outline-offset:2px}
+.badge{display:inline-block;padding:2px 10px;border-radius:20px;font-weight:700;
+  font-size:.85rem;color:#fff}
+.grade-5ss{background:#7c3aed}.grade-5s{background:#9333ea}.grade-5{background:#2563eb}
+.grade-4{background:#0891b2}.grade-3{background:#16a34a}.grade-2{background:#ca8a04}
+.grade-1{background:#ea580c}.grade-U{background:#6b7280}
+.tag-ok{color:var(--ok);font-weight:600}.tag-bad{color:var(--bad);font-weight:600}
+.tag-none{color:var(--warn);font-weight:600}
+.empty{text-align:center;padding:30px;color:var(--muted)}
+.empty .big{font-size:2.5rem}
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);
+  background:var(--text);color:var(--bg);padding:12px 20px;border-radius:8px;
+  z-index:2000;box-shadow:var(--shadow);opacity:0;transition:opacity .3s}
+.toast.show{opacity:1}
+.modal-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);
+  z-index:1500;align-items:center;justify-content:center;padding:16px}
+.modal-bg.show{display:flex}
+.modal{background:var(--card);border-radius:12px;padding:20px;max-width:480px;
+  width:100%;max-height:90vh;overflow:auto}
+.err{color:var(--bad);font-size:.85rem;margin-top:4px}
+.help-txt{font-size:.85rem;color:var(--muted)}
+.chart-wrap{position:relative;min-height:260px}
+.css-bar{background:var(--primary);color:#fff;padding:2px 6px;border-radius:4px;
+  margin:2px 0;font-size:.8rem}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.theme-toggle{background:transparent;border:1px solid #fff;color:#fff;
+  border-radius:20px;padding:4px 12px;cursor:pointer;float:right}
+.filter-bar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+.filter-bar>*{flex:0 0 auto}
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+@media(max-width:600px){
+  main{padding:8px}.stat .num{font-size:1.4rem}
+  nav.top-nav{overflow-x:auto;flex-wrap:nowrap}
+  nav.top-nav button{white-space:nowrap}
+}
+@media print{
+  header.app-header,nav.top-nav,.no-print,button{display:none!important}
+  .page{display:none!important}.page.print-active{display:block!important}
+  .disclaimer{display:block!important}
+  body{background:#fff;color:#000}.card{box-shadow:none;border:1px solid #999}
+}
+</style>
+</head>
+<body>
+<!-- ============ 頂部標題與聲明 ============ -->
+<header class="app-header">
+  <button class="theme-toggle" id="themeToggle" aria-label="切換深色模式">🌓 深色模式</button>
+  <h1>📘 HKDSE 歷屆試題進度追蹤及等級估算器</h1>
+</header>
+<div class="disclaimer" role="note">
+  ⚠️ 本工具只按照使用者自行輸入的粗略分數界線估算等級，並非香港考試及評核局的正式評級結果。
+  實際等級界線可因年份、科目、試卷難度、校本評核及正式評級程序而有所不同。本工具與香港考試及評核局並無任何官方關係。
+</div>
+
+<!-- ============ 導覽列 ============ -->
+<nav class="top-nav" role="navigation" aria-label="主導覽">
+  <button data-page="home" class="active">首頁</button>
+  <button data-page="attempt">新增練習</button>
+  <button data-page="records">練習紀錄</button>
+  <button data-page="progress">進度分析</button>
+  <button data-page="wrong">錯題重溫</button>
+  <button data-page="manage">試卷資料管理</button>
+  <button data-page="backup">匯入匯出</button>
+  <button data-page="help">使用說明</button>
+</nav>
+
+<div class="sr-only" id="live" aria-live="polite"></div>
+
+<main>
+<!-- ============ 首頁／總覽 ============ -->
+<section class="page active" id="page-home" aria-label="首頁總覽">
+  <div class="card"><h2 id="homeSubject">科目</h2><div id="homeContent"></div></div>
+</section>
+
+<!-- ============ 新增練習 ============ -->
+<section class="page" id="page-attempt" aria-label="新增練習">
+  <div class="card">
+    <h2>➕ 新增練習</h2>
+    <label for="attYear">選擇年份／試卷</label>
+    <select id="attYear"><option value="">— 請選擇 —</option></select>
+    <div class="row" style="margin-top:8px">
+      <label style="margin:0"><input type="radio" name="attMode" value="full" checked style="width:auto"> 完整試卷估算</label>
+      <label style="margin:0"><input type="radio" name="attMode" value="partial" style="width:auto"> 只分析已完成部分</label>
+    </div>
+    <div id="draftInfo" class="help-txt"></div>
+  </div>
+  <div id="attemptArea"></div>
+</section>
+
+<!-- ============ 練習紀錄 ============ -->
+<section class="page" id="page-records" aria-label="練習紀錄">
+  <div class="card">
+    <h2>📋 練習紀錄</h2>
+    <div class="filter-bar">
+      <select id="recFilterYear"><option value="">全部年份</option></select>
+      <select id="recSort">
+        <option value="date-desc">日期（新→舊）</option>
+        <option value="date-asc">日期（舊→新）</option>
+        <option value="score-desc">分數（高→低）</option>
+        <option value="score-asc">分數（低→高）</option>
+      </select>
+    </div>
+    <div id="recordsList"></div>
+  </div>
+</section>
+
+<!-- ============ 進度分析 ============ -->
+<section class="page" id="page-progress" aria-label="進度分析">
+  <div class="card">
+    <h2>📈 進度分析</h2>
+    <div class="filter-bar">
+      <select id="progRange">
+        <option value="5">最近 5 次</option>
+        <option value="10">最近 10 次</option>
+        <option value="all">全部</option>
+      </select>
+      <select id="progYear"><option value="">全部年份</option></select>
+      <select id="progBarMode">
+        <option value="best">各年份：最佳</option>
+        <option value="latest">各年份：最近</option>
+        <option value="avg">各年份：平均</option>
+      </select>
+      <button class="btn secondary no-print" onclick="printPage('progress')">🖨️ 列印進度報告</button>
+    </div>
+    <div id="progressCharts"></div>
+  </div>
+</section>
+
+<!-- ============ 錯題重溫 ============ -->
+<section class="page" id="page-wrong" aria-label="錯題重溫">
+  <div class="card">
+    <h2>🔁 錯題重溫</h2>
+    <div class="filter-bar">
+      <select id="wrongYear"><option value="">全部年份</option></select>
+      <select id="wrongSort">
+        <option value="count-desc">答錯次數（多→少）</option>
+        <option value="recent-desc">最近答錯（新→舊）</option>
+      </select>
+      <input type="text" id="wrongSearch" placeholder="搜尋題號，例如 12" style="max-width:160px">
+      <label style="margin:0"><input type="checkbox" id="wrongUnmastered" style="width:auto"> 只顯示仍未掌握</label>
+      <button class="btn secondary no-print" id="wrongSelectAll">全選</button>
+      <button class="btn secondary no-print" onclick="bulkMark('reviewed')">標記已重溫</button>
+      <button class="btn secondary no-print" onclick="bulkMark('mastered')">標記已掌握</button>
+      <button class="btn secondary no-print" onclick="exportWrongCsv()">匯出 CSV</button>
+      <button class="btn secondary no-print" onclick="printPage('wrong')">🖨️ 列印</button>
+    </div>
+    <div id="wrongList"></div>
+  </div>
+</section>
+
+<!-- ============ 試卷資料管理 ============ -->
+<section class="page" id="page-manage" aria-label="試卷資料管理">
+  <div class="card">
+    <h2>🛠️ 試卷資料管理</h2>
+    <p class="help-txt">在此新增或編輯年份試卷資料。所有更改會即時儲存到瀏覽器 localStorage（不會改動 data.js 檔案本身）。</p>
+    <label for="mgSubjectId">科目 ID</label><input id="mgSubjectId">
+    <label for="mgSubjectName">科目名稱</label><input id="mgSubjectName">
+    <button class="btn" onclick="saveSubjectMeta()">儲存科目資料</button>
+    <hr>
+    <h3>年份／試卷列表</h3>
+    <div id="paperList"></div>
+    <button class="btn" onclick="editPaper(null)">➕ 新增年份試卷</button>
+    <button class="btn secondary" onclick="reloadFromDataJs()">↻ 重新從 data.js 載入設定</button>
+  </div>
+  <div class="card" id="paperEditor" style="display:none"></div>
+</section>
+
+<!-- ============ 匯入匯出備份 ============ -->
+<section class="page" id="page-backup" aria-label="匯入匯出備份">
+  <div class="card">
+    <h2>💾 匯入、匯出及備份</h2>
+    <p class="help-txt" id="lastSaved"></p>
+    <h3>匯出</h3>
+    <button class="btn" onclick="doExport('all')">匯出全部（設定＋紀錄）</button>
+    <button class="btn secondary" onclick="doExport('config')">只匯出試卷設定</button>
+    <button class="btn secondary" onclick="doExport('attempts')">只匯出練習紀錄</button>
+    <button class="btn secondary" onclick="exportAttemptsCsv()">匯出練習紀錄 CSV</button>
+    <button class="btn secondary" onclick="exportWrongCsv()">匯出錯題清單 CSV</button>
+    <hr>
+    <h3>匯入</h3>
+    <label for="importFile">從檔案匯入 JSON</label>
+    <input type="file" id="importFile" accept=".json">
+    <label for="importText">或貼上 JSON 文字</label>
+    <textarea id="importText" rows="5" placeholder='貼上 JSON…'></textarea>
+    <div class="row">
+      <label style="margin:0"><input type="radio" name="importMode" value="merge" checked style="width:auto"> 合併資料</label>
+      <label style="margin:0"><input type="radio" name="importMode" value="replace" style="width:auto"> 完全取代</label>
+    </div>
+    <button class="btn" onclick="previewImport()">預覽並匯入</button>
+    <div id="importPreview"></div>
+    <hr>
+    <h3>備份與清除</h3>
+    <button class="btn secondary" onclick="manualBackup()">手動備份</button>
+    <button class="btn secondary" onclick="restoreBackup()">還原上次備份</button>
+    <button class="btn danger" onclick="clearAllPrompt()">清除全部資料</button>
+    <p class="help-txt">🔒 資料只儲存在此瀏覽器。清除瀏覽器資料或更換裝置可能令紀錄消失，請定期匯出備份。</p>
+  </div>
+</section>
+
+<!-- ============ 使用說明 ============ -->
+<section class="page" id="page-help" aria-label="使用說明">
+  <div class="card">
+    <h2>📖 使用說明</h2>
+    <ol>
+      <li><b>兩個檔案</b>：index.html（程式）與 data.js（年度資料）必須放在同一資料夾。</li>
+      <li><b>新增年份</b>：只需編輯 data.js 的 papers 陣列（詳見該檔頂部註解）。</li>
+      <li><b>新增練習</b>：選擇年份，輸入 MC 答案及長題分數，提交後即時計分。</li>
+      <li><b>進度分析</b>：以圖表檢視分數趨勢、MC 正確率、等級分布及錯題分析。</li>
+      <li><b>錯題重溫</b>：集中查看所有答錯題目（只顯示「Q題號，年份」，不含題目內容）。</li>
+      <li><b>匯入匯出</b>：定期匯出 JSON 備份，避免資料遺失。</li>
+    </ol>
+    <p class="help-txt">開發者測試：在瀏覽器 Console 執行 <code>runSelfTests()</code>。</p>
+    <p class="help-txt">📌 本工具不包含任何真實 HKDSE 題目內容；錯題只以索引格式提示，請自行翻查合法取得的試卷。</p>
+  </div>
+</section>
+</main>
+
+<div class="toast" id="toast" role="status"></div>
+<div class="modal-bg" id="modalBg"><div class="modal" id="modal"></div></div>
+
+<!-- ★★ 先載入年度資料檔 data.js（必須在主程式之前） ★★ -->
+<script src="data.js"></script>
+<!-- Chart.js CDN（載入失敗時自動退回 CSS/文字圖表） -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<script>
+"use strict";
+/* ============================================================
+   區域 1：讀取外部設定（來自 data.js）
+   若 data.js 未能載入，使用最小預設值並提示使用者。
+   ============================================================ */
+const APP_CONFIG = (window.APP_CONFIG) ? window.APP_CONFIG : {
+  appVersion: "1.0.0", schemaVersion: 1,
+  subject: { id: "no-data", name: "（未載入 data.js）" },
+  papers: []
+};
+if(!window.APP_CONFIG){
+  console.error("找不到 data.js，請確認 data.js 與 index.html 放在同一資料夾。");
+}
+const GRADES = ["5**","5*","5","4","3","2","1"]; // 由高至低，U 另外處理
+const gradeClass = g => ({"5**":"grade-5ss","5*":"grade-5s","5":"grade-5","4":"grade-4","3":"grade-3","2":"grade-2","1":"grade-1","U":"grade-U"}[g]||"grade-U");
+
+/* ============================================================
+   區域 2：localStorage 資料存取
+   ============================================================ */
+const LS_KEY = "hkdse_tracker_v1";
+const LS_BACKUP = "hkdse_tracker_backup";
+let STATE = null;
+
+function loadState(){
+  let raw = localStorage.getItem(LS_KEY);
+  if(!raw){ STATE = defaultState(); saveState(); return; }
+  let data;
+  try{ data = JSON.parse(raw); }
+  catch(e){ toast("本機資料損壞，已載入預設資料"); STATE = defaultState(); saveState(); return; }
+  data = migrateData(data);
+  STATE = data;
+}
+function defaultState(){
+  return {
+    schemaVersion: 1,
+    config: JSON.parse(JSON.stringify(APP_CONFIG)),
+    attempts: [],
+    wrongQuestions: {},
+    prefs: { theme: "light", studentName: "" }
+  };
+}
+function saveState(){
+  try{
+    STATE.prefs.lastSaved = new Date().toISOString();
+    localStorage.setItem(LS_KEY, JSON.stringify(STATE));
+    updateLastSaved();
+  }catch(e){
+    if(e.name==="QuotaExceededError") toast("儲存空間已滿，請刪除舊紀錄或匯出後清理");
+    else toast("儲存失敗："+e.message);
+  }
+}
+function updateLastSaved(){
+  const el=document.getElementById("lastSaved");
+  if(el&&STATE.prefs.lastSaved) el.textContent="上次儲存："+new Date(STATE.prefs.lastSaved).toLocaleString("zh-HK");
+}
+// 從 data.js 重新載入設定（合併新年份，保留學生紀錄）
+function reloadFromDataJs(){
+  if(!window.APP_CONFIG){ toast("找不到 data.js"); return; }
+  showModal(`<h3>重新從 data.js 載入設定？</h3>
+    <p>將以 data.js 的試卷資料更新設定（相同年份＋卷別會被覆蓋），你的練習紀錄與錯題不受影響。</p>
+    <button class="btn" onclick="doReloadDataJs()">確認載入</button>
+    <button class="btn secondary" onclick="closeModal()">取消</button>`);
+}
+function doReloadDataJs(){
+  localStorage.setItem(LS_BACKUP, JSON.stringify(STATE));
+  const src=window.APP_CONFIG;
+  STATE.config.subject=JSON.parse(JSON.stringify(src.subject));
+  src.papers.forEach(np=>{
+    const idx=STATE.config.papers.findIndex(p=>String(p.year)===String(np.year)&&p.paperId===np.paperId);
+    if(idx>=0) STATE.config.papers[idx]=JSON.parse(JSON.stringify(np));
+    else STATE.config.papers.push(JSON.parse(JSON.stringify(np)));
+  });
+  saveState(); renderAll(); closeModal(); toast("已從 data.js 更新設定");
+}
+
+/* ============================================================
+   區域 3：schema migration（資料升級機制）
+   ============================================================ */
+const CURRENT_SCHEMA = 1;
+function migrateData(oldData){
+  if(!oldData || typeof oldData!=="object") return defaultState();
+  let ver = oldData.schemaVersion || 1;
+  if(ver < CURRENT_SCHEMA){
+    localStorage.setItem(LS_BACKUP, JSON.stringify(oldData));
+    try{
+      // 日後升級：if(ver===1){ oldData=migrate_1_to_2(oldData); ver=2; } …
+      oldData.schemaVersion = CURRENT_SCHEMA;
+    }catch(e){ toast("資料遷移失敗，已保留原始備份"); return oldData; }
+  }
+  oldData.config = oldData.config || JSON.parse(JSON.stringify(APP_CONFIG));
+  oldData.attempts = oldData.attempts || [];
+  oldData.wrongQuestions = oldData.wrongQuestions || {};
+  oldData.prefs = oldData.prefs || { theme:"light", studentName:"" };
+  return oldData;
+}
+
+/* ============================================================
+   區域 4：試卷資料驗證
+   ============================================================ */
+function validatePaperConfig(paper){
+  const errs=[];
+  if(paper.year===undefined||paper.year==="") errs.push("缺少年份");
+  if(!paper.paperId) errs.push("缺少卷別 ID");
+  const mcq=paper.mcq||{};
+  const qc=Number(mcq.questionCount)||0;
+  if(qc<0) errs.push("選擇題題數不可為負");
+  if(!Array.isArray(mcq.options)||mcq.options.length<2) errs.push("選項至少要有 2 個");
+  if(!Array.isArray(mcq.answers)) errs.push("缺少正確答案陣列");
+  else if(mcq.answers.length!==qc) errs.push(`正確答案數量（${mcq.answers.length}）與題目數量（${qc}）不一致`);
+  else mcq.answers.forEach((a,i)=>{ if(!mcq.options.includes(a)) errs.push(`第 ${i+1} 題答案「${a}」不是有效選項`); });
+  const sec=paper.writtenSections||[];
+  const hasWeight = paper.mcqWeight!=null && sec.every(s=>s.weight!=null);
+  if(hasWeight){
+    const sum=(Number(paper.mcqWeight)||0)+sec.reduce((t,s)=>t+(Number(s.weight)||0),0);
+    if(Math.abs(sum-1)>0.001 && Math.abs(sum-100)>0.001) errs.push(`比重總和應為 1 或 100%（目前 ${sum}）`);
+  }
+  sec.forEach((s,i)=>{ if(Number(s.maxMark)<0) errs.push(`第 ${i+1} 個長題部分滿分不可為負`); });
+  const cErr=validateCutoffs(paper.cutoffs);
+  if(cErr) errs.push(cErr);
+  return errs;
+}
+function validateCutoffs(c){
+  if(!c) return "缺少臨界分數";
+  const vals=GRADES.map(g=>c[g]);
+  for(let i=0;i<vals.length-1;i++){
+    if(vals[i]==null||vals[i+1]==null) continue;
+    if(!(vals[i]>vals[i+1])) return `臨界分數次序錯誤：${GRADES[i]}(${vals[i]}) 必須大於 ${GRADES[i+1]}(${vals[i+1]})`;
+  }
+  return null;
+}
+function checkDuplicatePaper(year,paperId,excludeIdx){
+  return STATE.config.papers.some((p,i)=>i!==excludeIdx && String(p.year)===String(year) && p.paperId===paperId);
+}
+function parseAnswers(raw, options, count){
+  raw=(raw||"").trim();
+  let ans=[];
+  if(/:/.test(raw)){
+    raw.split(/[\n,;]+/).forEach(line=>{
+      const m=line.trim().match(/^(\d+)\s*[:：]\s*([A-Za-z])/);
+      if(m) ans[Number(m[1])-1]=m[2].toUpperCase();
+    });
+  }else{ ans=raw.replace(/\s+/g,"").toUpperCase().split(""); }
+  const errs=[];
+  ans.forEach((a,i)=>{ if(a && !options.includes(a)) errs.push(`第 ${i+1} 題「${a}」不是有效選項`); });
+  if(count!=null && ans.filter(Boolean).length!==count) errs.push(`答案數量（${ans.filter(Boolean).length}）與題目數量（${count}）不一致`);
+  return {answers:ans, errors:errs};
+}
+
+/* ============================================================
+   區域 5：計分及等級估算
+   ============================================================ */
+function calculateMcqResult(studentAnswers, correctAnswers, marksPerQuestion){
+  let correct=0, wrong=[], unanswered=[];
+  correctAnswers.forEach((ca,i)=>{
+    const sa=studentAnswers[i];
+    if(sa==null||sa===""||sa==="NA"){ unanswered.push(i+1); }
+    else if(sa===ca){ correct++; }
+    else{ wrong.push(i+1); }
+  });
+  return { correct, total:correctAnswers.length, wrong, unanswered,
+    score: correct*marksPerQuestion, maxScore: correctAnswers.length*marksPerQuestion,
+    accuracy: correctAnswers.length? correct/correctAnswers.length*100 : 0 };
+}
+function calculateWeightedScore(parts){
+  const hasWeight = parts.every(p=>p.weight!=null);
+  if(hasWeight){
+    let total=0, wsum=0;
+    parts.forEach(p=>{ const pct=p.maxMark? p.score/p.maxMark*100:0; total+=pct*p.weight; wsum+=p.weight; });
+    if(Math.abs(wsum-100)<0.5) total/=100; else if(Math.abs(wsum-1)>0.5 && wsum) total/=wsum;
+    return { percentage: total, weighted:true };
+  }else{
+    const rawSum=parts.reduce((t,p)=>t+p.score,0);
+    const maxSum=parts.reduce((t,p)=>t+p.maxMark,0);
+    return { percentage: maxSum? rawSum/maxSum*100:0, weighted:false, rawSum, maxSum };
+  }
+}
+function estimateGrade(score, cutoffs){
+  for(const g of GRADES){ const c=cutoffs[g]; if(c!=null && score>=c) return g; }
+  return "U";
+}
+function nextGradeGap(score, cutoffs){
+  const asc=[...GRADES].reverse();
+  for(const g of asc){ const c=cutoffs[g]; if(c!=null && score<c) return { grade:g, gap:+(c-score).toFixed(2) }; }
+  return null;
+}
+
+/* ============================================================
+   區域 6：練習紀錄管理
+   ============================================================ */
+function uid(){ return "a_"+Date.now()+"_"+Math.random().toString(36).slice(2,7); }
+function getPaper(year,paperId){
+  return STATE.config.papers.find(p=>String(p.year)===String(year)&&p.paperId===paperId);
+}
+function saveAttempt(att){ STATE.attempts.push(att); updateWrongQuestionBank(att); saveState(); }
+function deleteAttempt(id){ STATE.attempts=STATE.attempts.filter(a=>a.id!==id); saveState(); }
+
+/* ============================================================
+   區域 7：錯題統計
+   ============================================================ */
+function wrongKey(year,paperId,qno){ return `${STATE.config.subject.id}_${year}_${paperId}_Q${qno}`; }
+function updateWrongQuestionBank(att){
+  const wq=STATE.wrongQuestions;
+  att.mcqDetail.forEach(d=>{
+    const key=wrongKey(att.year,att.paperId,d.qno);
+    if(d.status==="wrong"){
+      if(!wq[key]){
+        wq[key]={ key, year:att.year, paperId:att.paperId, paperName:att.paperName, qno:d.qno,
+          wrongCount:0, attemptCount:0, lastAnswer:d.student, correctAnswer:d.correct,
+          lastWrongDate:att.date, reviewed:false, mastered:false, recentlyCorrect:false };
+      }
+      wq[key].wrongCount++; wq[key].attemptCount++;
+      wq[key].lastAnswer=d.student; wq[key].correctAnswer=d.correct;
+      wq[key].lastWrongDate=att.date; wq[key].recentlyCorrect=false;
+    }else if(d.status==="correct" && wq[key]){
+      wq[key].attemptCount++; wq[key].recentlyCorrect=true;
+    }
+  });
+}
+function unmasteredCount(){ return Object.values(STATE.wrongQuestions).filter(w=>!w.mastered).length; }
+
+/* ============================================================
+   區域 8：圖表管理
+   ============================================================ */
+const CHART_OK = typeof Chart !== "undefined";
+let chartInstances=[];
+function destroyCharts(){ chartInstances.forEach(c=>{try{c.destroy();}catch(e){}}); chartInstances=[]; }
+
+/* ============================================================
+   區域 9：JSON／CSV 匯入匯出
+   ============================================================ */
+function buildExport(type){
+  const base={ schemaVersion:CURRENT_SCHEMA, exportedAt:new Date().toISOString() };
+  if(type==="config") return {...base, config:STATE.config};
+  if(type==="attempts") return {...base, attempts:STATE.attempts, wrongQuestions:STATE.wrongQuestions};
+  return {...base, config:STATE.config, attempts:STATE.attempts, wrongQuestions:STATE.wrongQuestions};
+}
+function doExport(type){
+  download(`hkdse-${type}-${Date.now()}.json`, JSON.stringify(buildExport(type),null,2), "application/json");
+  toast("已匯出 JSON");
+}
+function download(name, content, mime){
+  const blob=new Blob([content],{type:mime});
+  const a=document.createElement("a");
+  a.href=URL.createObjectURL(blob); a.download=name; a.click();
+  setTimeout(()=>URL.revokeObjectURL(a.href),1000);
+}
+function exportAttemptsCsv(){
+  const rows=[["紀錄ID","科目","年份","卷別","日期","答對","答錯","未答","MC分數","原始總分","加權%","估算等級","臨界版本","備註"]];
+  STATE.attempts.forEach(a=>rows.push([a.id,STATE.config.subject.name,a.year,a.paperName,a.date,
+    a.mcq.correct,a.mcq.wrong.length,a.mcq.unanswered.length,a.mcq.score,a.rawTotal,a.percentage.toFixed(1),a.grade,a.cutoffVersion,(a.note||"").replace(/,/g,"，")]));
+  download(`hkdse-attempts-${Date.now()}.csv`, "\uFEFF"+rows.map(r=>r.join(",")).join("\n"), "text/csv");
+  toast("已匯出練習紀錄 CSV");
+}
+function exportWrongCsv(){
+  const rows=[["題目索引","年份","卷別","上次答案","正確答案","答錯次數","最近答錯","狀態"]];
+  Object.values(STATE.wrongQuestions).forEach(w=>rows.push([`Q${w.qno}，${w.year}`,w.year,w.paperName,w.lastAnswer,w.correctAnswer,w.wrongCount,w.lastWrongDate,w.mastered?"已掌握":(w.recentlyCorrect?"最近已答對":"未掌握")]));
+  download(`hkdse-wrong-${Date.now()}.csv`, "\uFEFF"+rows.map(r=>r.join(",")).join("\n"), "text/csv");
+  toast("已匯出錯題清單 CSV");
+}
+function previewImport(){
+  const fileInput=document.getElementById("importFile");
+  const text=document.getElementById("importText").value.trim();
+  if(fileInput.files.length){ const r=new FileReader(); r.onload=()=>processImport(r.result); r.readAsText(fileInput.files[0]); }
+  else if(text){ processImport(text); }
+  else{ toast("請選擇檔案或貼上 JSON"); }
+}
+function processImport(raw){
+  let data;
+  try{ data=JSON.parse(raw); }
+  catch(e){ document.getElementById("importPreview").innerHTML=`<p class="err">JSON 格式錯誤：${esc(e.message)}</p>`; return; }
+  if(typeof data!=="object"||data===null){ document.getElementById("importPreview").innerHTML=`<p class="err">資料格式不正確</p>`; return; }
+  const mode=document.querySelector('input[name="importMode"]:checked').value;
+  const cfgN=data.config? (data.config.papers||[]).length : 0;
+  const attN=data.attempts? data.attempts.length : 0;
+  document.getElementById("importPreview").innerHTML=`
+    <div class="card"><b>匯入預覽（${mode==="merge"?"合併":"完全取代"}）</b>
+    <ul><li>試卷設定年份數：${cfgN}</li><li>練習紀錄數：${attN}</li>
+    <li>錯題項目：${data.wrongQuestions?Object.keys(data.wrongQuestions).length:0}</li></ul>
+    <button class="btn" onclick='confirmImport(${JSON.stringify(JSON.stringify(data))})'>確認匯入</button></div>`;
+}
+function confirmImport(rawStr){
+  const data=JSON.parse(JSON.parse(rawStr));
+  localStorage.setItem(LS_BACKUP, JSON.stringify(STATE));
+  const mode=document.querySelector('input[name="importMode"]:checked').value;
+  try{
+    if(mode==="replace"){
+      if(data.config) STATE.config=data.config;
+      if(data.attempts) STATE.attempts=data.attempts;
+      if(data.wrongQuestions) STATE.wrongQuestions=data.wrongQuestions;
+    }else{
+      if(data.config&&data.config.papers){
+        data.config.papers.forEach(np=>{
+          const idx=STATE.config.papers.findIndex(p=>String(p.year)===String(np.year)&&p.paperId===np.paperId);
+          if(idx>=0) STATE.config.papers[idx]=np; else STATE.config.papers.push(np);
+        });
+        if(data.config.subject) STATE.config.subject=data.config.subject;
+      }
+      if(data.attempts){ const ids=new Set(STATE.attempts.map(a=>a.id));
+        data.attempts.forEach(a=>{ if(!ids.has(a.id)) STATE.attempts.push(a); }); }
+      if(data.wrongQuestions) Object.assign(STATE.wrongQuestions, data.wrongQuestions);
+    }
+    saveState(); renderAll();
+    toast(`匯入成功：新增 ${(data.attempts||[]).length} 筆紀錄`);
+    document.getElementById("importPreview").innerHTML="<p class='tag-ok'>✓ 匯入完成</p>";
+  }catch(e){ toast("匯入失敗："+e.message); }
+}
+
+/* ============================================================
+   區域 10：UI 渲染
+   ============================================================ */
+function esc(s){ const d=document.createElement("div"); d.textContent=s==null?"":String(s); return d.innerHTML; }
+function toast(msg){
+  const t=document.getElementById("toast"); t.textContent=msg; t.classList.add("show");
+  document.getElementById("live").textContent=msg;
+  clearTimeout(t._t); t._t=setTimeout(()=>t.classList.remove("show"),2600);
+}
+function showModal(html){ document.getElementById("modal").innerHTML=html; document.getElementById("modalBg").classList.add("show"); }
+function closeModal(){ document.getElementById("modalBg").classList.remove("show"); }
+
+function renderHome(){
+  document.getElementById("homeSubject").textContent="📊 "+STATE.config.subject.name;
+  const el=document.getElementById("homeContent");
+  const A=STATE.attempts;
+  if(A.length===0){
+    el.innerHTML=`<div class="empty"><div class="big">📝</div>
+      <p>尚未有練習紀錄。</p><p>先確認年份資料，再開始你的第一次練習！</p>
+      <button class="btn" onclick="go('attempt')">開始練習</button>
+      <button class="btn secondary" onclick="go('manage')">管理試卷資料</button></div>`;
+    return;
+  }
+  const years=new Set(A.map(a=>a.year));
+  const last=A[A.length-1];
+  const best=A.reduce((m,a)=>a.percentage>m.percentage?a:m,A[0]);
+  const avgAcc=A.reduce((t,a)=>t+a.mcq.accuracy,0)/A.length;
+  const recent=A.slice(-5);
+  const trend=recent.map(a=>`<span class="css-bar" style="width:${Math.max(a.percentage,8)}%">${a.year}: ${a.percentage.toFixed(0)}% <span class="badge ${gradeClass(a.grade)}">${a.grade||"部分"}</span></span>`).join("");
+  el.innerHTML=`
+    <div class="grid">
+      <div class="stat"><div class="num">${A.length}</div><div class="lbl">已完成練習</div></div>
+      <div class="stat"><div class="num">${years.size}</div><div class="lbl">涵蓋年份</div></div>
+      <div class="stat"><div class="num">${last.percentage.toFixed(1)}%</div><div class="lbl">最近估算分數</div></div>
+      <div class="stat"><div class="num"><span class="badge ${gradeClass(last.grade)}">${last.grade||"部分"}</span></div><div class="lbl">最近估算等級</div></div>
+      <div class="stat"><div class="num">${best.percentage.toFixed(1)}%</div><div class="lbl">個人最佳</div></div>
+      <div class="stat"><div class="num">${avgAcc.toFixed(0)}%</div><div class="lbl">平均 MC 正確率</div></div>
+      <div class="stat"><div class="num">${unmasteredCount()}</div><div class="lbl">未掌握錯題</div></div>
+    </div>
+    <h3>最近 5 次分數趨勢</h3>${trend}
+    <div style="margin-top:12px">
+      <button class="btn" onclick="go('attempt')">開始練習</button>
+      <button class="btn secondary" onclick="go('wrong')">重溫錯題</button>
+      <button class="btn secondary" onclick="go('manage')">管理試卷資料</button>
+    </div>
+    <p class="help-txt">⚠️ 以上等級只按你自訂的粗略界線估算，並非考評局正式評級。</p>`;
+}
+
+let currentDraft=null;
+function fillYearSelects(){
+  const opts=STATE.config.papers.map(p=>`<option value="${p.year}__${p.paperId}">${p.year}｜${esc(p.paperName)}</option>`).join("");
+  const s=document.getElementById("attYear"); s.innerHTML=`<option value="">— 請選擇 —</option>`+opts;
+  const years=[...new Set(STATE.config.papers.map(p=>p.year))].sort();
+  const yopts=`<option value="">全部年份</option>`+years.map(y=>`<option value="${y}">${y}</option>`).join("");
+  ["recFilterYear","progYear","wrongYear"].forEach(id=>{ const e=document.getElementById(id); if(e) e.innerHTML=yopts; });
+}
+function renderAttemptForm(){
+  const val=document.getElementById("attYear").value;
+  const area=document.getElementById("attemptArea");
+  if(!val){ area.innerHTML=""; return; }
+  const [year,paperId]=val.split("__");
+  const paper=getPaper(year,paperId);
+  const errs=validatePaperConfig(paper);
+  if(errs.length){ area.innerHTML=`<div class="card"><p class="err">此試卷資料有誤，請先修正：<br>${errs.map(esc).join("<br>")}</p></div>`; return; }
+  const draftKey="draft_"+val;
+  const saved=STATE.prefs[draftKey];
+  const draftAns = saved? saved.mcq : new Array(paper.mcq.questionCount).fill(null);
+  const draftWrit = saved? saved.written : {};
+  if(saved) document.getElementById("draftInfo").textContent="已載入草稿，最後更新："+new Date(saved.time).toLocaleString("zh-HK");
+  let mcqHtml="";
+  for(let i=0;i<paper.mcq.questionCount;i++){
+    const optBtns=paper.mcq.options.map(o=>
+      `<button type="button" class="opt-btn ${draftAns[i]===o?'selected':''}" data-q="${i}" data-opt="${o}" aria-label="第${i+1}題選${o}">${o}</button>`).join("");
+    mcqHtml+=`<div class="mcq-q"><span class="qno">Q${i+1}</span>${optBtns}
+      <button type="button" class="opt-btn na ${draftAns[i]==='NA'?'selected':''}" data-q="${i}" data-opt="NA">未作答</button></div>`;
+  }
+  const writHtml=paper.writtenSections.map(s=>{
+    const d=draftWrit[s.id]||{};
+    return `<div class="row" style="border-bottom:1px solid var(--border);padding:8px 0">
+      <label style="margin:0;min-width:140px">${esc(s.name)}（滿分 ${s.maxMark}）</label>
+      <input type="number" class="writ-in" data-sec="${s.id}" min="0" max="${s.maxMark}" step="0.5" value="${d.score!=null?d.score:''}" placeholder="實得分" style="max-width:120px">
+      <label style="margin:0"><input type="checkbox" class="writ-na" data-sec="${s.id}" ${d.na?'checked':''} style="width:auto"> 未完成</label>
+    </div>`;}).join("");
+  area.innerHTML=`
+    <div class="card"><h3>選擇題（共 ${paper.mcq.questionCount} 題，每題 ${paper.mcq.marksPerQuestion} 分）</h3>${mcqHtml||'<p class="help-txt">此卷沒有選擇題。</p>'}</div>
+    <div class="card"><h3>長題目／非選擇題</h3>${writHtml||'<p class="help-txt">此卷沒有長題目。</p>'}</div>
+    <div class="card"><button class="btn" id="submitBtn">提交及計算</button>
+      <button class="btn secondary" onclick="resetDraft('${val}')">重新開始</button></div>
+    <div id="resultArea"></div>`;
+  area.querySelectorAll(".opt-btn").forEach(b=>b.addEventListener("click",()=>{
+    const q=+b.dataset.q;
+    area.querySelectorAll(`.opt-btn[data-q="${q}"]`).forEach(x=>x.classList.remove("selected"));
+    b.classList.add("selected"); saveDraft(val,paper);
+  }));
+  area.querySelectorAll(".writ-in,.writ-na").forEach(inp=>inp.addEventListener("change",()=>saveDraft(val,paper)));
+  document.getElementById("submitBtn").addEventListener("click",()=>confirmSubmit(val,paper));
+}
+function readForm(paper){
+  const area=document.getElementById("attemptArea");
+  const mcq=[];
+  for(let i=0;i<paper.mcq.questionCount;i++){
+    const sel=area.querySelector(`.opt-btn[data-q="${i}"].selected`);
+    mcq[i]= sel? sel.dataset.opt : null;
+  }
+  const written={};
+  paper.writtenSections.forEach(s=>{
+    const na=area.querySelector(`.writ-na[data-sec="${s.id}"]`).checked;
+    const v=area.querySelector(`.writ-in[data-sec="${s.id}"]`).value;
+    written[s.id]={ na, score: v===""?null:Number(v) };
+  });
+  return {mcq,written};
+}
+function saveDraft(val,paper){
+  const f=readForm(paper);
+  STATE.prefs["draft_"+val]={...f, time:new Date().toISOString()};
+  saveState();
+  document.getElementById("draftInfo").textContent="草稿已自動儲存："+new Date().toLocaleString("zh-HK");
+}
+function resetDraft(val){
+  delete STATE.prefs["draft_"+val]; saveState();
+  document.getElementById("draftInfo").textContent=""; renderAttemptForm();
+}
+function confirmSubmit(val,paper){
+  const mode=document.querySelector('input[name="attMode"]:checked').value;
+  const f=readForm(paper);
+  for(const s of paper.writtenSections){
+    const w=f.written[s.id];
+    if(!w.na && w.score!=null){
+      if(w.score<0){ toast(`「${s.name}」分數不可為負`); return; }
+      if(w.score>s.maxMark){ toast(`「${s.name}」分數不可超過滿分 ${s.maxMark}`); return; }
+    }
+  }
+  if(mode==="full"){
+    const missing=paper.writtenSections.filter(s=>{ const w=f.written[s.id]; return w.na||w.score==null; });
+    if(missing.length){
+      showModal(`<h3>尚有未完成部分</h3><p>以下長題部分未輸入分數：${missing.map(m=>esc(m.name)).join("、")}。</p>
+        <button class="btn" onclick="closeModal();doSubmit('${val}','partial')">只分析已完成</button>
+        <button class="btn danger" onclick="closeModal();doSubmit('${val}','fullZero')">當作 0 分並繼續</button>
+        <button class="btn secondary" onclick="closeModal()">取消</button>`);
+      return;
+    }
+  }
+  showModal(`<h3>確認提交？</h3><p>提交後將計算分數並可儲存為紀錄。</p>
+    <button class="btn" onclick="closeModal();doSubmit('${val}','${mode}')">確認提交</button>
+    <button class="btn secondary" onclick="closeModal()">返回修改</button>`);
+}
+let lastResult=null, submitLock=false;
+function doSubmit(val,mode){
+  if(submitLock) return; submitLock=true; setTimeout(()=>submitLock=false,800);
+  const [year,paperId]=val.split("__");
+  const paper=getPaper(year,paperId);
+  const f=readForm(paper);
+  const mcqRes=calculateMcqResult(f.mcq.map(x=>x==="NA"?null:x), paper.mcq.answers, paper.mcq.marksPerQuestion);
+  const parts=[];
+  if(paper.mcq.questionCount>0) parts.push({name:"選擇題", score:mcqRes.score, maxMark:mcqRes.maxScore, weight: paper.mcqWeight});
+  let partial=(mode==="partial");
+  paper.writtenSections.forEach(s=>{
+    const w=f.written[s.id];
+    let sc = (w.na||w.score==null)? (mode==="fullZero"?0:null) : w.score;
+    if(sc==null){ partial=true; }
+    else parts.push({name:s.name, score:sc, maxMark:s.maxMark, weight:s.weight});
+  });
+  const useWeight = parts.every(p=>p.weight!=null);
+  const wRes=calculateWeightedScore(parts.map(p=>({score:p.score,maxMark:p.maxMark,weight:useWeight?p.weight:null})));
+  const rawTotal=parts.reduce((t,p)=>t+p.score,0);
+  let grade=null, gap=null;
+  if(!partial){ grade=estimateGrade(wRes.percentage, paper.cutoffs); gap=nextGradeGap(wRes.percentage, paper.cutoffs); }
+  const mcqDetail=paper.mcq.answers.map((ca,i)=>{
+    const sa=f.mcq[i]==="NA"?null:f.mcq[i];
+    const status = sa==null?"unanswered":(sa===ca?"correct":"wrong");
+    return {qno:i+1, student:sa||"未作答", correct:ca, status};
+  });
+  lastResult={val,paper,mode,partial,f,mcqRes,parts,wRes,rawTotal,grade,gap,mcqDetail};
+  renderResult();
+}
+function renderResult(){
+  const R=lastResult;
+  const wrongList=R.mcqRes.wrong.map(q=>`Q${q}，${R.paper.year}`).join("、")||"（無）";
+  const naList=R.mcqRes.unanswered.map(q=>`Q${q}`).join("、")||"（無）";
+  const gradeHtml=R.partial? `<span class="tag-none">只分析已完成部分，不估算整體等級</span>`
+    : `<span class="badge ${gradeClass(R.grade)}">${R.grade}</span> ${R.gap?`（距離 ${R.gap.grade} 尚差 ${R.gap.gap} 分）`:"（已達最高估算等級）"}`;
+  document.getElementById("resultArea").innerHTML=`<div class="card" aria-live="polite">
+    <h3>📊 計算結果</h3>
+    <table>
+      <tr><td>選擇題答對</td><td>${R.mcqRes.correct} / ${R.mcqRes.total}</td></tr>
+      <tr><td>選擇題得分</td><td>${R.mcqRes.score} / ${R.mcqRes.maxScore}</td></tr>
+      <tr><td>選擇題正確率</td><td>${R.mcqRes.accuracy.toFixed(1)}%</td></tr>
+      <tr><td>長題實得分</td><td>${R.parts.filter(p=>p.name!=="選擇題").map(p=>`${esc(p.name)} ${p.score}/${p.maxMark}`).join("；")||"（無）"}</td></tr>
+      <tr><td>原始總分</td><td>${R.rawTotal}</td></tr>
+      <tr><td>${R.wRes.weighted?"加權後百分比":"總百分比"}</td><td><b>${R.wRes.percentage.toFixed(2)}%</b></td></tr>
+      <tr><td>粗略估算等級</td><td>${gradeHtml}</td></tr>
+      <tr><td>答錯題目</td><td class="tag-bad">${wrongList}</td></tr>
+      <tr><td>未作答</td><td class="tag-none">${naList}</td></tr>
+    </table>
+    <p class="help-txt">⚠️ 此等級只按你自訂粗略界線估算，並非考評局正式評級。</p>
+    <label for="attNote">備註（選填）</label><input id="attNote" placeholder="例如：計時練習">
+    <div style="margin-top:8px">
+      <button class="btn" id="saveAttBtn">儲存紀錄</button>
+      <button class="btn secondary" onclick="renderAttemptForm()">修改答案</button>
+      <button class="btn secondary" onclick="go('attempt')">開始另一年份</button>
+      <button class="btn secondary" onclick="go('wrong')">查看錯題</button>
+      <button class="btn secondary" onclick="go('home')">返回總覽</button>
+    </div></div>`;
+  document.getElementById("saveAttBtn").addEventListener("click",saveCurrentAttempt);
+  document.getElementById("live").textContent=`計算完成，百分比 ${R.wRes.percentage.toFixed(1)}%`;
+}
+function saveCurrentAttempt(){
+  const R=lastResult; if(!R) return;
+  document.getElementById("saveAttBtn").disabled=true;
+  const att={
+    id:uid(), subjectId:STATE.config.subject.id, year:R.paper.year, paperId:R.paper.paperId,
+    paperName:R.paper.paperName, date:new Date().toISOString(),
+    studentAnswers:R.f.mcq, correctAnswers:R.paper.mcq.answers,
+    mcq:{correct:R.mcqRes.correct,total:R.mcqRes.total,wrong:R.mcqRes.wrong,unanswered:R.mcqRes.unanswered,score:R.mcqRes.score,accuracy:R.mcqRes.accuracy},
+    mcqDetail:R.mcqDetail,
+    writtenParts:R.parts.filter(p=>p.name!=="選擇題"),
+    rawTotal:R.rawTotal, weightedTotal:R.wRes.percentage, percentage:R.wRes.percentage,
+    grade:R.partial?null:R.grade, partial:R.partial,
+    cutoffs:JSON.parse(JSON.stringify(R.paper.cutoffs)), cutoffVersion:R.paper.cutoffVersion,
+    note:document.getElementById("attNote").value
+  };
+  saveAttempt(att); toast("✓ 紀錄已儲存");
+  delete STATE.prefs["draft_"+R.val]; saveState();
+  renderAll(); go("records");
+}
+
+function renderRecords(){
+  const el=document.getElementById("recordsList");
+  let list=[...STATE.attempts];
+  const fy=document.getElementById("recFilterYear").value;
+  if(fy) list=list.filter(a=>String(a.year)===fy);
+  const sort=document.getElementById("recSort").value;
+  list.sort((a,b)=>{
+    if(sort==="date-asc") return new Date(a.date)-new Date(b.date);
+    if(sort==="score-desc") return b.percentage-a.percentage;
+    if(sort==="score-asc") return a.percentage-b.percentage;
+    return new Date(b.date)-new Date(a.date);
+  });
+  if(list.length===0){ el.innerHTML=`<div class="empty"><div class="big">📭</div><p>沒有符合的紀錄。</p></div>`; return; }
+  const byTime=[...STATE.attempts].sort((a,b)=>new Date(a.date)-new Date(b.date));
+  let html=`<table><thead><tr><th>日期</th><th>年份</th><th>百分比</th><th>等級</th><th>升跌</th><th>操作</th></tr></thead><tbody>`;
+  list.forEach(a=>{
+    const idx=byTime.findIndex(x=>x.id===a.id);
+    const prev=idx>0?byTime[idx-1]:null;
+    const diff=prev?(a.percentage-prev.percentage):null;
+    const diffHtml=diff==null?"—":(diff>=0?`<span class="tag-ok">▲${diff.toFixed(1)}</span>`:`<span class="tag-bad">▼${Math.abs(diff).toFixed(1)}</span>`);
+    html+=`<tr>
+      <td>${new Date(a.date).toLocaleDateString("zh-HK")}</td>
+      <td>${a.year}｜${esc(a.paperName)}</td>
+      <td>${a.percentage.toFixed(1)}%</td>
+      <td>${a.grade?`<span class="badge ${gradeClass(a.grade)}">${a.grade}</span>`:'<span class="tag-none">部分</span>'}</td>
+      <td>${diffHtml}</td>
+      <td class="no-print">
+        <button class="btn secondary" onclick="viewRecord('${a.id}')">詳細</button>
+        <button class="btn secondary" onclick="copyRecord('${a.id}')">重做</button>
+        <button class="btn danger" onclick="delRecordPrompt('${a.id}')">刪除</button>
+      </td></tr>`;
+  });
+  el.innerHTML=html+`</tbody></table>`;
+}
+function viewRecord(id){
+  const a=STATE.attempts.find(x=>x.id===id);
+  const rows=a.mcqDetail.map(d=>`<tr><td>Q${d.qno}</td><td>${d.student}</td><td>${d.correct}</td>
+    <td>${d.status==="correct"?'<span class="tag-ok">✓對</span>':d.status==="wrong"?'<span class="tag-bad">✗錯</span>':'<span class="tag-none">未答</span>'}</td></tr>`).join("");
+  showModal(`<h3>${a.year}｜${esc(a.paperName)} 詳細</h3>
+    <p>日期：${new Date(a.date).toLocaleString("zh-HK")}｜百分比：${a.percentage.toFixed(1)}%｜臨界版本：${esc(a.cutoffVersion)}</p>
+    <table><thead><tr><th>題號</th><th>你的答案</th><th>正確</th><th>結果</th></tr></thead><tbody>${rows}</tbody></table>
+    <p class="help-txt">備註：${esc(a.note)||"（無）"}</p>
+    <button class="btn secondary" onclick="printRecord('${id}')">🖨️ 列印此結果</button>
+    <button class="btn secondary" onclick="closeModal()">關閉</button>`);
+}
+function copyRecord(id){
+  const a=STATE.attempts.find(x=>x.id===id);
+  go("attempt");
+  document.getElementById("attYear").value=a.year+"__"+a.paperId;
+  renderAttemptForm(); toast("已載入此年份，可重新練習");
+}
+function delRecordPrompt(id){
+  showModal(`<h3>確認刪除？（第一次確認）</h3>
+    <button class="btn danger" onclick="delRecordPrompt2('${id}')">繼續刪除</button>
+    <button class="btn secondary" onclick="closeModal()">取消</button>`);
+}
+function delRecordPrompt2(id){
+  showModal(`<h3>⚠️ 再次確認刪除？（第二次確認）</h3><p>此操作無法復原。</p>
+    <button class="btn danger" onclick="closeModal();deleteAttempt('${id}');renderAll();toast('已刪除紀錄')">確定刪除</button>
+    <button class="btn secondary" onclick="closeModal()">取消</button>`);
+}
+
+function filteredAttempts(){
+  let list=[...STATE.attempts].sort((a,b)=>new Date(a.date)-new Date(b.date));
+  const y=document.getElementById("progYear").value;
+  if(y) list=list.filter(a=>String(a.year)===y);
+  const range=document.getElementById("progRange").value;
+  if(range!=="all") list=list.slice(-Number(range));
+  return list;
+}
+function renderProgressCharts(){
+  destroyCharts();
+  const el=document.getElementById("progressCharts");
+  const list=filteredAttempts();
+  if(list.length===0){ el.innerHTML=`<div class="empty"><div class="big">📉</div><p>尚無足夠資料繪製圖表。</p></div>`; return; }
+  el.innerHTML=`
+    <h3>1. 分數趨勢</h3><div class="chart-wrap"><canvas id="c1"></canvas><div id="t1"></div></div>
+    <h3>2. 選擇題正確率趨勢</h3><div class="chart-wrap"><canvas id="c2"></canvas><div id="t2"></div></div>
+    <h3>3. 各年份表現</h3><div class="chart-wrap"><canvas id="c3"></canvas><div id="t3"></div></div>
+    <h3>4. 等級分布</h3><div class="chart-wrap"><canvas id="c4"></canvas><div id="t4"></div></div>
+    <h3>5. 各年份錯題數量</h3><div class="chart-wrap"><canvas id="c5"></canvas><div id="t5"></div></div>`;
+  const labels=list.map(a=>`${a.year} ${new Date(a.date).toLocaleDateString("zh-HK")}`);
+  const scores=list.map(a=>+a.percentage.toFixed(1));
+  const accs=list.map(a=>+a.mcq.accuracy.toFixed(1));
+  const barMode=document.getElementById("progBarMode").value;
+  const byYear={};
+  STATE.attempts.forEach(a=>{ (byYear[a.year]=byYear[a.year]||[]).push(a.percentage); });
+  const yearLabels=Object.keys(byYear).sort();
+  const yearVals=yearLabels.map(y=>{ const arr=byYear[y];
+    if(barMode==="best") return Math.max(...arr);
+    if(barMode==="latest") return arr[arr.length-1];
+    return arr.reduce((t,v)=>t+v,0)/arr.length; }).map(v=>+v.toFixed(1));
+  const gd={}; STATE.attempts.forEach(a=>{ if(a.grade) gd[a.grade]=(gd[a.grade]||0)+1; });
+  const gLabels=Object.keys(gd); const gVals=gLabels.map(g=>gd[g]);
+  const wy={}; Object.values(STATE.wrongQuestions).forEach(w=>{ if(!w.mastered) wy[w.year]=(wy[w.year]||0)+1; });
+  const wyLabels=Object.keys(wy).sort(); const wyVals=wyLabels.map(y=>wy[y]);
+  document.getElementById("t1").innerHTML=textTable(["練習","百分比"], labels.map((l,i)=>[l,scores[i]+"%"]));
+  document.getElementById("t2").innerHTML=textTable(["練習","MC正確率"], labels.map((l,i)=>[l,accs[i]+"%"]));
+  document.getElementById("t3").innerHTML=textTable(["年份","分數"], yearLabels.map((l,i)=>[l,yearVals[i]+"%"]));
+  document.getElementById("t4").innerHTML=textTable(["等級","次數"], gLabels.map((l,i)=>[l,gVals[i]]));
+  document.getElementById("t5").innerHTML=textTable(["年份","未掌握錯題"], wyLabels.map((l,i)=>[l,wyVals[i]]));
+  if(!CHART_OK){
+    el.querySelectorAll("canvas").forEach(c=>c.replaceWith(Object.assign(document.createElement("p"),{className:"help-txt",textContent:"（Chart.js 未能載入，以上為文字版數據）"})));
+    return;
+  }
+  Chart.defaults.color=getComputedStyle(document.body).getPropertyValue("--text").trim();
+  chartInstances.push(new Chart(document.getElementById("c1"),{type:"line",data:{labels,datasets:[{label:"估算百分比 (%)",data:scores,borderColor:"#2563eb",backgroundColor:"rgba(37,99,235,.15)",tension:.2,fill:true}]},options:lineOpts("百分比 %",list)}));
+  chartInstances.push(new Chart(document.getElementById("c2"),{type:"line",data:{labels,datasets:[{label:"MC 正確率 (%)",data:accs,borderColor:"#16a34a",tension:.2}]},options:lineOpts("正確率 %")}));
+  chartInstances.push(new Chart(document.getElementById("c3"),{type:"bar",data:{labels:yearLabels,datasets:[{label:barMode+" 分數 (%)",data:yearVals,backgroundColor:"#0891b2"}]},options:barOpts("百分比 %")}));
+  chartInstances.push(new Chart(document.getElementById("c4"),{type:"bar",data:{labels:gLabels,datasets:[{label:"次數",data:gVals,backgroundColor:gLabels.map(g=>({"5**":"#7c3aed","5*":"#9333ea","5":"#2563eb","4":"#0891b2","3":"#16a34a","2":"#ca8a04","1":"#ea580c","U":"#6b7280"}[g]||"#888"))}]},options:barOpts("次數")}));
+  chartInstances.push(new Chart(document.getElementById("c5"),{type:"bar",data:{labels:wyLabels,datasets:[{label:"未掌握錯題數",data:wyVals,backgroundColor:"#dc2626"}]},options:barOpts("題數")}));
+}
+function lineOpts(yLabel,list){
+  return {responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{display:true},tooltip:{callbacks:{afterLabel:(ctx)=>list?`等級：${list[ctx.dataIndex].grade||"部分"}`:""}}},
+    scales:{y:{title:{display:true,text:yLabel},beginAtZero:true,max:100}}};
+}
+function barOpts(yLabel){ return {responsive:true,maintainAspectRatio:false,plugins:{legend:{display:true}},scales:{y:{title:{display:true,text:yLabel},beginAtZero:true}}}; }
+function textTable(head,rows){
+  if(rows.length===0) return "";
+  return `<table class="no-print" style="margin-top:6px"><thead><tr>${head.map(h=>`<th>${esc(h)}</th>`).join("")}</tr></thead><tbody>${rows.map(r=>`<tr>${r.map(c=>`<td>${esc(c)}</td>`).join("")}</tr>`).join("")}</tbody></table>`;
+}
+
+let wrongSelected=new Set();
+function renderWrong(){
+  const el=document.getElementById("wrongList");
+  let list=Object.values(STATE.wrongQuestions);
+  const y=document.getElementById("wrongYear").value;
+  if(y) list=list.filter(w=>String(w.year)===y);
+  const search=document.getElementById("wrongSearch").value.trim();
+  if(search) list=list.filter(w=>String(w.qno).includes(search));
+  if(document.getElementById("wrongUnmastered").checked) list=list.filter(w=>!w.mastered);
+  const sort=document.getElementById("wrongSort").value;
+  list.sort((a,b)=> sort==="recent-desc"? new Date(b.lastWrongDate)-new Date(a.lastWrongDate) : b.wrongCount-a.wrongCount);
+  if(list.length===0){ el.innerHTML=`<div class="empty"><div class="big">🎉</div><p>沒有符合的錯題，繼續加油！</p></div>`; return; }
+  let html=`<table><thead><tr><th class="no-print">選</th><th>題目索引</th><th>你的答案</th><th>正確答案</th><th>答錯次數</th><th>最近答錯</th><th>狀態</th><th class="no-print">操作</th></tr></thead><tbody>`;
+  list.forEach(w=>{
+    const status=w.mastered?'<span class="tag-ok">已掌握</span>':(w.recentlyCorrect?'<span class="tag-none">最近已答對</span>':'<span class="tag-bad">未掌握</span>');
+    html+=`<tr>
+      <td class="no-print"><input type="checkbox" ${wrongSelected.has(w.key)?"checked":""} onchange="toggleWrongSel('${esc(w.key)}',this.checked)" style="width:auto"></td>
+      <td><b>Q${w.qno}，${w.year}</b></td>
+      <td>${esc(w.lastAnswer)}</td><td>${esc(w.correctAnswer)}</td>
+      <td>${w.wrongCount}</td>
+      <td>${new Date(w.lastWrongDate).toLocaleDateString("zh-HK")}</td>
+      <td>${status} ${w.reviewed?'📖':''}</td>
+      <td class="no-print">
+        <button class="btn secondary" onclick="markWrong('${esc(w.key)}','reviewed')">已重溫</button>
+        <button class="btn secondary" onclick="markWrong('${esc(w.key)}','mastered')">${w.mastered?'取消掌握':'已掌握'}</button>
+      </td></tr>`;
+  });
+  el.innerHTML=html+`</tbody></table><p class="help-txt">只顯示題目索引，不含題目內容；請自行翻查合法取得的試卷。</p>`;
+}
+function toggleWrongSel(key,on){ if(on) wrongSelected.add(key); else wrongSelected.delete(key); }
+function markWrong(key,type){
+  const w=STATE.wrongQuestions[key]; if(!w) return;
+  if(type==="reviewed") w.reviewed=true;
+  if(type==="mastered") w.mastered=!w.mastered;
+  saveState(); renderWrong(); toast("已更新錯題狀態");
+}
+function bulkMark(type){
+  if(wrongSelected.size===0){ toast("請先選取題目"); return; }
+  wrongSelected.forEach(k=>{ const w=STATE.wrongQuestions[k]; if(w){ if(type==="reviewed")w.reviewed=true; if(type==="mastered")w.mastered=true; }});
+  saveState(); wrongSelected.clear(); renderWrong(); toast("已批量更新");
+}
+
+function renderManage(){
+  document.getElementById("mgSubjectId").value=STATE.config.subject.id;
+  document.getElementById("mgSubjectName").value=STATE.config.subject.name;
+  const el=document.getElementById("paperList");
+  if(STATE.config.papers.length===0){ el.innerHTML=`<p class="empty">尚未有試卷資料（請檢查 data.js）。</p>`; return; }
+  el.innerHTML=`<table><thead><tr><th>年份</th><th>卷別</th><th>MC題數</th><th>臨界版本</th><th>操作</th></tr></thead><tbody>`+
+    STATE.config.papers.map((p,i)=>`<tr><td>${p.year}</td><td>${esc(p.paperName)}</td><td>${p.mcq.questionCount}</td><td>${esc(p.cutoffVersion)}</td>
+    <td><button class="btn secondary" onclick="editPaper(${i})">編輯</button>
+    <button class="btn danger" onclick="delPaper(${i})">刪除</button></td></tr>`).join("")+`</tbody></table>`;
+}
+function saveSubjectMeta(){
+  const id=document.getElementById("mgSubjectId").value.trim();
+  const name=document.getElementById("mgSubjectName").value.trim();
+  if(!id||!name){ toast("科目 ID 及名稱不可空白"); return; }
+  STATE.config.subject={id,name}; saveState(); renderAll(); toast("已儲存科目資料");
+}
+function editPaper(idx){
+  const p = idx==null? {year:"",paperId:"paper2",paperName:"卷二",
+    mcq:{questionCount:0,options:["A","B","C","D"],marksPerQuestion:1,allowMultiple:false,answers:[]},
+    writtenSections:[], mcqWeight:1,
+    cutoffs:{"5**":null,"5*":null,"5":null,"4":null,"3":null,"2":null,"1":null}, cutoffVersion:"", note:""}
+    : JSON.parse(JSON.stringify(STATE.config.papers[idx]));
+  const ed=document.getElementById("paperEditor");
+  ed.style.display="block";
+  ed.innerHTML=`<h3>${idx==null?"新增":"編輯"}年份試卷</h3>
+    <div class="grid">
+      <div><label>年份</label><input id="ep_year" type="number" value="${p.year}"></div>
+      <div><label>卷別 ID</label><input id="ep_pid" value="${esc(p.paperId)}"></div>
+      <div><label>卷別名稱</label><input id="ep_pname" value="${esc(p.paperName)}"></div>
+      <div><label>選項（逗號分隔）</label><input id="ep_opts" value="${p.mcq.options.join(",")}"></div>
+      <div><label>MC 題數</label><input id="ep_qc" type="number" value="${p.mcq.questionCount}"></div>
+      <div><label>每題分數</label><input id="ep_mpq" type="number" step="0.5" value="${p.mcq.marksPerQuestion}"></div>
+      <div><label>MC 比重（可留空）</label><input id="ep_mcw" type="number" step="0.01" value="${p.mcqWeight!=null?p.mcqWeight:''}"></div>
+      <div><label>臨界版本</label><input id="ep_cv" value="${esc(p.cutoffVersion)}"></div>
+    </div>
+    <label>貼上正確答案（支援 ABCD… 或 1:A 格式）</label>
+    <textarea id="ep_ans" rows="3">${p.mcq.answers.join("")}</textarea>
+    <button class="btn secondary" onclick="previewAnswers()">預覽答案</button>
+    <div id="ep_ansPreview"></div>
+    <label>長題部分（每行：id|名稱|滿分|比重，比重可留空）</label>
+    <textarea id="ep_sec" rows="3">${p.writtenSections.map(s=>`${s.id}|${s.name}|${s.maxMark}|${s.weight!=null?s.weight:''}`).join("\n")}</textarea>
+    <label>粗略等級臨界分數</label>
+    <div class="grid">${GRADES.map(g=>`<div><label>${g}</label><input id="ep_c_${g.replace(/\*/g,'s')}" type="number" step="0.5" value="${p.cutoffs[g]!=null?p.cutoffs[g]:''}"></div>`).join("")}</div>
+    <label>備註</label><input id="ep_note" value="${esc(p.note)}">
+    <div id="ep_err" class="err"></div>
+    <button class="btn" onclick="savePaper(${idx==null?'null':idx})">儲存試卷</button>
+    <button class="btn secondary" onclick="document.getElementById('paperEditor').style.display='none'">取消</button>`;
+  ed.scrollIntoView();
+}
+function previewAnswers(){
+  const opts=document.getElementById("ep_opts").value.split(",").map(x=>x.trim().toUpperCase());
+  const qc=Number(document.getElementById("ep_qc").value)||0;
+  const r=parseAnswers(document.getElementById("ep_ans").value, opts, qc);
+  document.getElementById("ep_ansPreview").innerHTML = r.errors.length
+    ? `<p class="err">${r.errors.map(esc).join("<br>")}</p>`
+    : `<p class="tag-ok">✓ 預覽：${r.answers.join(" ")}</p>`;
+}
+function readPaperEditor(){
+  const opts=document.getElementById("ep_opts").value.split(",").map(x=>x.trim().toUpperCase()).filter(Boolean);
+  const qc=Number(document.getElementById("ep_qc").value)||0;
+  const ans=parseAnswers(document.getElementById("ep_ans").value, opts, null).answers.filter(Boolean);
+  const secs=document.getElementById("ep_sec").value.split("\n").map(l=>l.trim()).filter(Boolean).map(l=>{
+    const [id,name,max,w]=l.split("|").map(x=>(x||"").trim());
+    return { id, name, maxMark:Number(max)||0, weight: w===""||w==null?null:Number(w) };
+  });
+  const mcw=document.getElementById("ep_mcw").value;
+  const cutoffs={};
+  GRADES.forEach(g=>{ const v=document.getElementById("ep_c_"+g.replace(/\*/g,"s")).value; cutoffs[g]= v===""?null:Number(v); });
+  return {
+    year:Number(document.getElementById("ep_year").value),
+    paperId:document.getElementById("ep_pid").value.trim(),
+    paperName:document.getElementById("ep_pname").value.trim(),
+    mcq:{ questionCount:qc, options:opts, marksPerQuestion:Number(document.getElementById("ep_mpq").value)||1, allowMultiple:false, answers:ans },
+    writtenSections:secs,
+    mcqWeight: mcw===""?null:Number(mcw),
+    cutoffs, cutoffVersion:document.getElementById("ep_cv").value.trim(),
+    note:document.getElementById("ep_note").value.trim()
+  };
+}
+function savePaper(idx){
+  const p=readPaperEditor();
+  if(checkDuplicatePaper(p.year, p.paperId, idx)){
+    document.getElementById("ep_err").textContent=`已存在相同年份（${p.year}）及卷別 ID（${p.paperId}）的試卷`; return;
+  }
+  const errs=validatePaperConfig(p);
+  if(errs.length){ document.getElementById("ep_err").innerHTML=errs.map(esc).join("<br>"); return; }
+  if(idx==null) STATE.config.papers.push(p); else STATE.config.papers[idx]=p;
+  saveState(); renderAll();
+  document.getElementById("paperEditor").style.display="none";
+  toast("✓ 試卷資料已儲存");
+}
+function delPaper(idx){
+  const p=STATE.config.papers[idx];
+  showModal(`<h3>確認刪除試卷？</h3><p>${p.year}｜${esc(p.paperName)}。已儲存的練習紀錄不會受影響。</p>
+    <button class="btn danger" onclick="closeModal();STATE.config.papers.splice(${idx},1);saveState();renderAll();toast('已刪除試卷')">刪除</button>
+    <button class="btn secondary" onclick="closeModal()">取消</button>`);
+}
+
+/* ============================================================
+   區域 11：列印
+   ============================================================ */
+function printPage(pageId){
+  document.querySelectorAll(".page").forEach(p=>p.classList.remove("print-active"));
+  document.getElementById("page-"+pageId).classList.add("print-active");
+  window.print();
+  setTimeout(()=>document.getElementById("page-"+pageId).classList.remove("print-active"),500);
+}
+function printRecord(id){
+  const a=STATE.attempts.find(x=>x.id===id);
+  const w=window.open("","_blank");
+  const rows=a.mcqDetail.map(d=>`<tr><td>Q${d.qno}</td><td>${d.student}</td><td>${d.correct}</td><td>${d.status==="correct"?"✓對":d.status==="wrong"?"✗錯":"未答"}</td></tr>`).join("");
+  w.document.write(`<html><head><title>練習結果</title><meta charset="utf-8">
+    <style>body{font-family:sans-serif;padding:20px}table{border-collapse:collapse;width:100%}td,th{border:1px solid #999;padding:6px}</style></head><body>
+    <h2>HKDSE 練習結果</h2>
+    <p>學生：${esc(STATE.prefs.studentName||"（未填）")}｜列印日期：${new Date().toLocaleString("zh-HK")}</p>
+    <p>科目：${esc(STATE.config.subject.name)}｜${a.year}｜${esc(a.paperName)}</p>
+    <p>百分比：${a.percentage.toFixed(1)}%｜估算等級：${a.grade||"部分分析"}</p>
+    <table><thead><tr><th>題號</th><th>你的答案</th><th>正確</th><th>結果</th></tr></thead><tbody>${rows}</tbody></table>
+    <p style="font-size:.8rem;color:#666">⚠️ 本結果只按使用者自訂粗略界線估算，並非香港考試及評核局的正式評級結果。</p>
+    </body></html>`);
+  w.document.close(); w.print();
+}
+
+/* ============================================================
+   區域 12：備份 / 清除 / 偏好
+   ============================================================ */
+function manualBackup(){ localStorage.setItem(LS_BACKUP, JSON.stringify(STATE)); toast("已建立本機備份"); }
+function restoreBackup(){
+  const b=localStorage.getItem(LS_BACKUP);
+  if(!b){ toast("沒有可用備份"); return; }
+  showModal(`<h3>還原上次備份？</h3><p>目前資料將被備份內容取代。</p>
+    <button class="btn danger" onclick="closeModal();STATE=migrateData(JSON.parse(localStorage.getItem(LS_BACKUP)));saveState();renderAll();toast('已還原備份')">還原</button>
+    <button class="btn secondary" onclick="closeModal()">取消</button>`);
+}
+function clearAllPrompt(){
+  showModal(`<h3>⚠️ 清除全部資料</h3><p>此操作會刪除所有練習紀錄、錯題及設定，無法復原。<br>請輸入「確認清除」以繼續：</p>
+    <input id="clearConfirm" placeholder="確認清除">
+    <button class="btn danger" onclick="doClearAll()">清除全部</button>
+    <button class="btn secondary" onclick="closeModal()">取消</button>`);
+}
+function doClearAll(){
+  if(document.getElementById("clearConfirm").value!=="確認清除"){ toast("請正確輸入「確認清除」"); return; }
+  localStorage.setItem(LS_BACKUP, JSON.stringify(STATE));
+  STATE=defaultState(); saveState(); renderAll(); closeModal(); toast("已清除全部資料（仍保留一份備份）");
+}
+function applyTheme(){
+  document.documentElement.setAttribute("data-theme", STATE.prefs.theme);
+  document.getElementById("themeToggle").textContent = STATE.prefs.theme==="dark"?"☀️ 淺色模式":"🌓 深色模式";
+}
+
+/* ============================================================
+   區域 13：頁面切換與統一渲染
+   ============================================================ */
+/* ============================================================
+   區域 13（續）：頁面切換與統一渲染
+   ============================================================ */
+function go(page){
+  document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
+  document.getElementById("page-"+page).classList.add("active");
+  document.querySelectorAll("nav.top-nav button").forEach(b=>b.classList.toggle("active", b.dataset.page===page));
+  if(page==="home") renderHome();
+  if(page==="attempt"){ fillYearSelects(); renderAttemptForm(); }
+  if(page==="records") renderRecords();
+  if(page==="progress") renderProgressCharts();
+  if(page==="wrong") renderWrong();
+  if(page==="manage") renderManage();
+  if(page==="backup") updateLastSaved();
+  window.scrollTo(0,0);
+}
+function renderAll(){
+  fillYearSelects(); renderHome(); renderRecords(); renderManage(); renderWrong();
+  const active=document.querySelector(".page.active");
+  if(active&&active.id==="page-progress") renderProgressCharts();
+}
+
+/* ============================================================
+   區域 14：事件監聽與初始化
+   ============================================================ */
+function init(){
+  loadState();
+  applyTheme();
+  updateLastSaved();
+  // 導覽列
+  document.querySelectorAll("nav.top-nav button").forEach(b=>b.addEventListener("click",()=>go(b.dataset.page)));
+  // 主題切換（記住選擇）
+  document.getElementById("themeToggle").addEventListener("click",()=>{
+    STATE.prefs.theme = STATE.prefs.theme==="dark"?"light":"dark";
+    applyTheme(); saveState();
+    const a=document.querySelector(".page.active"); if(a&&a.id==="page-progress") renderProgressCharts();
+  });
+  // 新增練習
+  document.getElementById("attYear").addEventListener("change",renderAttemptForm);
+  // 紀錄篩選
+  ["recFilterYear","recSort"].forEach(id=>document.getElementById(id).addEventListener("change",renderRecords));
+  // 進度篩選
+  ["progRange","progYear","progBarMode"].forEach(id=>document.getElementById(id).addEventListener("change",renderProgressCharts));
+  // 錯題篩選
+  ["wrongYear","wrongSort","wrongSearch","wrongUnmastered"].forEach(id=>document.getElementById(id).addEventListener("input",renderWrong));
+  document.getElementById("wrongSelectAll").addEventListener("click",()=>{
+    Object.values(STATE.wrongQuestions).forEach(w=>wrongSelected.add(w.key)); renderWrong();
+  });
+  // 鍵盤操作：focus 在選項按鈕時 Enter/Space 作答
+  document.addEventListener("keydown",(e)=>{
+    const el=document.activeElement;
+    if(el&&el.classList&&el.classList.contains("opt-btn")){
+      if(e.key==="Enter"||e.key===" "){ el.click(); e.preventDefault(); }
+    }
+  });
+  // 點背景關閉 modal
+  document.getElementById("modalBg").addEventListener("click",(e)=>{ if(e.target.id==="modalBg") closeModal(); });
+  // 若找不到 data.js，提示使用者
+  if(!window.APP_CONFIG){
+    toast("⚠️ 找不到 data.js，請把它與 index.html 放在同一資料夾");
+  }
+  go("home");
+}
+document.addEventListener("DOMContentLoaded",init);
+
+/* ============================================================
+   區域 15：開發者自我測試（Console 執行 runSelfTests()）
+   ============================================================ */
+function runSelfTests(){
+  let pass=0, fail=0;
+  const check=(name,cond)=>{ if(cond){pass++;console.log("✓ "+name);} else {fail++;console.error("✗ "+name);} };
+  // 1 全對
+  let r=calculateMcqResult(["A","B","C"],["A","B","C"],2);
+  check("全對：3對、得6分", r.correct===3&&r.score===6&&r.accuracy===100);
+  // 2 全錯
+  r=calculateMcqResult(["B","C","A"],["A","B","C"],2);
+  check("全錯：0對、3題答錯", r.correct===0&&r.wrong.length===3);
+  // 3 部分未作答
+  r=calculateMcqResult(["A",null,"C"],["A","B","C"],1);
+  check("未作答計入 unanswered", r.unanswered.length===1&&r.correct===2);
+  // 4 加權計算
+  let w=calculateWeightedScore([{score:8,maxMark:10,weight:0.5},{score:20,maxMark:40,weight:0.5}]);
+  check("加權：80%×.5 + 50%×.5 = 65%", Math.abs(w.percentage-65)<0.01);
+  // 5 無比重總分
+  w=calculateWeightedScore([{score:8,maxMark:10,weight:null},{score:20,maxMark:40,weight:null}]);
+  check("無比重：28/50 = 56%", Math.abs(w.percentage-56)<0.01);
+  // 6 等級剛好等於臨界
+  const co={"5**":85,"5*":78,"5":70,"4":60,"3":50,"2":40,"1":30};
+  check("剛好 70 → 5", estimateGrade(70,co)==="5");
+  check("84.9 → 5*", estimateGrade(84.9,co)==="5*");
+  // 7 低於 Level 1
+  check("低於 30 → U", estimateGrade(20,co)==="U");
+  // 8 臨界次序錯誤
+  check("次序錯誤被偵測", validateCutoffs({"5**":70,"5*":78,"5":80,"4":60,"3":50,"2":40,"1":30})!==null);
+  check("正確次序通過", validateCutoffs(co)===null);
+  // 9 答案數量不一致
+  let errs=validatePaperConfig({year:2020,paperId:"p1",mcq:{questionCount:3,options:["A","B"],marksPerQuestion:1,answers:["A","B"]},writtenSections:[],mcqWeight:null,cutoffs:co});
+  check("答案數量不一致被偵測", errs.some(e=>e.includes("不一致")));
+  // 10 下一級差距
+  const gap=nextGradeGap(65,co);
+  check("65 → 距離 5(70) 差 5 分", gap&&gap.grade==="5"&&gap.gap===5);
+  // 11 錯題累積
+  const bak=JSON.parse(JSON.stringify(STATE));
+  STATE.wrongQuestions={};
+  const mkAtt=()=>({year:2026,paperId:"paper2",paperName:"卷二",date:new Date().toISOString(),
+    mcqDetail:[{qno:12,student:"A",correct:"B",status:"wrong"}]});
+  updateWrongQuestionBank(mkAtt()); updateWrongQuestionBank(mkAtt());
+  const k=wrongKey(2026,"paper2",12);
+  check("同錯題累積 wrongCount=2", STATE.wrongQuestions[k]&&STATE.wrongQuestions[k].wrongCount===2);
+  updateWrongQuestionBank({year:2026,paperId:"paper2",paperName:"卷二",date:new Date().toISOString(),mcqDetail:[{qno:12,student:"B",correct:"B",status:"correct"}]});
+  check("答對後保留歷史並標記最近已答對", STATE.wrongQuestions[k]&&STATE.wrongQuestions[k].recentlyCorrect===true&&STATE.wrongQuestions[k].wrongCount===2);
+  STATE=bak; // 還原
+  // 12 JSON 匯入格式錯誤
+  let bad=false; try{ JSON.parse("{壞的"); }catch(e){ bad=true; }
+  check("損壞 JSON 被 catch", bad===true);
+  // 13 schema 遷移
+  const migrated=migrateData({schemaVersion:0,attempts:[]});
+  check("舊版本補齊並升級至最新 schema", migrated.schemaVersion===CURRENT_SCHEMA&&Array.isArray(migrated.attempts));
+  // 14 答案解析
+  const pa=parseAnswers("a b c d",["A","B","C","D"],4);
+  check("答案解析：去空格轉大寫", pa.answers.join("")==="ABCD"&&pa.errors.length===0);
+  const pa2=parseAnswers("1:A\n2:B\n3:C",["A","B","C","D"],3);
+  check("答案解析：1:A 格式", pa2.answers.join("")==="ABC");
+  // 15 data.js 已載入
+  check("data.js 已載入且含 papers", !!(window.APP_CONFIG&&Array.isArray(window.APP_CONFIG.papers)));
+  console.log(`%c測試完成：通過 ${pass}，失敗 ${fail}`, `color:${fail?"red":"green"};font-weight:bold`);
+  return {pass,fail};
+}
+</script>
+</body>
+</html>
