@@ -11,8 +11,8 @@
   "updated": "2026-07-03"
 },
 {
-  "id": "TSA 中三數學 MC 溫習 App",
-  "folder": "TSA 中三數學 MC 溫習 App",
+  "id": "tsa-math-mc",
+  "folder": "tsa-math-mc",
   "title": "TSA 中三數學 MC 溫習 App",
   "subject": "數學",
   "author": "GRF(teacher)",
@@ -23,8 +23,8 @@
   "updated": "2026-07-04"
 },
 {
-  "id": "DSE Maths mc",
-  "folder": "DSE Maths mc",
+  "id": "dse-math-mc",
+  "folder": "dse-math-mc",
   "title": "記錄你數學DSE卷二的成績",
   "subject": "數學",
   "author": "GRF(teacher)",
