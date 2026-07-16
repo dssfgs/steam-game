@@ -1,0 +1,1354 @@
+﻿Record_ID,Year,Paper,Row_Number,Source_Raw_Mark_or_Label,B1_Value,B2_Value,Other_Result,Source_File,Source_Region,Original_Row_Text,Visual_Confidence,Verification_Status,Notes
+2012_1B_01,2012,1B,1,1B1 (easier),0,0,,2012.JPG,Table 1 (Paper 1B),0 -> 0,High,Verified,
+2012_1B_02,2012,1B,2,1B1 (easier),1,1,,2012.JPG,Table 1 (Paper 1B),1 -> 1,High,Verified,
+2012_1B_03,2012,1B,3,1B1 (easier),2,2,,2012.JPG,Table 1 (Paper 1B),2 -> 2,High,Verified,
+2012_1B_04,2012,1B,4,1B1 (easier),3,2,,2012.JPG,Table 1 (Paper 1B),3 -> 2,High,Verified,
+2012_1B_05,2012,1B,5,1B1 (easier),4,3,,2012.JPG,Table 1 (Paper 1B),4 -> 3,High,Verified,
+2012_1B_06,2012,1B,6,1B1 (easier),5,4,,2012.JPG,Table 1 (Paper 1B),5 -> 4,High,Verified,
+2012_1B_07,2012,1B,7,1B1 (easier),6,4,,2012.JPG,Table 1 (Paper 1B),6 -> 4,High,Verified,
+2012_1B_08,2012,1B,8,1B1 (easier),7,5,,2012.JPG,Table 1 (Paper 1B),7 -> 5,High,Verified,
+2012_1B_09,2012,1B,9,1B1 (easier),8,5,,2012.JPG,Table 1 (Paper 1B),8 -> 5,High,Verified,
+2012_1B_10,2012,1B,10,1B1 (easier),9,6,,2012.JPG,Table 1 (Paper 1B),9 -> 6,High,Verified,
+2012_1B_11,2012,1B,11,1B1 (easier),10,6,,2012.JPG,Table 1 (Paper 1B),10 -> 6,High,Verified,
+2012_1B_12,2012,1B,12,1B1 (easier),11,7,,2012.JPG,Table 1 (Paper 1B),11 -> 7,High,Verified,
+2012_1B_13,2012,1B,13,1B1 (easier),12,8,,2012.JPG,Table 1 (Paper 1B),12 -> 8,High,Verified,
+2012_1B_14,2012,1B,14,1B1 (easier),13,8,,2012.JPG,Table 1 (Paper 1B),13 -> 8,High,Verified,
+2012_1B_15,2012,1B,15,1B1 (easier),14,9,,2012.JPG,Table 1 (Paper 1B),14 -> 9,High,Verified,
+2012_1B_16,2012,1B,16,1B1 (easier),15,10,,2012.JPG,Table 1 (Paper 1B),15 -> 10,High,Verified,
+2012_1B_17,2012,1B,17,1B1 (easier),16,11,,2012.JPG,Table 1 (Paper 1B),16 -> 11,High,Verified,
+2012_1B_18,2012,1B,18,1B1 (easier),17,12,,2012.JPG,Table 1 (Paper 1B),17 -> 12,High,Verified,
+2012_1B_19,2012,1B,19,1B1 (easier),18,13,,2012.JPG,Table 1 (Paper 1B),18 -> 13,High,Verified,
+2012_1B_20,2012,1B,20,1B1 (easier),19,14,,2012.JPG,Table 1 (Paper 1B),19 -> 14,High,Verified,
+2012_1B_21,2012,1B,21,1B1 (easier),20,15,,2012.JPG,Table 1 (Paper 1B),20 -> 15,High,Verified,
+2012_1B_22,2012,1B,22,1B1 (easier),21,16,,2012.JPG,Table 1 (Paper 1B),21 -> 16,High,Verified,
+2012_1B_23,2012,1B,23,1B1 (easier),22,18,,2012.JPG,Table 1 (Paper 1B),22 -> 18,High,Verified,Audited correction
+2012_1B_24,2012,1B,24,1B1 (easier),23,19,,2012.JPG,Table 1 (Paper 1B),23 -> 19,High,Verified,
+2012_1B_25,2012,1B,25,1B1 (easier),24,20,,2012.JPG,Table 1 (Paper 1B),24 -> 20,High,Verified,
+2012_1B_26,2012,1B,26,1B1 (easier),25,21,,2012.JPG,Table 1 (Paper 1B),25 -> 21,High,Verified,
+2012_1B_27,2012,1B,27,1B1 (easier),26,22,,2012.JPG,Table 1 (Paper 1B),26 -> 22,High,Verified,
+2012_1B_28,2012,1B,28,1B1 (easier),27,24,,2012.JPG,Table 1 (Paper 1B),27 -> 24,High,Verified,
+2012_1B_29,2012,1B,29,1B1 (easier),28,25,,2012.JPG,Table 1 (Paper 1B),28 -> 25,High,Verified,
+2012_1B_30,2012,1B,30,1B1 (easier),29,26,,2012.JPG,Table 1 (Paper 1B),29 -> 26,High,Verified,
+2012_1B_31,2012,1B,31,1B1 (easier),30,27,,2012.JPG,Table 1 (Paper 1B),30 -> 27,High,Verified,
+2012_1B_32,2012,1B,32,1B1 (easier),31,29,,2012.JPG,Table 1 (Paper 1B),31 -> 29,High,Verified,
+2012_1B_33,2012,1B,33,1B1 (easier),32,30,,2012.JPG,Table 1 (Paper 1B),32 -> 30,High,Verified,
+2012_1B_34,2012,1B,34,1B1 (easier),33,31,,2012.JPG,Table 1 (Paper 1B),33 -> 31,High,Verified,
+2012_1B_35,2012,1B,35,1B1 (easier),34,32,,2012.JPG,Table 1 (Paper 1B),34 -> 32,High,Verified,
+2012_1B_36,2012,1B,36,1B1 (easier),35,34,,2012.JPG,Table 1 (Paper 1B),35 -> 34,High,Verified,
+2012_1B_37,2012,1B,37,1B1 (easier),36,35,,2012.JPG,Table 1 (Paper 1B),36 -> 35,High,Verified,
+2012_1B_38,2012,1B,38,1B1 (easier),37,36,,2012.JPG,Table 1 (Paper 1B),37 -> 36,High,Verified,
+2012_1B_39,2012,1B,39,1B1 (easier),38,38,,2012.JPG,Table 1 (Paper 1B),38 -> 38,High,Verified,
+2012_1B_40,2012,1B,40,1B1 (easier),39,39,,2012.JPG,Table 1 (Paper 1B),39 -> 39,High,Verified,
+2012_1B_41,2012,1B,41,1B1 (easier),40,40,,2012.JPG,Table 1 (Paper 1B),40 -> 40,High,Verified,
+2012_1B_42,2012,1B,42,1B1 (easier),41,42,,2012.JPG,Table 1 (Paper 1B),41 -> 42,High,Verified,
+2012_1B_43,2012,1B,43,1B1 (easier),42,43,,2012.JPG,Table 1 (Paper 1B),42 -> 43,High,Verified,
+2012_1B_44,2012,1B,44,1B1 (easier),43,45,,2012.JPG,Table 1 (Paper 1B),43 -> 45,High,Verified,Audited correction
+2012_3B_01,2012,3B,1,3B1 (easier),0,0,,2012.JPG,Table 2 (Paper 3B),0 -> 0,High,Verified,
+2012_3B_02,2012,3B,2,3B1 (easier),1,0,,2012.JPG,Table 2 (Paper 3B),1 -> 0,High,Verified,
+2012_3B_03,2012,3B,3,3B1 (easier),2,1,,2012.JPG,Table 2 (Paper 3B),2 -> 1,High,Verified,
+2012_3B_04,2012,3B,4,3B1 (easier),3,1,,2012.JPG,Table 2 (Paper 3B),3 -> 1,High,Verified,
+2012_3B_05,2012,3B,5,3B1 (easier),4,1,,2012.JPG,Table 2 (Paper 3B),4 -> 1,High,Verified,
+2012_3B_06,2012,3B,6,3B1 (easier),5,1,,2012.JPG,Table 2 (Paper 3B),5 -> 1,High,Verified,
+2012_3B_07,2012,3B,7,3B1 (easier),6,2,,2012.JPG,Table 2 (Paper 3B),6 -> 2,High,Verified,
+2012_3B_08,2012,3B,8,3B1 (easier),7,2,,2012.JPG,Table 2 (Paper 3B),7 -> 2,High,Verified,
+2012_3B_09,2012,3B,9,3B1 (easier),8,2,,2012.JPG,Table 2 (Paper 3B),8 -> 2,High,Verified,
+2012_3B_10,2012,3B,10,3B1 (easier),9,2,,2012.JPG,Table 2 (Paper 3B),9 -> 2,High,Verified,
+2012_3B_11,2012,3B,11,3B1 (easier),10,3,,2012.JPG,Table 2 (Paper 3B),10 -> 3,High,Verified,
+2012_3B_12,2012,3B,12,3B1 (easier),11,3,,2012.JPG,Table 2 (Paper 3B),11 -> 3,High,Verified,
+2012_3B_13,2012,3B,13,3B1 (easier),12,3,,2012.JPG,Table 2 (Paper 3B),12 -> 3,High,Verified,
+2012_3B_14,2012,3B,14,3B1 (easier),13,4,,2012.JPG,Table 2 (Paper 3B),13 -> 4,High,Verified,
+2012_3B_15,2012,3B,15,3B1 (easier),14,4,,2012.JPG,Table 2 (Paper 3B),14 -> 4,High,Verified,
+2012_3B_16,2012,3B,16,3B1 (easier),15,4,,2012.JPG,Table 2 (Paper 3B),15 -> 4,High,Verified,
+2012_3B_17,2012,3B,17,3B1 (easier),16,4,,2012.JPG,Table 2 (Paper 3B),16 -> 4,High,Verified,
+2012_3B_18,2012,3B,18,3B1 (easier),17,5,,2012.JPG,Table 2 (Paper 3B),17 -> 5,High,Verified,
+2012_3B_19,2012,3B,19,3B1 (easier),18,5,,2012.JPG,Table 2 (Paper 3B),18 -> 5,High,Verified,
+2012_3B_20,2012,3B,20,3B1 (easier),19,5,,2012.JPG,Table 2 (Paper 3B),19 -> 5,High,Verified,
+2012_3B_21,2012,3B,21,3B1 (easier),20,6,,2012.JPG,Table 2 (Paper 3B),20 -> 6,High,Verified,
+2012_3B_22,2012,3B,22,3B1 (easier),21,6,,2012.JPG,Table 2 (Paper 3B),21 -> 6,High,Verified,
+2012_3B_23,2012,3B,23,3B1 (easier),22,7,,2012.JPG,Table 2 (Paper 3B),22 -> 7,High,Verified,
+2012_3B_24,2012,3B,24,3B1 (easier),23,8,,2012.JPG,Table 2 (Paper 3B),23 -> 8,High,Verified,
+2012_3B_25,2012,3B,25,3B1 (easier),24,8,,2012.JPG,Table 2 (Paper 3B),24 -> 8,High,Verified,
+2012_3B_26,2012,3B,26,3B1 (easier),25,9,,2012.JPG,Table 2 (Paper 3B),25 -> 9,High,Verified,
+2012_3B_27,2012,3B,27,3B1 (easier),26,10,,2012.JPG,Table 2 (Paper 3B),26 -> 10,High,Verified,
+2012_3B_28,2012,3B,28,3B1 (easier),27,11,,2012.JPG,Table 2 (Paper 3B),27 -> 11,High,Verified,
+2012_3B_29,2012,3B,29,3B1 (easier),28,12,,2012.JPG,Table 2 (Paper 3B),28 -> 12,High,Verified,
+2012_3B_30,2012,3B,30,3B1 (easier),29,14,,2012.JPG,Table 2 (Paper 3B),29 -> 14,High,Verified,
+2012_3B_31,2012,3B,31,3B1 (easier),30,15,,2012.JPG,Table 2 (Paper 3B),30 -> 15,High,Verified,
+2012_3B_32,2012,3B,32,3B1 (easier),31,16,,2012.JPG,Table 2 (Paper 3B),31 -> 16,High,Verified,
+2012_3B_33,2012,3B,33,3B1 (easier),32,18,,2012.JPG,Table 2 (Paper 3B),32 -> 18,High,Verified,
+2012_3B_34,2012,3B,34,3B1 (easier),33,19,,2012.JPG,Table 2 (Paper 3B),33 -> 19,High,Verified,
+2012_3B_35,2012,3B,35,3B1 (easier),34,21,,2012.JPG,Table 2 (Paper 3B),34 -> 21,High,Verified,
+2012_3B_36,2012,3B,36,3B1 (easier),35,22,,2012.JPG,Table 2 (Paper 3B),35 -> 22,High,Verified,
+2012_3B_37,2012,3B,37,3B1 (easier),36,23,,2012.JPG,Table 2 (Paper 3B),36 -> 23,High,Verified,
+2012_3B_38,2012,3B,38,3B1 (easier),37,25,,2012.JPG,Table 2 (Paper 3B),37 -> 25,High,Verified,
+2012_3B_39,2012,3B,39,3B1 (easier),38,26,,2012.JPG,Table 2 (Paper 3B),38 -> 26,High,Verified,
+2012_3B_40,2012,3B,40,3B1 (easier),39,28,,2012.JPG,Table 2 (Paper 3B),39 -> 28,High,Verified,
+2012_3B_41,2012,3B,41,3B1 (easier),40,29,,2012.JPG,Table 2 (Paper 3B),40 -> 29,High,Verified,
+2012_3B_42,2012,3B,42,3B1 (easier),41,31,,2012.JPG,Table 2 (Paper 3B),41 -> 31,High,Verified,
+2012_3B_43,2012,3B,43,3B1 (easier),42,32,,2012.JPG,Table 2 (Paper 3B),42 -> 32,High,Verified,
+2012_3B_44,2012,3B,44,3B1 (easier),43,34,,2012.JPG,Table 2 (Paper 3B),43 -> 34,High,Verified,
+2012_3B_45,2012,3B,45,3B1 (easier),44,36,,2012.JPG,Table 2 (Paper 3B),44 -> 36,High,Verified,
+2012_3B_46,2012,3B,46,3B1 (easier),45,39,,2012.JPG,Table 2 (Paper 3B),45 -> 39,High,Verified,
+2012_3B_47,2012,3B,47,3B1 (easier),46,42,,2012.JPG,Table 2 (Paper 3B),46 -> 42,High,Verified,
+2013_P1B_00,2013,1B,1,0,0,0,,2013.JPG,Paper 1B Table,"0,0",High,Verified,Standard conversion
+2013_P1B_01,2013,1B,2,1,1,0,,2013.JPG,Paper 1B Table,"1,0",High,Verified,Standard conversion
+2013_P1B_02,2013,1B,3,2,2,1,,2013.JPG,Paper 1B Table,"2,1",High,Verified,Standard conversion
+2013_P1B_03,2013,1B,4,3,3,1,,2013.JPG,Paper 1B Table,"3,1",High,Verified,Standard conversion
+2013_P1B_04,2013,1B,5,4,4,2,,2013.JPG,Paper 1B Table,"4,2",High,Verified,Standard conversion
+2013_P1B_05,2013,1B,6,5,5,2,,2013.JPG,Paper 1B Table,"5,2",High,Verified,Standard conversion
+2013_P1B_06,2013,1B,7,6,6,2,,2013.JPG,Paper 1B Table,"6,2",High,Verified,Standard conversion
+2013_P1B_07,2013,1B,8,7,7,3,,2013.JPG,Paper 1B Table,"7,3",High,Verified,Standard conversion
+2013_P1B_08,2013,1B,9,8,8,3,,2013.JPG,Paper 1B Table,"8,3",High,Verified,Standard conversion
+2013_P1B_09,2013,1B,10,9,9,3,,2013.JPG,Paper 1B Table,"9,3",High,Verified,Standard conversion
+2013_P1B_10,2013,1B,11,10,10,3,,2013.JPG,Paper 1B Table,"10,3",High,Verified,Standard conversion
+2013_P1B_11,2013,1B,12,11,11,4,,2013.JPG,Paper 1B Table,"11,4",High,Verified,Standard conversion
+2013_P1B_12,2013,1B,13,12,12,4,,2013.JPG,Paper 1B Table,"12,4",High,Verified,Standard conversion
+2013_P1B_13,2013,1B,14,13,13,5,,2013.JPG,Paper 1B Table,"13,5",High,Verified,Standard conversion
+2013_P1B_14,2013,1B,15,14,14,5,,2013.JPG,Paper 1B Table,"14,5",High,Verified,Standard conversion
+2013_P1B_15,2013,1B,16,15,15,6,,2013.JPG,Paper 1B Table,"15,6",High,Verified,Standard conversion
+2013_P1B_16,2013,1B,17,16,16,6,,2013.JPG,Paper 1B Table,"16,6",High,Verified,Standard conversion
+2013_P1B_17,2013,1B,18,17,17,7,,2013.JPG,Paper 1B Table,"17,7",High,Verified,Standard conversion
+2013_P1B_18,2013,1B,19,18,18,7,,2013.JPG,Paper 1B Table,"18,7",High,Verified,Standard conversion
+2013_P1B_19,2013,1B,20,19,19,8,,2013.JPG,Paper 1B Table,"19,8",High,Verified,Standard conversion
+2013_P1B_20,2013,1B,21,20,20,8,,2013.JPG,Paper 1B Table,"20,8",High,Verified,Standard conversion
+2013_P1B_21,2013,1B,22,21,21,9,,2013.JPG,Paper 1B Table,"21,9",High,Verified,Standard conversion
+2013_P1B_22,2013,1B,23,22,22,10,,2013.JPG,Paper 1B Table,"22,10",High,Verified,Standard conversion
+2013_P1B_23,2013,1B,24,23,23,11,,2013.JPG,Paper 1B Table,"23,11",High,Verified,Standard conversion
+2013_P1B_24,2013,1B,25,24,24,11,,2013.JPG,Paper 1B Table,"24,11",High,Verified,Standard conversion
+2013_P1B_25,2013,1B,26,25,25,12,,2013.JPG,Paper 1B Table,"25,12",High,Verified,Standard conversion
+2013_P1B_26,2013,1B,27,26,26,13,,2013.JPG,Paper 1B Table,"26,13",High,Verified,Standard conversion
+2013_P1B_27,2013,1B,28,27,27,14,,2013.JPG,Paper 1B Table,"27,14",High,Verified,Standard conversion
+2013_P1B_28,2013,1B,29,28,28,15,,2013.JPG,Paper 1B Table,"28,15",High,Verified,Standard conversion
+2013_P1B_29,2013,1B,30,29,29,16,,2013.JPG,Paper 1B Table,"29,16",High,Verified,Standard conversion
+2013_P1B_30,2013,1B,31,30,30,17,,2013.JPG,Paper 1B Table,"30,17",High,Verified,Standard conversion
+2013_P1B_31,2013,1B,32,31,31,18,,2013.JPG,Paper 1B Table,"31,18",High,Verified,Standard conversion
+2013_P1B_32,2013,1B,33,32,32,19,,2013.JPG,Paper 1B Table,"32,19",High,Verified,Standard conversion
+2013_P1B_33,2013,1B,34,33,33,21,,2013.JPG,Paper 1B Table,"33,21",High,Verified,Standard conversion
+2013_P1B_34,2013,1B,35,34,34,22,,2013.JPG,Paper 1B Table,"34,22",High,Verified,Standard conversion
+2013_P1B_35,2013,1B,36,35,35,23,,2013.JPG,Paper 1B Table,"35,23",High,Verified,Standard conversion
+2013_P1B_36,2013,1B,37,36,36,25,,2013.JPG,Paper 1B Table,"36,25",High,Verified,Standard conversion
+2013_P1B_37,2013,1B,38,37,37,27,,2013.JPG,Paper 1B Table,"37,27",High,Verified,Standard conversion
+2013_P1B_38,2013,1B,39,38,38,30,,2013.JPG,Paper 1B Table,"38,30",High,Verified,Standard conversion
+2013_P1B_39,2013,1B,40,39,39,33,,2013.JPG,Paper 1B Table,"39,33",High,Verified,Standard conversion
+2013_P1B_40,2013,1B,41,40,40,37,,2013.JPG,Paper 1B Table,"40,37",High,Verified,Standard conversion
+2013_P1B_41,2013,1B,42,41,41,41,,2013.JPG,Paper 1B Table,"41,41",High,Verified,Standard conversion
+2013_P3B_00,2013,3B,1,0,0,0,,2013.JPG,Paper 3B Table,"0,0",High,Verified,Standard conversion
+2013_P3B_01,2013,3B,2,1,1,1,,2013.JPG,Paper 3B Table,"1,1",High,Verified,Standard conversion
+2013_P3B_02,2013,3B,3,2,2,2,,2013.JPG,Paper 3B Table,"2,2",High,Verified,Standard conversion
+2013_P3B_03,2013,3B,4,3,3,3,,2013.JPG,Paper 3B Table,"3,3",High,Verified,Standard conversion
+2013_P3B_04,2013,3B,5,4,4,4,,2013.JPG,Paper 3B Table,"4,4",High,Verified,Standard conversion
+2013_P3B_05,2013,3B,6,5,5,4,,2013.JPG,Paper 3B Table,"5,4",High,Verified,Standard conversion
+2013_P3B_06,2013,3B,7,6,6,4,,2013.JPG,Paper 3B Table,"6,4",High,Verified,Standard conversion
+2013_P3B_07,2013,3B,8,7,7,5,,2013.JPG,Paper 3B Table,"7,5",High,Verified,Standard conversion
+2013_P3B_08,2013,3B,9,8,8,5,,2013.JPG,Paper 3B Table,"8,5",High,Verified,Standard conversion
+2013_P3B_09,2013,3B,10,9,9,5,,2013.JPG,Paper 3B Table,"9,5",High,Verified,Standard conversion
+2013_P3B_10,2013,3B,11,10,10,5,,2013.JPG,Paper 3B Table,"10,5",High,Verified,Standard conversion
+2013_P3B_11,2013,3B,12,11,11,6,,2013.JPG,Paper 3B Table,"11,6",High,Verified,Standard conversion
+2013_P3B_12,2013,3B,13,12,12,6,,2013.JPG,Paper 3B Table,"12,6",High,Verified,Standard conversion
+2013_P3B_13,2013,3B,14,13,13,6,,2013.JPG,Paper 3B Table,"13,6",High,Verified,Standard conversion
+2013_P3B_14,2013,3B,15,14,14,7,,2013.JPG,Paper 3B Table,"14,7",High,Verified,Standard conversion
+2013_P3B_15,2013,3B,16,15,15,7,,2013.JPG,Paper 3B Table,"15,7",High,Verified,Standard conversion
+2013_P3B_16,2013,3B,17,16,16,7,,2013.JPG,Paper 3B Table,"16,7",High,Verified,Standard conversion
+2013_P3B_17,2013,3B,18,17,17,7,,2013.JPG,Paper 3B Table,"17,7",High,Verified,Standard conversion
+2013_P3B_18,2013,3B,19,18,18,8,,2013.JPG,Paper 3B Table,"18,8",High,Verified,Standard conversion
+2013_P3B_19,2013,3B,20,19,19,8,,2013.JPG,Paper 3B Table,"19,8",High,Verified,Standard conversion
+2013_P3B_20,2013,3B,21,20,20,9,,2013.JPG,Paper 3B Table,"20,9",High,Verified,Standard conversion
+2013_P3B_21,2013,3B,22,21,21,9,,2013.JPG,Paper 3B Table,"21,9",High,Verified,Standard conversion
+2013_P3B_22,2013,3B,23,22,22,9,,2013.JPG,Paper 3B Table,"22,9",High,Verified,Standard conversion
+2013_P3B_23,2013,3B,24,23,23,10,,2013.JPG,Paper 3B Table,"23,10",High,Verified,Standard conversion
+2013_P3B_24,2013,3B,25,24,24,10,,2013.JPG,Paper 3B Table,"24,10",High,Verified,Standard conversion
+2013_P3B_25,2013,3B,26,25,25,11,,2013.JPG,Paper 3B Table,"25,11",High,Verified,Standard conversion
+2013_P3B_26,2013,3B,27,26,26,11,,2013.JPG,Paper 3B Table,"26,11",High,Verified,Standard conversion
+2013_P3B_27,2013,3B,28,27,27,12,,2013.JPG,Paper 3B Table,"27,12",High,Verified,Standard conversion
+2013_P3B_28,2013,3B,29,28,28,12,,2013.JPG,Paper 3B Table,"28,12",High,Verified,Standard conversion
+2013_P3B_29,2013,3B,30,29,29,13,,2013.JPG,Paper 3B Table,"29,13",High,Verified,Standard conversion
+2013_P3B_30,2013,3B,31,30,30,14,,2013.JPG,Paper 3B Table,"30,14",High,Verified,Standard conversion
+2013_P3B_31,2013,3B,32,31,31,15,,2013.JPG,Paper 3B Table,"31,15",High,Verified,Standard conversion
+2013_P3B_32,2013,3B,33,32,32,16,,2013.JPG,Paper 3B Table,"32,16",High,Verified,Standard conversion
+2013_P3B_33,2013,3B,34,33,33,17,,2013.JPG,Paper 3B Table,"33,17",High,Verified,Standard conversion
+2013_P3B_34,2013,3B,35,34,34,18,,2013.JPG,Paper 3B Table,"34,18",High,Verified,Standard conversion
+2013_P3B_35,2013,3B,36,35,35,19,,2013.JPG,Paper 3B Table,"35,19",High,Verified,Standard conversion
+2013_P3B_36,2013,3B,37,36,36,20,,2013.JPG,Paper 3B Table,"36,20",High,Verified,Standard conversion
+2013_P3B_37,2013,3B,38,37,37,21,,2013.JPG,Paper 3B Table,"37,21",High,Verified,Standard conversion
+2013_P3B_38,2013,3B,39,38,38,22,,2013.JPG,Paper 3B Table,"38,22",High,Verified,Standard conversion
+2013_P3B_39,2013,3B,40,39,39,23,,2013.JPG,Paper 3B Table,"39,23",High,Verified,Standard conversion
+2013_P3B_40,2013,3B,41,40,40,25,,2013.JPG,Paper 3B Table,"40,25",High,Verified,Standard conversion
+2013_P3B_41,2013,3B,42,41,41,26,,2013.JPG,Paper 3B Table,"41,26",High,Verified,Standard conversion
+2013_P3B_42,2013,3B,43,42,42,27,,2013.JPG,Paper 3B Table,"42,27",High,Verified,Standard conversion
+2013_P3B_43,2013,3B,44,43,43,28,,2013.JPG,Paper 3B Table,"43,28",High,Verified,Standard conversion
+2013_P3B_44,2013,3B,45,44,44,30,,2013.JPG,Paper 3B Table,"44,30",High,Verified,Standard conversion
+2013_P3B_45,2013,3B,46,45,45,31,,2013.JPG,Paper 3B Table,"45,31",High,Verified,Standard conversion
+2013_P3B_46,2013,3B,47,46,46,32,,2013.JPG,Paper 3B Table,"46,32",High,Verified,Standard conversion
+2013_P3B_47,2013,3B,48,47,47,34,,2013.JPG,Paper 3B Table,"47,34",High,Verified,Standard conversion
+2013_P3B_48,2013,3B,49,48,48,35,,2013.JPG,Paper 3B Table,"48,35",High,Verified,Standard conversion
+2013_P3B_49,2013,3B,50,49,49,37,,2013.JPG,Paper 3B Table,"49,37",High,Verified,Standard conversion
+2013_P3B_50,2013,3B,51,50,50,39,,2013.JPG,Paper 3B Table,"50,39",High,Verified,Standard conversion
+2013_P3B_51,2013,3B,52,51,51,41,,2013.JPG,Paper 3B Table,"51,41",High,Verified,Standard conversion
+2013_P3B_52,2013,3B,53,52,52,43,,2013.JPG,Paper 3B Table,"52,43",High,Verified,Standard conversion
+2013_P3B_53,2013,3B,54,53,53,47,,2013.JPG,Paper 3B Table,"53,47",High,Verified,Standard conversion
+2013_P3B_54,2013,3B,55,54,54,54,,2013.JPG,Paper 3B Table,"54,54",High,Verified,Standard conversion
+2014_1B_01,2014,1B,1,0,0,0,,2014.JPG,Paper 1B,0 | 0,High,Verified,
+2014_1B_02,2014,1B,2,1,1,0,,2014.JPG,Paper 1B,1 | 0,High,Verified,
+2014_1B_03,2014,1B,3,2,2,0,,2014.JPG,Paper 1B,2 | 0,High,Verified,
+2014_1B_04,2014,1B,4,3,3,1,,2014.JPG,Paper 1B,3 | 1,High,Verified,
+2014_1B_05,2014,1B,5,4,4,1,,2014.JPG,Paper 1B,4 | 1,High,Verified,
+2014_1B_06,2014,1B,6,5,5,1,,2014.JPG,Paper 1B,5 | 1,High,Verified,
+2014_1B_07,2014,1B,7,6,6,1,,2014.JPG,Paper 1B,6 | 1,High,Verified,
+2014_1B_08,2014,1B,8,7,7,2,,2014.JPG,Paper 1B,7 | 2,High,Verified,
+2014_1B_09,2014,1B,9,8,8,2,,2014.JPG,Paper 1B,8 | 2,High,Verified,
+2014_1B_10,2014,1B,10,9,9,2,,2014.JPG,Paper 1B,9 | 2,High,Verified,
+2014_1B_11,2014,1B,11,10,10,2,,2014.JPG,Paper 1B,10 | 2,High,Verified,
+2014_1B_12,2014,1B,12,11,11,3,,2014.JPG,Paper 1B,11 | 3,High,Verified,
+2014_1B_13,2014,1B,13,12,12,3,,2014.JPG,Paper 1B,12 | 3,High,Verified,
+2014_1B_14,2014,1B,14,13,13,3,,2014.JPG,Paper 1B,13 | 3,High,Verified,
+2014_1B_15,2014,1B,15,14,14,3,,2014.JPG,Paper 1B,14 | 3,High,Verified,
+2014_1B_16,2014,1B,16,15,15,4,,2014.JPG,Paper 1B,15 | 4,High,Verified,
+2014_1B_17,2014,1B,17,16,16,4,,2014.JPG,Paper 1B,16 | 4,High,Verified,
+2014_1B_18,2014,1B,18,17,17,4,,2014.JPG,Paper 1B,17 | 4,High,Verified,
+2014_1B_19,2014,1B,19,18,18,4,,2014.JPG,Paper 1B,18 | 4,High,Verified,
+2014_1B_20,2014,1B,20,19,19,5,,2014.JPG,Paper 1B,19 | 5,High,Verified,
+2014_1B_21,2014,1B,21,20,20,5,,2014.JPG,Paper 1B,20 | 5,High,Verified,
+2014_1B_22,2014,1B,22,21,21,5,,2014.JPG,Paper 1B,21 | 5,High,Verified,
+2014_1B_23,2014,1B,23,22,22,6,,2014.JPG,Paper 1B,22 | 6,High,Verified,
+2014_1B_24,2014,1B,24,23,23,6,,2014.JPG,Paper 1B,23 | 6,High,Verified,
+2014_1B_25,2014,1B,25,24,24,7,,2014.JPG,Paper 1B,24 | 7,High,Verified,
+2014_1B_26,2014,1B,26,25,25,8,,2014.JPG,Paper 1B,25 | 8,High,Verified,
+2014_1B_27,2014,1B,27,26,26,9,,2014.JPG,Paper 1B,26 | 9,High,Verified,
+2014_1B_28,2014,1B,28,27,27,10,,2014.JPG,Paper 1B,27 | 10,High,Verified,
+2014_1B_29,2014,1B,29,28,28,11,,2014.JPG,Paper 1B,28 | 11,High,Verified,
+2014_1B_30,2014,1B,30,29,29,12,,2014.JPG,Paper 1B,29 | 12,High,Verified,
+2014_1B_31,2014,1B,31,30,30,13,,2014.JPG,Paper 1B,30 | 13,High,Verified,
+2014_1B_32,2014,1B,32,31,31,14,,2014.JPG,Paper 1B,31 | 14,High,Verified,
+2014_1B_33,2014,1B,33,32,32,16,,2014.JPG,Paper 1B,32 | 16,High,Verified,
+2014_1B_34,2014,1B,34,33,33,17,,2014.JPG,Paper 1B,33 | 17,High,Verified,
+2014_1B_35,2014,1B,35,34,34,19,,2014.JPG,Paper 1B,34 | 19,High,Verified,
+2014_1B_36,2014,1B,36,35,35,22,,2014.JPG,Paper 1B,35 | 22,High,Verified,
+2014_1B_37,2014,1B,37,36,36,24,,2014.JPG,Paper 1B,36 | 24,High,Verified,
+2014_1B_38,2014,1B,38,37,37,26,,2014.JPG,Paper 1B,37 | 26,High,Verified,
+2014_1B_39,2014,1B,39,38,38,29,,2014.JPG,Paper 1B,38 | 29,High,Verified,
+2014_1B_40,2014,1B,40,39,39,32,,2014.JPG,Paper 1B,39 | 32,High,Verified,
+2014_1B_41,2014,1B,41,40,40,35,,2014.JPG,Paper 1B,40 | 35,High,Verified,
+2014_1B_42,2014,1B,42,41,41,38,,2014.JPG,Paper 1B,41 | 38,High,Verified,
+2014_3B_P1_01,2014,3B,1,0,0,0,,2014.JPG,Paper 3B - Part 1,0 | 0,High,Verified,Paper 3B main table
+2014_3B_P1_02,2014,3B,2,1,1,1,,2014.JPG,Paper 3B - Part 1,1 | 1,High,Verified,Paper 3B main table
+2014_3B_P1_03,2014,3B,3,2,2,2,,2014.JPG,Paper 3B - Part 1,2 | 2,High,Verified,Paper 3B main table
+2014_3B_P1_04,2014,3B,4,3,3,3,,2014.JPG,Paper 3B - Part 1,3 | 3,High,Verified,Paper 3B main table
+2014_3B_P1_05,2014,3B,5,4,4,4,,2014.JPG,Paper 3B - Part 1,4 | 4,High,Verified,Paper 3B main table
+2014_3B_P1_06,2014,3B,6,5,5,5,,2014.JPG,Paper 3B - Part 1,5 | 5,High,Verified,Paper 3B main table
+2014_3B_P1_07,2014,3B,7,6,6,6,,2014.JPG,Paper 3B - Part 1,6 | 6,High,Verified,Paper 3B main table
+2014_3B_P1_08,2014,3B,8,7,7,6,,2014.JPG,Paper 3B - Part 1,7 | 6,High,Verified,Paper 3B main table
+2014_3B_P1_09,2014,3B,9,8,8,7,,2014.JPG,Paper 3B - Part 1,8 | 7,High,Verified,Paper 3B main table
+2014_3B_P1_10,2014,3B,10,9,9,7,,2014.JPG,Paper 3B - Part 1,9 | 7,High,Verified,Paper 3B main table
+2014_3B_P1_11,2014,3B,11,10,10,8,,2014.JPG,Paper 3B - Part 1,10 | 8,High,Verified,Paper 3B main table
+2014_3B_P1_12,2014,3B,12,11,11,8,,2014.JPG,Paper 3B - Part 1,11 | 8,High,Verified,Paper 3B main table
+2014_3B_P1_13,2014,3B,13,12,12,8,,2014.JPG,Paper 3B - Part 1,12 | 8,High,Verified,Paper 3B main table
+2014_3B_P1_14,2014,3B,14,13,13,9,,2014.JPG,Paper 3B - Part 1,13 | 9,High,Verified,Paper 3B main table
+2014_3B_P1_15,2014,3B,15,14,14,9,,2014.JPG,Paper 3B - Part 1,14 | 9,High,Verified,Paper 3B main table
+2014_3B_P1_16,2014,3B,16,15,15,10,,2014.JPG,Paper 3B - Part 1,15 | 10,High,Verified,Paper 3B main table
+2014_3B_P1_17,2014,3B,17,16,16,10,,2014.JPG,Paper 3B - Part 1,16 | 10,High,Verified,Paper 3B main table
+2014_3B_P1_18,2014,3B,18,17,17,11,,2014.JPG,Paper 3B - Part 1,17 | 11,High,Verified,Paper 3B main table
+2014_3B_P1_19,2014,3B,19,18,18,11,,2014.JPG,Paper 3B - Part 1,18 | 11,High,Verified,Paper 3B main table
+2014_3B_P1_20,2014,3B,20,19,19,11,,2014.JPG,Paper 3B - Part 1,19 | 11,High,Verified,Paper 3B main table
+2014_3B_P1_21,2014,3B,21,20,20,12,,2014.JPG,Paper 3B - Part 1,20 | 12,High,Verified,Paper 3B main table
+2014_3B_P1_22,2014,3B,22,21,21,12,,2014.JPG,Paper 3B - Part 1,21 | 12,High,Verified,Paper 3B main table
+2014_3B_P1_23,2014,3B,23,22,22,12,,2014.JPG,Paper 3B - Part 1,22 | 12,High,Verified,Paper 3B main table
+2014_3B_P1_24,2014,3B,24,23,23,13,,2014.JPG,Paper 3B - Part 1,23 | 13,High,Verified,Paper 3B main table
+2014_3B_P1_25,2014,3B,25,24,24,13,,2014.JPG,Paper 3B - Part 1,24 | 13,High,Verified,Paper 3B main table
+2014_3B_P1_26,2014,3B,26,25,25,13,,2014.JPG,Paper 3B - Part 1,25 | 13,High,Verified,Paper 3B main table
+2014_3B_P1_27,2014,3B,27,26,26,14,,2014.JPG,Paper 3B - Part 1,26 | 14,High,Verified,Paper 3B main table
+2014_3B_P1_28,2014,3B,28,27,27,15,,2014.JPG,Paper 3B - Part 1,27 | 15,High,Verified,Paper 3B main table
+2014_3B_P1_29,2014,3B,29,28,28,15,,2014.JPG,Paper 3B - Part 1,28 | 15,High,Verified,Paper 3B main table
+2014_3B_P1_30,2014,3B,30,29,29,16,,2014.JPG,Paper 3B - Part 1,29 | 16,High,Verified,Paper 3B main table
+2014_3B_P1_31,2014,3B,31,30,30,16,,2014.JPG,Paper 3B - Part 1,30 | 16,High,Verified,Paper 3B main table
+2014_3B_P1_32,2014,3B,32,31,31,17,,2014.JPG,Paper 3B - Part 1,31 | 17,High,Verified,Paper 3B main table
+2014_3B_P1_33,2014,3B,33,32,32,17,,2014.JPG,Paper 3B - Part 1,32 | 17,High,Verified,Paper 3B main table
+2014_3B_P1_34,2014,3B,34,33,33,18,,2014.JPG,Paper 3B - Part 1,33 | 18,High,Verified,Paper 3B main table
+2014_3B_P1_35,2014,3B,35,34,34,19,,2014.JPG,Paper 3B - Part 1,34 | 19,High,Verified,Paper 3B main table
+2014_3B_P1_36,2014,3B,36,35,35,20,,2014.JPG,Paper 3B - Part 1,35 | 20,High,Verified,Paper 3B main table
+2014_3B_P1_37,2014,3B,37,36,36,20,,2014.JPG,Paper 3B - Part 1,36 | 20,High,Verified,Paper 3B main table
+2014_3B_P1_38,2014,3B,38,37,37,21,,2014.JPG,Paper 3B - Part 1,37 | 21,High,Verified,Paper 3B main table
+2014_3B_P1_39,2014,3B,39,38,38,22,,2014.JPG,Paper 3B - Part 1,38 | 22,High,Verified,Paper 3B main table
+2014_3B_P1_40,2014,3B,40,39,39,23,,2014.JPG,Paper 3B - Part 1,39 | 23,High,Verified,Paper 3B main table
+2014_3B_P1_41,2014,3B,41,40,40,24,,2014.JPG,Paper 3B - Part 1,40 | 24,High,Verified,Paper 3B main table
+2014_3B_P1_42,2014,3B,42,41,41,25,,2014.JPG,Paper 3B - Part 1,41 | 25,High,Verified,Paper 3B main table
+2014_3B_P1_43,2014,3B,43,42,42,26,,2014.JPG,Paper 3B - Part 1,42 | 26,High,Verified,Paper 3B main table
+2014_3B_P1_44,2014,3B,44,43,43,27,,2014.JPG,Paper 3B - Part 1,43 | 27,High,Verified,Paper 3B main table
+2014_3B_P1_45,2014,3B,45,44,44,28,,2014.JPG,Paper 3B - Part 1,44 | 28,High,Verified,Paper 3B main table
+2014_3B_P1_46,2014,3B,46,45,45,29,,2014.JPG,Paper 3B - Part 1,45 | 29,High,Verified,Paper 3B main table
+2014_3B_P1_47,2014,3B,47,46,46,30,,2014.JPG,Paper 3B - Part 1,46 | 30,High,Verified,Paper 3B main table
+2014_3B_P2_01,2014,3B,48,47,47,31,,2014.JPG,Paper 3B - Part 2,47 | 31,High,Verified,Paper 3B continued table
+2014_3B_P2_02,2014,3B,49,48,48,32,,2014.JPG,Paper 3B - Part 2,48 | 32,High,Verified,Paper 3B continued table
+2014_3B_P2_03,2014,3B,50,49,49,34,,2014.JPG,Paper 3B - Part 2,49 | 34,High,Verified,Paper 3B continued table
+2014_3B_P2_04,2014,3B,51,50,50,35,,2014.JPG,Paper 3B - Part 2,50 | 35,High,Verified,Paper 3B continued table
+2014_3B_P2_05,2014,3B,52,51,51,37,,2014.JPG,Paper 3B - Part 2,51 | 37,High,Verified,Paper 3B continued table
+2014_3B_P2_06,2014,3B,53,52,52,40,,2014.JPG,Paper 3B - Part 2,52 | 40,High,Verified,Paper 3B continued table
+2014_3B_P2_07,2014,3B,54,53,53,43,,2014.JPG,Paper 3B - Part 2,53 | 43,High,Verified,Paper 3B continued table
+2014_3B_P2_08,2014,3B,55,54,54,46,,2014.JPG,Paper 3B - Part 2,54 | 46,High,Verified,Paper 3B continued table
+2015_1B_000,2015,1B,1,0,0,0,,2015.JPG,Paper 1B Table,0 | 0,High,Verified,1B1 (easier) vs 1B2 (more difficult)
+2015_1B_001,2015,1B,2,1,1,0,,2015.JPG,Paper 1B Table,1 | 0,High,Verified,1B1 (easier) vs 1B2 (more difficult)
+2015_1B_002,2015,1B,3,2,2,1,,2015.JPG,Paper 1B Table,2 | 1,High,Verified,1B1 (easier) vs 1B2 (more difficult)
+2015_1B_003,2015,1B,4,3,3,1,,2015.JPG,Paper 1B Table,3 | 1,High,Verified,1B1 (easier) vs 1B2 (more difficult)
+2015_1B_004,2015,1B,5,4,4,2,,2015.JPG,Paper 1B Table,4 | 2,High,Verified,1B1 (easier) vs 1B2 (more difficult)
+2015_1B_005,2015,1B,6,5,5,2,,2015.JPG,Paper 1B Table,5 | 2,High,Verified,1B1 (easier) vs 1B2 (more difficult)
+2015_1B_006,2015,1B,7,6,6,3,,2015.JPG,Paper 1B Table,6 | 3,High,Verified,1B1 (easier) vs 1B2 (more difficult)
+2015_1B_007,2015,1B,8,7,7,3,,2015.JPG,Paper 1B Table,7 | 3,High,Verified,1B1 (easier) vs 1B2 (more difficult)
+2015_1B_008,2015,1B,9,8,8,4,,2015.JPG,Paper 1B Table,8 | 4,High,Verified,1B1 (easier) vs 1B2 (more difficult)
+2015_1B_009,2015,1B,10,9,9,4,,2015.JPG,Paper 1B Table,9 | 4,High,Verified,1B1 (easier) vs 1B2 (more difficult)
+2015_1B_010,2015,1B,11,10,10,5,,2015.JPG,Paper 1B Table,10 | 5,High,Verified,1B1 (easier) vs 1B2 (more difficult)
+2015_1B_011,2015,1B,12,11,11,5,,2015.JPG,Paper 1B Table,11 | 5,High,Verified,1B1 (easier) vs 1B2 (more difficult)
+2015_1B_012,2015,1B,13,12,12,5,,2015.JPG,Paper 1B Table,12 | 5,High,Verified,1B1 (easier) vs 1B2 (more difficult)
+2015_1B_013,2015,1B,14,13,13,5,,2015.JPG,Paper 1B Table,13 | 5,High,Verified,1B1 (easier) vs 1B2 (more difficult)
+2015_1B_014,2015,1B,15,14,14,6,,2015.JPG,Paper 1B Table,14 | 6,High,Verified,1B1 (easier) vs 1B2 (more difficult)
+2015_1B_015,2015,1B,16,15,15,6,,2015.JPG,Paper 1B Table,15 | 6,High,Verified,1B1 (easier) vs 1B2 (more difficult)
+2015_1B_016,2015,1B,17,16,16,6,,2015.JPG,Paper 1B Table,16 | 6,High,Verified,1B1 (easier) vs 1B2 (more difficult)
+2015_1B_017,2015,1B,18,17,17,7,,2015.JPG,Paper 1B Table,17 | 7,High,Verified,1B1 (easier) vs 1B2 (more difficult)
+2015_1B_018,2015,1B,19,18,18,7,,2015.JPG,Paper 1B Table,18 | 7,High,Verified,1B1 (easier) vs 1B2 (more difficult)
+2015_1B_019,2015,1B,20,19,19,7,,2015.JPG,Paper 1B Table,19 | 7,High,Verified,1B1 (easier) vs 1B2 (more difficult)
+2015_1B_020,2015,1B,21,20,20,8,,2015.JPG,Paper 1B Table,20 | 8,High,Verified,1B1 (easier) vs 1B2 (more difficult)
+2015_1B_021,2015,1B,22,21,21,8,,2015.JPG,Paper 1B Table,21 | 8,High,Verified,1B1 (easier) vs 1B2 (more difficult)
+2015_1B_022,2015,1B,23,22,22,8,,2015.JPG,Paper 1B Table,22 | 8,High,Verified,1B1 (easier) vs 1B2 (more difficult)
+2015_1B_023,2015,1B,24,23,23,9,,2015.JPG,Paper 1B Table,23 | 9,High,Verified,1B1 (easier) vs 1B2 (more difficult)
+2015_1B_024,2015,1B,25,24,24,10,,2015.JPG,Paper 1B Table,24 | 10,High,Verified,1B1 (easier) vs 1B2 (more difficult)
+2015_1B_025,2015,1B,26,25,25,10,,2015.JPG,Paper 1B Table,25 | 10,High,Verified,1B1 (easier) vs 1B2 (more difficult)
+2015_1B_026,2015,1B,27,26,26,11,,2015.JPG,Paper 1B Table,26 | 11,High,Verified,1B1 (easier) vs 1B2 (more difficult)
+2015_1B_027,2015,1B,28,27,27,12,,2015.JPG,Paper 1B Table,27 | 12,High,Verified,1B1 (easier) vs 1B2 (more difficult)
+2015_1B_028,2015,1B,29,28,28,13,,2015.JPG,Paper 1B Table,28 | 13,High,Verified,1B1 (easier) vs 1B2 (more difficult)
+2015_1B_029,2015,1B,30,29,29,14,,2015.JPG,Paper 1B Table,29 | 14,High,Verified,1B1 (easier) vs 1B2 (more difficult)
+2015_1B_030,2015,1B,31,30,30,15,,2015.JPG,Paper 1B Table,30 | 15,High,Verified,1B1 (easier) vs 1B2 (more difficult)
+2015_1B_031,2015,1B,32,31,31,16,,2015.JPG,Paper 1B Table,31 | 16,High,Verified,1B1 (easier) vs 1B2 (more difficult)
+2015_1B_032,2015,1B,33,32,32,17,,2015.JPG,Paper 1B Table,32 | 17,High,Verified,1B1 (easier) vs 1B2 (more difficult)
+2015_1B_033,2015,1B,34,33,33,18,,2015.JPG,Paper 1B Table,33 | 18,High,Verified,1B1 (easier) vs 1B2 (more difficult)
+2015_1B_034,2015,1B,35,34,34,20,,2015.JPG,Paper 1B Table,34 | 20,High,Verified,1B1 (easier) vs 1B2 (more difficult)
+2015_1B_035,2015,1B,36,35,35,22,,2015.JPG,Paper 1B Table,35 | 22,High,Verified,1B1 (easier) vs 1B2 (more difficult)
+2015_1B_036,2015,1B,37,36,36,24,,2015.JPG,Paper 1B Table,36 | 24,High,Verified,1B1 (easier) vs 1B2 (more difficult)
+2015_1B_037,2015,1B,38,37,37,29,,2015.JPG,Paper 1B Table,37 | 29,High,Verified,1B1 (easier) vs 1B2 (more difficult)
+2015_1B_038,2015,1B,39,38,38,33,,2015.JPG,Paper 1B Table,38 | 33,High,Verified,1B1 (easier) vs 1B2 (more difficult)
+2015_1B_039,2015,1B,40,39,39,37,,2015.JPG,Paper 1B Table,39 | 37,High,Verified,1B1 (easier) vs 1B2 (more difficult)
+2015_1B_040,2015,1B,41,40,40,40,,2015.JPG,Paper 1B Table,40 | 40,High,Verified,1B1 (easier) vs 1B2 (more difficult)
+2015_3B_000,2015,3B,1,0,0,0,,2015.JPG,Paper 3B Table Part 1,0 | 0,High,Verified,3B1 (easier) vs 3B2 (more difficult)
+2015_3B_001,2015,3B,2,1,1,0,,2015.JPG,Paper 3B Table Part 1,1 | 0,High,Verified,3B1 (easier) vs 3B2 (more difficult)
+2015_3B_002,2015,3B,3,2,2,1,,2015.JPG,Paper 3B Table Part 1,2 | 1,High,Verified,3B1 (easier) vs 3B2 (more difficult)
+2015_3B_003,2015,3B,4,3,3,1,,2015.JPG,Paper 3B Table Part 1,3 | 1,High,Verified,3B1 (easier) vs 3B2 (more difficult)
+2015_3B_004,2015,3B,5,4,4,1,,2015.JPG,Paper 3B Table Part 1,4 | 1,High,Verified,3B1 (easier) vs 3B2 (more difficult)
+2015_3B_005,2015,3B,6,5,5,2,,2015.JPG,Paper 3B Table Part 1,5 | 2,High,Verified,3B1 (easier) vs 3B2 (more difficult)
+2015_3B_006,2015,3B,7,6,6,2,,2015.JPG,Paper 3B Table Part 1,6 | 2,High,Verified,3B1 (easier) vs 3B2 (more difficult)
+2015_3B_007,2015,3B,8,7,7,2,,2015.JPG,Paper 3B Table Part 1,7 | 2,High,Verified,3B1 (easier) vs 3B2 (more difficult)
+2015_3B_008,2015,3B,9,8,8,2,,2015.JPG,Paper 3B Table Part 1,8 | 2,High,Verified,3B1 (easier) vs 3B2 (more difficult)
+2015_3B_009,2015,3B,10,9,9,3,,2015.JPG,Paper 3B Table Part 1,9 | 3,High,Verified,3B1 (easier) vs 3B2 (more difficult)
+2015_3B_010,2015,3B,11,10,10,3,,2015.JPG,Paper 3B Table Part 1,10 | 3,High,Verified,3B1 (easier) vs 3B2 (more difficult)
+2015_3B_011,2015,3B,12,11,11,3,,2015.JPG,Paper 3B Table Part 1,11 | 3,High,Verified,3B1 (easier) vs 3B2 (more difficult)
+2015_3B_012,2015,3B,13,12,12,3,,2015.JPG,Paper 3B Table Part 1,12 | 3,High,Verified,3B1 (easier) vs 3B2 (more difficult)
+2015_3B_013,2015,3B,14,13,13,4,,2015.JPG,Paper 3B Table Part 1,13 | 4,High,Verified,3B1 (easier) vs 3B2 (more difficult)
+2015_3B_014,2015,3B,15,14,14,4,,2015.JPG,Paper 3B Table Part 1,14 | 4,High,Verified,3B1 (easier) vs 3B2 (more difficult)
+2015_3B_015,2015,3B,16,15,15,4,,2015.JPG,Paper 3B Table Part 1,15 | 4,High,Verified,3B1 (easier) vs 3B2 (more difficult)
+2015_3B_016,2015,3B,17,16,16,4,,2015.JPG,Paper 3B Table Part 1,16 | 4,High,Verified,3B1 (easier) vs 3B2 (more difficult)
+2015_3B_017,2015,3B,18,17,17,5,,2015.JPG,Paper 3B Table Part 1,17 | 5,High,Verified,3B1 (easier) vs 3B2 (more difficult)
+2015_3B_018,2015,3B,19,18,18,5,,2015.JPG,Paper 3B Table Part 1,18 | 5,High,Verified,3B1 (easier) vs 3B2 (more difficult)
+2015_3B_019,2015,3B,20,19,19,5,,2015.JPG,Paper 3B Table Part 1,19 | 5,High,Verified,3B1 (easier) vs 3B2 (more difficult)
+2015_3B_020,2015,3B,21,20,20,6,,2015.JPG,Paper 3B Table Part 1,20 | 6,High,Verified,3B1 (easier) vs 3B2 (more difficult)
+2015_3B_021,2015,3B,22,21,21,6,,2015.JPG,Paper 3B Table Part 1,21 | 6,High,Verified,3B1 (easier) vs 3B2 (more difficult)
+2015_3B_022,2015,3B,23,22,22,7,,2015.JPG,Paper 3B Table Part 1,22 | 7,High,Verified,3B1 (easier) vs 3B2 (more difficult)
+2015_3B_023,2015,3B,24,23,23,7,,2015.JPG,Paper 3B Table Part 1,23 | 7,High,Verified,3B1 (easier) vs 3B2 (more difficult)
+2015_3B_024,2015,3B,25,24,24,7,,2015.JPG,Paper 3B Table Part 1,24 | 7,High,Verified,3B1 (easier) vs 3B2 (more difficult)
+2015_3B_025,2015,3B,26,25,25,8,,2015.JPG,Paper 3B Table Part 1,25 | 8,High,Verified,3B1 (easier) vs 3B2 (more difficult)
+2015_3B_026,2015,3B,27,26,26,8,,2015.JPG,Paper 3B Table Part 1,26 | 8,High,Verified,3B1 (easier) vs 3B2 (more difficult)
+2015_3B_027,2015,3B,28,27,27,9,,2015.JPG,Paper 3B Table Part 1,27 | 9,High,Verified,3B1 (easier) vs 3B2 (more difficult)
+2015_3B_028,2015,3B,29,28,28,10,,2015.JPG,Paper 3B Table Part 1,28 | 10,High,Verified,3B1 (easier) vs 3B2 (more difficult)
+2015_3B_029,2015,3B,30,29,29,10,,2015.JPG,Paper 3B Table Part 1,29 | 10,High,Verified,3B1 (easier) vs 3B2 (more difficult)
+2015_3B_030,2015,3B,31,30,30,11,,2015.JPG,Paper 3B Table Part 1,30 | 11,High,Verified,3B1 (easier) vs 3B2 (more difficult)
+2015_3B_031,2015,3B,32,31,31,12,,2015.JPG,Paper 3B Table Part 1,31 | 12,High,Verified,3B1 (easier) vs 3B2 (more difficult)
+2015_3B_032,2015,3B,33,32,32,13,,2015.JPG,Paper 3B Table Part 1,32 | 13,High,Verified,3B1 (easier) vs 3B2 (more difficult)
+2015_3B_033,2015,3B,34,33,33,13,,2015.JPG,Paper 3B Table Part 1,33 | 13,High,Verified,3B1 (easier) vs 3B2 (more difficult)
+2015_3B_034,2015,3B,35,34,34,14,,2015.JPG,Paper 3B Table Part 1,34 | 14,High,Verified,3B1 (easier) vs 3B2 (more difficult)
+2015_3B_035,2015,3B,36,35,35,15,,2015.JPG,Paper 3B Table Part 1,35 | 15,High,Verified,3B1 (easier) vs 3B2 (more difficult)
+2015_3B_036,2015,3B,37,36,36,16,,2015.JPG,Paper 3B Table Part 1,36 | 16,High,Verified,3B1 (easier) vs 3B2 (more difficult)
+2015_3B_037,2015,3B,38,37,37,17,,2015.JPG,Paper 3B Table Part 1,37 | 17,High,Verified,3B1 (easier) vs 3B2 (more difficult)
+2015_3B_038,2015,3B,39,38,38,18,,2015.JPG,Paper 3B Table Part 1,38 | 18,High,Verified,3B1 (easier) vs 3B2 (more difficult)
+2015_3B_039,2015,3B,40,39,39,19,,2015.JPG,Paper 3B Table Part 1,39 | 19,High,Verified,3B1 (easier) vs 3B2 (more difficult)
+2015_3B_040,2015,3B,41,40,40,20,,2015.JPG,Paper 3B Table Part 1,40 | 20,High,Verified,3B1 (easier) vs 3B2 (more difficult)
+2015_3B_041,2015,3B,42,41,41,21,,2015.JPG,Paper 3B Table Part 1,41 | 21,High,Verified,3B1 (easier) vs 3B2 (more difficult)
+2015_3B_042,2015,3B,43,42,42,22,,2015.JPG,Paper 3B Table Part 1,42 | 22,High,Verified,3B1 (easier) vs 3B2 (more difficult)
+2015_3B_043,2015,3B,44,43,43,23,,2015.JPG,Paper 3B Table Part 1,43 | 23,High,Verified,3B1 (easier) vs 3B2 (more difficult)
+2015_3B_044,2015,3B,45,44,44,24,,2015.JPG,Paper 3B Table Part 1,44 | 24,High,Verified,3B1 (easier) vs 3B2 (more difficult)
+2015_3B_045,2015,3B,46,45,45,25,,2015.JPG,Paper 3B Table Part 1,45 | 25,High,Verified,3B1 (easier) vs 3B2 (more difficult)
+2015_3B_046,2015,3B,47,46,46,26,,2015.JPG,Paper 3B Table Part 1,46 | 26,High,Verified,3B1 (easier) vs 3B2 (more difficult)
+2015_3B_047,2015,3B,48,47,47,28,,2015.JPG,Paper 3B Table Part 2,47 | 28,High,Verified,3B1 (easier) vs 3B2 (more difficult)
+2015_3B_048,2015,3B,49,48,48,30,,2015.JPG,Paper 3B Table Part 2,48 | 30,High,Verified,3B1 (easier) vs 3B2 (more difficult)
+2015_3B_049,2015,3B,50,49,49,32,,2015.JPG,Paper 3B Table Part 2,49 | 32,High,Verified,3B1 (easier) vs 3B2 (more difficult)
+2015_3B_050,2015,3B,51,50,50,34,,2015.JPG,Paper 3B Table Part 2,50 | 34,High,Verified,3B1 (easier) vs 3B2 (more difficult)
+2015_3B_051,2015,3B,52,51,51,36,,2015.JPG,Paper 3B Table Part 2,51 | 36,High,Verified,3B1 (easier) vs 3B2 (more difficult)
+2015_3B_052,2015,3B,53,52,52,39,,2015.JPG,Paper 3B Table Part 2,52 | 39,High,Verified,3B1 (easier) vs 3B2 (more difficult)
+2015_3B_053,2015,3B,54,53,53,45,,2015.JPG,Paper 3B Table Part 2,53 | 45,High,Verified,3B1 (easier) vs 3B2 (more difficult)
+2015_3B_054,2015,3B,55,54,54,54,,2015.JPG,Paper 3B Table Part 2,54 | 54,High,Verified,3B1 (easier) vs 3B2 (more difficult)
+2016_P1B_001,2016,1B,1,0,0,0,,2016.JPG,Table 1 (Paper 1B),"0, 0",High,Verified,
+2016_P1B_002,2016,1B,2,1,1,0,,2016.JPG,Table 1 (Paper 1B),"1, 0",High,Verified,
+2016_P1B_003,2016,1B,3,2,2,1,,2016.JPG,Table 1 (Paper 1B),"2, 1",High,Verified,
+2016_P1B_004,2016,1B,4,3,3,1,,2016.JPG,Table 1 (Paper 1B),"3, 1",High,Verified,
+2016_P1B_005,2016,1B,5,4,4,2,,2016.JPG,Table 1 (Paper 1B),"4, 2",High,Verified,
+2016_P1B_006,2016,1B,6,5,5,2,,2016.JPG,Table 1 (Paper 1B),"5, 2",High,Verified,
+2016_P1B_007,2016,1B,7,6,6,3,,2016.JPG,Table 1 (Paper 1B),"6, 3",High,Verified,
+2016_P1B_008,2016,1B,8,7,7,3,,2016.JPG,Table 1 (Paper 1B),"7, 3",High,Verified,
+2016_P1B_009,2016,1B,9,8,8,4,,2016.JPG,Table 1 (Paper 1B),"8, 4",High,Verified,
+2016_P1B_010,2016,1B,10,9,9,4,,2016.JPG,Table 1 (Paper 1B),"9, 4",High,Verified,
+2016_P1B_011,2016,1B,11,10,10,5,,2016.JPG,Table 1 (Paper 1B),"10, 5",High,Verified,
+2016_P1B_012,2016,1B,12,11,11,5,,2016.JPG,Table 1 (Paper 1B),"11, 5",High,Verified,
+2016_P1B_013,2016,1B,13,12,12,6,,2016.JPG,Table 1 (Paper 1B),"12, 6",High,Verified,
+2016_P1B_014,2016,1B,14,13,13,6,,2016.JPG,Table 1 (Paper 1B),"13, 6",High,Verified,
+2016_P1B_015,2016,1B,15,14,14,7,,2016.JPG,Table 1 (Paper 1B),"14, 7",High,Verified,
+2016_P1B_016,2016,1B,16,15,15,7,,2016.JPG,Table 1 (Paper 1B),"15, 7",High,Verified,
+2016_P1B_017,2016,1B,17,16,16,8,,2016.JPG,Table 1 (Paper 1B),"16, 8",High,Verified,
+2016_P1B_018,2016,1B,18,17,17,8,,2016.JPG,Table 1 (Paper 1B),"17, 8",High,Verified,
+2016_P1B_019,2016,1B,19,18,18,9,,2016.JPG,Table 1 (Paper 1B),"18, 9",High,Verified,
+2016_P1B_020,2016,1B,20,19,19,9,,2016.JPG,Table 1 (Paper 1B),"19, 9",High,Verified,
+2016_P1B_021,2016,1B,21,20,20,10,,2016.JPG,Table 1 (Paper 1B),"20, 10",High,Verified,
+2016_P1B_022,2016,1B,22,21,21,10,,2016.JPG,Table 1 (Paper 1B),"21, 10",High,Verified,
+2016_P1B_023,2016,1B,23,22,22,11,,2016.JPG,Table 1 (Paper 1B),"22, 11",High,Verified,
+2016_P1B_024,2016,1B,24,23,23,12,,2016.JPG,Table 1 (Paper 1B),"23, 12",High,Verified,
+2016_P1B_025,2016,1B,25,24,24,13,,2016.JPG,Table 1 (Paper 1B),"24, 13",High,Verified,
+2016_P1B_026,2016,1B,26,25,25,13,,2016.JPG,Table 1 (Paper 1B),"25, 13",High,Verified,
+2016_P1B_027,2016,1B,27,26,26,14,,2016.JPG,Table 1 (Paper 1B),"26, 14",High,Verified,
+2016_P1B_028,2016,1B,28,27,27,15,,2016.JPG,Table 1 (Paper 1B),"27, 15",High,Verified,
+2016_P1B_029,2016,1B,29,28,28,16,,2016.JPG,Table 1 (Paper 1B),"28, 16",High,Verified,
+2016_P1B_030,2016,1B,30,29,29,17,,2016.JPG,Table 1 (Paper 1B),"29, 17",High,Verified,
+2016_P1B_031,2016,1B,31,30,30,19,,2016.JPG,Table 1 (Paper 1B),"30, 19",High,Verified,
+2016_P1B_032,2016,1B,32,31,31,19,,2016.JPG,Table 1 (Paper 1B),"31, 19",High,Verified,
+2016_P1B_033,2016,1B,33,32,32,21,,2016.JPG,Table 1 (Paper 1B),"32, 21",High,Verified,
+2016_P1B_034,2016,1B,34,33,33,22,,2016.JPG,Table 1 (Paper 1B),"33, 22",High,Verified,
+2016_P1B_035,2016,1B,35,34,34,23,,2016.JPG,Table 1 (Paper 1B),"34, 23",High,Verified,
+2016_P1B_036,2016,1B,36,35,35,24,,2016.JPG,Table 1 (Paper 1B),"35, 24",High,Verified,
+2016_P1B_037,2016,1B,37,36,36,26,,2016.JPG,Table 1 (Paper 1B),"36, 26",High,Verified,
+2016_P1B_038,2016,1B,38,37,37,28,,2016.JPG,Table 1 (Paper 1B),"37, 28",High,Verified,
+2016_P1B_039,2016,1B,39,38,38,30,,2016.JPG,Table 1 (Paper 1B),"38, 30",High,Verified,
+2016_P1B_040,2016,1B,40,39,39,32,,2016.JPG,Table 1 (Paper 1B),"39, 32",High,Verified,
+2016_P1B_041,2016,1B,41,40,40,34,,2016.JPG,Table 1 (Paper 1B),"40, 34",High,Verified,
+2016_P1B_042,2016,1B,42,41,41,37,,2016.JPG,Table 1 (Paper 1B),"41, 37",High,Verified,
+2016_P1B_043,2016,1B,43,42,42,39,,2016.JPG,Table 1 (Paper 1B),"42, 39",High,Verified,
+2016_P1B_044,2016,1B,44,43,43,41,,2016.JPG,Table 1 (Paper 1B),"43, 41",High,Verified,
+2016_P3B_001,2016,3B,1,0,0,0,,2016.JPG,Table 2 (Paper 3B Part 1),"0, 0",High,Verified,
+2016_P3B_002,2016,3B,2,1,1,1,,2016.JPG,Table 2 (Paper 3B Part 1),"1, 1",High,Verified,
+2016_P3B_003,2016,3B,3,2,2,2,,2016.JPG,Table 2 (Paper 3B Part 1),"2, 2",High,Verified,
+2016_P3B_004,2016,3B,4,3,3,2,,2016.JPG,Table 2 (Paper 3B Part 1),"3, 2",High,Verified,
+2016_P3B_005,2016,3B,5,4,4,2,,2016.JPG,Table 2 (Paper 3B Part 1),"4, 2",High,Verified,
+2016_P3B_006,2016,3B,6,5,5,2,,2016.JPG,Table 2 (Paper 3B Part 1),"5, 2",High,Verified,
+2016_P3B_007,2016,3B,7,6,6,2,,2016.JPG,Table 2 (Paper 3B Part 1),"6, 2",High,Verified,
+2016_P3B_008,2016,3B,8,7,7,3,,2016.JPG,Table 2 (Paper 3B Part 1),"7, 3",High,Verified,
+2016_P3B_009,2016,3B,9,8,8,3,,2016.JPG,Table 2 (Paper 3B Part 1),"8, 3",High,Verified,
+2016_P3B_010,2016,3B,10,9,9,3,,2016.JPG,Table 2 (Paper 3B Part 1),"9, 3",High,Verified,
+2016_P3B_011,2016,3B,11,10,10,4,,2016.JPG,Table 2 (Paper 3B Part 1),"10, 4",High,Verified,
+2016_P3B_012,2016,3B,12,11,11,4,,2016.JPG,Table 2 (Paper 3B Part 1),"11, 4",High,Verified,
+2016_P3B_013,2016,3B,13,12,12,4,,2016.JPG,Table 2 (Paper 3B Part 1),"12, 4",High,Verified,
+2016_P3B_014,2016,3B,14,13,13,5,,2016.JPG,Table 2 (Paper 3B Part 1),"13, 5",High,Verified,
+2016_P3B_015,2016,3B,15,14,14,5,,2016.JPG,Table 2 (Paper 3B Part 1),"14, 5",High,Verified,
+2016_P3B_016,2016,3B,16,15,15,5,,2016.JPG,Table 2 (Paper 3B Part 1),"15, 5",High,Verified,
+2016_P3B_017,2016,3B,17,16,16,5,,2016.JPG,Table 2 (Paper 3B Part 1),"16, 5",High,Verified,
+2016_P3B_018,2016,3B,18,17,17,6,,2016.JPG,Table 2 (Paper 3B Part 1),"17, 6",High,Verified,
+2016_P3B_019,2016,3B,19,18,18,6,,2016.JPG,Table 2 (Paper 3B Part 1),"18, 6",High,Verified,
+2016_P3B_020,2016,3B,20,19,19,7,,2016.JPG,Table 2 (Paper 3B Part 1),"19, 7",High,Verified,
+2016_P3B_021,2016,3B,21,20,20,7,,2016.JPG,Table 2 (Paper 3B Part 1),"20, 7",High,Verified,
+2016_P3B_022,2016,3B,22,21,21,7,,2016.JPG,Table 2 (Paper 3B Part 1),"21, 7",High,Verified,
+2016_P3B_023,2016,3B,23,22,22,8,,2016.JPG,Table 2 (Paper 3B Part 1),"22, 8",High,Verified,
+2016_P3B_024,2016,3B,24,23,23,8,,2016.JPG,Table 2 (Paper 3B Part 1),"23, 8",High,Verified,
+2016_P3B_025,2016,3B,25,24,24,9,,2016.JPG,Table 2 (Paper 3B Part 1),"24, 9",High,Verified,
+2016_P3B_026,2016,3B,26,25,25,10,,2016.JPG,Table 2 (Paper 3B Part 1),"25, 10",High,Verified,
+2016_P3B_027,2016,3B,27,26,26,10,,2016.JPG,Table 2 (Paper 3B Part 1),"26, 10",High,Verified,
+2016_P3B_028,2016,3B,28,27,27,11,,2016.JPG,Table 2 (Paper 3B Part 1),"27, 11",High,Verified,
+2016_P3B_029,2016,3B,29,28,28,11,,2016.JPG,Table 2 (Paper 3B Part 1),"28, 11",High,Verified,
+2016_P3B_030,2016,3B,30,29,29,12,,2016.JPG,Table 2 (Paper 3B Part 1),"29, 12",High,Verified,
+2016_P3B_031,2016,3B,31,30,30,13,,2016.JPG,Table 2 (Paper 3B Part 1),"30, 13",High,Verified,
+2016_P3B_032,2016,3B,32,31,31,13,,2016.JPG,Table 2 (Paper 3B Part 1),"31, 13",High,Verified,
+2016_P3B_033,2016,3B,33,32,32,14,,2016.JPG,Table 2 (Paper 3B Part 1),"32, 14",High,Verified,
+2016_P3B_034,2016,3B,34,33,33,15,,2016.JPG,Table 2 (Paper 3B Part 1),"33, 15",High,Verified,
+2016_P3B_035,2016,3B,35,34,34,16,,2016.JPG,Table 2 (Paper 3B Part 1),"34, 16",High,Verified,
+2016_P3B_036,2016,3B,36,35,35,16,,2016.JPG,Table 2 (Paper 3B Part 1),"35, 16",High,Verified,
+2016_P3B_037,2016,3B,37,36,36,17,,2016.JPG,Table 2 (Paper 3B Part 1),"36, 17",High,Verified,
+2016_P3B_038,2016,3B,38,37,37,18,,2016.JPG,Table 2 (Paper 3B Part 1),"37, 18",High,Verified,
+2016_P3B_039,2016,3B,39,38,38,19,,2016.JPG,Table 2 (Paper 3B Part 1),"38, 19",High,Verified,
+2016_P3B_040,2016,3B,40,39,39,20,,2016.JPG,Table 2 (Paper 3B Part 1),"39, 20",High,Verified,
+2016_P3B_041,2016,3B,41,40,40,20,,2016.JPG,Table 2 (Paper 3B Part 1),"40, 20",High,Verified,
+2016_P3B_042,2016,3B,42,41,41,21,,2016.JPG,Table 2 (Paper 3B Part 1),"41, 21",High,Verified,
+2016_P3B_043,2016,3B,43,42,42,22,,2016.JPG,Table 2 (Paper 3B Part 1),"42, 22",High,Verified,
+2016_P3B_044,2016,3B,44,43,43,23,,2016.JPG,Table 2 (Paper 3B Part 1),"43, 23",High,Verified,
+2016_P3B_045,2016,3B,45,44,44,24,,2016.JPG,Table 2 (Paper 3B Part 1),"44, 24",High,Verified,
+2016_P3B_046,2016,3B,46,45,45,25,,2016.JPG,Table 2 (Paper 3B Part 1),"45, 25",High,Verified,
+2016_P3B_047,2016,3B,47,46,46,26,,2016.JPG,Table 2 (Paper 3B Part 1),"46, 26",High,Verified,
+2016_P3B_048,2016,3B,48,47,47,27,,2016.JPG,Table 3 (Paper 3B Part 2),"47, 27",High,Verified,
+2016_P3B_049,2016,3B,49,48,48,29,,2016.JPG,Table 3 (Paper 3B Part 2),"48, 29",High,Verified,
+2016_P3B_050,2016,3B,50,49,49,30,,2016.JPG,Table 3 (Paper 3B Part 2),"49, 30",High,Verified,
+2016_P3B_051,2016,3B,51,50,50,33,,2016.JPG,Table 3 (Paper 3B Part 2),"50, 33",High,Verified,
+2016_P3B_052,2016,3B,52,51,51,35,,2016.JPG,Table 3 (Paper 3B Part 2),"51, 35",High,Verified,
+2016_P3B_053,2016,3B,53,52,52,38,,2016.JPG,Table 3 (Paper 3B Part 2),"52, 38",High,Verified,
+2016_P3B_054,2016,3B,54,53,53,41,,2016.JPG,Table 3 (Paper 3B Part 2),"53, 41",High,Verified,
+2016_P3B_055,2016,3B,55,54,54,44,,2016.JPG,Table 3 (Paper 3B Part 2),"54, 44",High,Verified,
+2017_1B_00,2017,1B,1,0,0,0,,2017.JPG,Paper 1B Table,1B1 (easier): 0 | 1B2 (more difficult): 0,High,Verified,
+2017_1B_01,2017,1B,2,1,1,1,,2017.JPG,Paper 1B Table,1B1 (easier): 1 | 1B2 (more difficult): 1,High,Verified,
+2017_1B_02,2017,1B,3,2,2,1,,2017.JPG,Paper 1B Table,1B1 (easier): 2 | 1B2 (more difficult): 1,High,Verified,
+2017_1B_03,2017,1B,4,3,3,2,,2017.JPG,Paper 1B Table,1B1 (easier): 3 | 1B2 (more difficult): 2,High,Verified,
+2017_1B_04,2017,1B,5,4,4,3,,2017.JPG,Paper 1B Table,1B1 (easier): 4 | 1B2 (more difficult): 3,High,Verified,
+2017_1B_05,2017,1B,6,5,5,3,,2017.JPG,Paper 1B Table,1B1 (easier): 5 | 1B2 (more difficult): 3,High,Verified,
+2017_1B_06,2017,1B,7,6,6,4,,2017.JPG,Paper 1B Table,1B1 (easier): 6 | 1B2 (more difficult): 4,High,Verified,
+2017_1B_07,2017,1B,8,7,7,4,,2017.JPG,Paper 1B Table,1B1 (easier): 7 | 1B2 (more difficult): 4,High,Verified,
+2017_1B_08,2017,1B,9,8,8,4,,2017.JPG,Paper 1B Table,1B1 (easier): 8 | 1B2 (more difficult): 4,High,Verified,
+2017_1B_09,2017,1B,10,9,9,5,,2017.JPG,Paper 1B Table,1B1 (easier): 9 | 1B2 (more difficult): 5,High,Verified,
+2017_1B_10,2017,1B,11,10,10,6,,2017.JPG,Paper 1B Table,1B1 (easier): 10 | 1B2 (more difficult): 6,High,Verified,
+2017_1B_11,2017,1B,12,11,11,6,,2017.JPG,Paper 1B Table,1B1 (easier): 11 | 1B2 (more difficult): 6,High,Verified,
+2017_1B_12,2017,1B,13,12,12,6,,2017.JPG,Paper 1B Table,1B1 (easier): 12 | 1B2 (more difficult): 6,High,Verified,
+2017_1B_13,2017,1B,14,13,13,7,,2017.JPG,Paper 1B Table,1B1 (easier): 13 | 1B2 (more difficult): 7,High,Verified,
+2017_1B_14,2017,1B,15,14,14,7,,2017.JPG,Paper 1B Table,1B1 (easier): 14 | 1B2 (more difficult): 7,High,Verified,
+2017_1B_15,2017,1B,16,15,15,8,,2017.JPG,Paper 1B Table,1B1 (easier): 15 | 1B2 (more difficult): 8,High,Verified,
+2017_1B_16,2017,1B,17,16,16,8,,2017.JPG,Paper 1B Table,1B1 (easier): 16 | 1B2 (more difficult): 8,High,Verified,
+2017_1B_17,2017,1B,18,17,17,8,,2017.JPG,Paper 1B Table,1B1 (easier): 17 | 1B2 (more difficult): 8,High,Verified,
+2017_1B_18,2017,1B,19,18,18,9,,2017.JPG,Paper 1B Table,1B1 (easier): 18 | 1B2 (more difficult): 9,High,Verified,
+2017_1B_19,2017,1B,20,19,19,9,,2017.JPG,Paper 1B Table,1B1 (easier): 19 | 1B2 (more difficult): 9,High,Verified,
+2017_1B_20,2017,1B,21,20,20,10,,2017.JPG,Paper 1B Table,1B1 (easier): 20 | 1B2 (more difficult): 10,High,Verified,
+2017_1B_21,2017,1B,22,21,21,10,,2017.JPG,Paper 1B Table,1B1 (easier): 21 | 1B2 (more difficult): 10,High,Verified,
+2017_1B_22,2017,1B,23,22,22,11,,2017.JPG,Paper 1B Table,1B1 (easier): 22 | 1B2 (more difficult): 11,High,Verified,
+2017_1B_23,2017,1B,24,23,23,11,,2017.JPG,Paper 1B Table,1B1 (easier): 23 | 1B2 (more difficult): 11,High,Verified,
+2017_1B_24,2017,1B,25,24,24,12,,2017.JPG,Paper 1B Table,1B1 (easier): 24 | 1B2 (more difficult): 12,High,Verified,
+2017_1B_25,2017,1B,26,25,25,12,,2017.JPG,Paper 1B Table,1B1 (easier): 25 | 1B2 (more difficult): 12,High,Verified,
+2017_1B_26,2017,1B,27,26,26,13,,2017.JPG,Paper 1B Table,1B1 (easier): 26 | 1B2 (more difficult): 13,High,Verified,
+2017_1B_27,2017,1B,28,27,27,14,,2017.JPG,Paper 1B Table,1B1 (easier): 27 | 1B2 (more difficult): 14,High,Verified,
+2017_1B_28,2017,1B,29,28,28,15,,2017.JPG,Paper 1B Table,1B1 (easier): 28 | 1B2 (more difficult): 15,High,Verified,
+2017_1B_29,2017,1B,30,29,29,16,,2017.JPG,Paper 1B Table,1B1 (easier): 29 | 1B2 (more difficult): 16,High,Verified,
+2017_1B_30,2017,1B,31,30,30,18,,2017.JPG,Paper 1B Table,1B1 (easier): 30 | 1B2 (more difficult): 18,High,Verified,
+2017_1B_31,2017,1B,32,31,31,19,,2017.JPG,Paper 1B Table,1B1 (easier): 31 | 1B2 (more difficult): 19,High,Verified,
+2017_1B_32,2017,1B,33,32,32,21,,2017.JPG,Paper 1B Table,1B1 (easier): 32 | 1B2 (more difficult): 21,High,Verified,
+2017_1B_33,2017,1B,34,33,33,23,,2017.JPG,Paper 1B Table,1B1 (easier): 33 | 1B2 (more difficult): 23,High,Verified,
+2017_1B_34,2017,1B,35,34,34,24,,2017.JPG,Paper 1B Table,1B1 (easier): 34 | 1B2 (more difficult): 24,High,Verified,
+2017_1B_35,2017,1B,36,35,35,26,,2017.JPG,Paper 1B Table,1B1 (easier): 35 | 1B2 (more difficult): 26,High,Verified,
+2017_1B_36,2017,1B,37,36,36,28,,2017.JPG,Paper 1B Table,1B1 (easier): 36 | 1B2 (more difficult): 28,High,Verified,
+2017_1B_37,2017,1B,38,37,37,29,,2017.JPG,Paper 1B Table,1B1 (easier): 37 | 1B2 (more difficult): 29,High,Verified,
+2017_1B_38,2017,1B,39,38,38,32,,2017.JPG,Paper 1B Table,1B1 (easier): 38 | 1B2 (more difficult): 32,High,Verified,
+2017_1B_39,2017,1B,40,39,39,34,,2017.JPG,Paper 1B Table,1B1 (easier): 39 | 1B2 (more difficult): 34,High,Verified,
+2017_1B_40,2017,1B,41,40,40,36,,2017.JPG,Paper 1B Table,1B1 (easier): 40 | 1B2 (more difficult): 36,High,Verified,
+2017_1B_41,2017,1B,42,41,41,38,,2017.JPG,Paper 1B Table,1B1 (easier): 41 | 1B2 (more difficult): 38,High,Verified,
+2017_1B_42,2017,1B,43,42,42,40,,2017.JPG,Paper 1B Table,1B1 (easier): 42 | 1B2 (more difficult): 40,High,Verified,
+2017_1B_43,2017,1B,44,43,43,42,,2017.JPG,Paper 1B Table,1B1 (easier): 43 | 1B2 (more difficult): 42,High,Verified,
+2017_3B_00,2017,3B,1,0,0,0,,2017.JPG,Paper 3B Table,3B1 (easier): 0 | 3B2 (more difficult): 0,High,Verified,
+2017_3B_01,2017,3B,2,1,1,1,,2017.JPG,Paper 3B Table,3B1 (easier): 1 | 3B2 (more difficult): 1,High,Verified,
+2017_3B_02,2017,3B,3,2,2,1,,2017.JPG,Paper 3B Table,3B1 (easier): 2 | 3B2 (more difficult): 1,High,Verified,
+2017_3B_03,2017,3B,4,3,3,1,,2017.JPG,Paper 3B Table,3B1 (easier): 3 | 3B2 (more difficult): 1,High,Verified,
+2017_3B_04,2017,3B,5,4,4,1,,2017.JPG,Paper 3B Table,3B1 (easier): 4 | 3B2 (more difficult): 1,High,Verified,
+2017_3B_05,2017,3B,6,5,5,2,,2017.JPG,Paper 3B Table,3B1 (easier): 5 | 3B2 (more difficult): 2,High,Verified,
+2017_3B_06,2017,3B,7,6,6,2,,2017.JPG,Paper 3B Table,3B1 (easier): 6 | 3B2 (more difficult): 2,High,Verified,
+2017_3B_07,2017,3B,8,7,7,2,,2017.JPG,Paper 3B Table,3B1 (easier): 7 | 3B2 (more difficult): 2,High,Verified,
+2017_3B_08,2017,3B,9,8,8,2,,2017.JPG,Paper 3B Table,3B1 (easier): 8 | 3B2 (more difficult): 2,High,Verified,
+2017_3B_09,2017,3B,10,9,9,3,,2017.JPG,Paper 3B Table,3B1 (easier): 9 | 3B2 (more difficult): 3,High,Verified,
+2017_3B_10,2017,3B,11,10,10,3,,2017.JPG,Paper 3B Table,3B1 (easier): 10 | 3B2 (more difficult): 3,High,Verified,
+2017_3B_11,2017,3B,12,11,11,3,,2017.JPG,Paper 3B Table,3B1 (easier): 11 | 3B2 (more difficult): 3,High,Verified,
+2017_3B_12,2017,3B,13,12,12,3,,2017.JPG,Paper 3B Table,3B1 (easier): 12 | 3B2 (more difficult): 3,High,Verified,
+2017_3B_13,2017,3B,14,13,13,4,,2017.JPG,Paper 3B Table,3B1 (easier): 13 | 3B2 (more difficult): 4,High,Verified,
+2017_3B_14,2017,3B,15,14,14,4,,2017.JPG,Paper 3B Table,3B1 (easier): 14 | 3B2 (more difficult): 4,High,Verified,
+2017_3B_15,2017,3B,16,15,15,4,,2017.JPG,Paper 3B Table,3B1 (easier): 15 | 3B2 (more difficult): 4,High,Verified,
+2017_3B_16,2017,3B,17,16,16,5,,2017.JPG,Paper 3B Table,3B1 (easier): 16 | 3B2 (more difficult): 5,High,Verified,
+2017_3B_17,2017,3B,18,17,17,5,,2017.JPG,Paper 3B Table,3B1 (easier): 17 | 3B2 (more difficult): 5,High,Verified,
+2017_3B_18,2017,3B,19,18,18,5,,2017.JPG,Paper 3B Table,3B1 (easier): 18 | 3B2 (more difficult): 5,High,Verified,
+2017_3B_19,2017,3B,20,19,19,5,,2017.JPG,Paper 3B Table,3B1 (easier): 19 | 3B2 (more difficult): 5,High,Verified,
+2017_3B_20,2017,3B,21,20,20,6,,2017.JPG,Paper 3B Table,3B1 (easier): 20 | 3B2 (more difficult): 6,High,Verified,
+2017_3B_21,2017,3B,22,21,21,6,,2017.JPG,Paper 3B Table,3B1 (easier): 21 | 3B2 (more difficult): 6,High,Verified,
+2017_3B_22,2017,3B,23,22,22,7,,2017.JPG,Paper 3B Table,3B1 (easier): 22 | 3B2 (more difficult): 7,High,Verified,
+2017_3B_23,2017,3B,24,23,23,7,,2017.JPG,Paper 3B Table,3B1 (easier): 23 | 3B2 (more difficult): 7,High,Verified,
+2017_3B_24,2017,3B,25,24,24,8,,2017.JPG,Paper 3B Table,3B1 (easier): 24 | 3B2 (more difficult): 8,High,Verified,
+2017_3B_25,2017,3B,26,25,25,8,,2017.JPG,Paper 3B Table,3B1 (easier): 25 | 3B2 (more difficult): 8,High,Verified,
+2017_3B_26,2017,3B,27,26,26,9,,2017.JPG,Paper 3B Table,3B1 (easier): 26 | 3B2 (more difficult): 9,High,Verified,
+2017_3B_27,2017,3B,28,27,27,9,,2017.JPG,Paper 3B Table,3B1 (easier): 27 | 3B2 (more difficult): 9,High,Verified,
+2017_3B_28,2017,3B,29,28,28,10,,2017.JPG,Paper 3B Table,3B1 (easier): 28 | 3B2 (more difficult): 10,High,Verified,
+2017_3B_29,2017,3B,30,29,29,11,,2017.JPG,Paper 3B Table,3B1 (easier): 29 | 3B2 (more difficult): 11,High,Verified,
+2017_3B_30,2017,3B,31,30,30,11,,2017.JPG,Paper 3B Table,3B1 (easier): 30 | 3B2 (more difficult): 11,High,Verified,
+2017_3B_31,2017,3B,32,31,31,12,,2017.JPG,Paper 3B Table,3B1 (easier): 31 | 3B2 (more difficult): 12,High,Verified,
+2017_3B_32,2017,3B,33,32,32,13,,2017.JPG,Paper 3B Table,3B1 (easier): 32 | 3B2 (more difficult): 13,High,Verified,
+2017_3B_33,2017,3B,34,33,33,14,,2017.JPG,Paper 3B Table,3B1 (easier): 33 | 3B2 (more difficult): 14,High,Verified,
+2017_3B_34,2017,3B,35,34,34,15,,2017.JPG,Paper 3B Table,3B1 (easier): 34 | 3B2 (more difficult): 15,High,Verified,
+2017_3B_35,2017,3B,36,35,35,15,,2017.JPG,Paper 3B Table,3B1 (easier): 35 | 3B2 (more difficult): 15,High,Verified,
+2017_3B_36,2017,3B,37,36,36,16,,2017.JPG,Paper 3B Table,3B1 (easier): 36 | 3B2 (more difficult): 16,High,Verified,
+2017_3B_37,2017,3B,38,37,37,17,,2017.JPG,Paper 3B Table,3B1 (easier): 37 | 3B2 (more difficult): 17,High,Verified,
+2017_3B_38,2017,3B,39,38,38,18,,2017.JPG,Paper 3B Table,3B1 (easier): 38 | 3B2 (more difficult): 18,High,Verified,
+2017_3B_39,2017,3B,40,39,39,19,,2017.JPG,Paper 3B Table,3B1 (easier): 39 | 3B2 (more difficult): 19,High,Verified,
+2017_3B_40,2017,3B,41,40,40,20,,2017.JPG,Paper 3B Table,3B1 (easier): 40 | 3B2 (more difficult): 20,High,Verified,
+2017_3B_41,2017,3B,42,41,41,21,,2017.JPG,Paper 3B Table,3B1 (easier): 41 | 3B2 (more difficult): 21,High,Verified,
+2017_3B_42,2017,3B,43,42,42,22,,2017.JPG,Paper 3B Table,3B1 (easier): 42 | 3B2 (more difficult): 22,High,Verified,
+2017_3B_43,2017,3B,44,43,43,23,,2017.JPG,Paper 3B Table,3B1 (easier): 43 | 3B2 (more difficult): 23,High,Verified,
+2017_3B_44,2017,3B,45,44,44,24,,2017.JPG,Paper 3B Table,3B1 (easier): 44 | 3B2 (more difficult): 24,High,Verified,
+2017_3B_45,2017,3B,46,45,45,26,,2017.JPG,Paper 3B Table,3B1 (easier): 45 | 3B2 (more difficult): 26,High,Verified,
+2017_3B_46,2017,3B,47,46,46,27,,2017.JPG,Paper 3B Table,3B1 (easier): 46 | 3B2 (more difficult): 27,High,Verified,
+2017_3B_47,2017,3B,48,47,47,29,,2017.JPG,Paper 3B Table,3B1 (easier): 47 | 3B2 (more difficult): 29,High,Verified,
+2017_3B_48,2017,3B,49,48,48,30,,2017.JPG,Paper 3B Table,3B1 (easier): 48 | 3B2 (more difficult): 30,High,Verified,
+2017_3B_49,2017,3B,50,49,49,32,,2017.JPG,Paper 3B Table,3B1 (easier): 49 | 3B2 (more difficult): 32,High,Verified,
+2017_3B_50,2017,3B,51,50,50,35,,2017.JPG,Paper 3B Table,3B1 (easier): 50 | 3B2 (more difficult): 35,High,Verified,
+2017_3B_51,2017,3B,52,51,51,37,,2017.JPG,Paper 3B Table,3B1 (easier): 51 | 3B2 (more difficult): 37,High,Verified,
+2017_3B_52,2017,3B,53,52,52,40,,2017.JPG,Paper 3B Table,3B1 (easier): 52 | 3B2 (more difficult): 40,High,Verified,
+2017_3B_53,2017,3B,54,53,53,43,,2017.JPG,Paper 3B Table,3B1 (easier): 53 | 3B2 (more difficult): 43,High,Verified,
+2018_1B_00,2018,1B,1,0,0,0,,2018.JPG,Paper 1B Table (left),0 | 0,High,Verified,
+2018_1B_01,2018,1B,2,1,1,0,,2018.JPG,Paper 1B Table (left),1 | 0,High,Verified,
+2018_1B_02,2018,1B,3,2,2,1,,2018.JPG,Paper 1B Table (left),2 | 1,High,Verified,
+2018_1B_03,2018,1B,4,3,3,1,,2018.JPG,Paper 1B Table (left),3 | 1,High,Verified,
+2018_1B_04,2018,1B,5,4,4,1,,2018.JPG,Paper 1B Table (left),4 | 1,High,Verified,
+2018_1B_05,2018,1B,6,5,5,2,,2018.JPG,Paper 1B Table (left),5 | 2,High,Verified,
+2018_1B_06,2018,1B,7,6,6,2,,2018.JPG,Paper 1B Table (left),6 | 2,High,Verified,
+2018_1B_07,2018,1B,8,7,7,2,,2018.JPG,Paper 1B Table (left),7 | 2,High,Verified,
+2018_1B_08,2018,1B,9,8,8,2,,2018.JPG,Paper 1B Table (left),8 | 2,High,Verified,
+2018_1B_09,2018,1B,10,9,9,3,,2018.JPG,Paper 1B Table (left),9 | 3,High,Verified,
+2018_1B_10,2018,1B,11,10,10,3,,2018.JPG,Paper 1B Table (left),10 | 3,High,Verified,
+2018_1B_11,2018,1B,12,11,11,3,,2018.JPG,Paper 1B Table (left),11 | 3,High,Verified,
+2018_1B_12,2018,1B,13,12,12,4,,2018.JPG,Paper 1B Table (left),12 | 4,High,Verified,
+2018_1B_13,2018,1B,14,13,13,4,,2018.JPG,Paper 1B Table (left),13 | 4,High,Verified,
+2018_1B_14,2018,1B,15,14,14,5,,2018.JPG,Paper 1B Table (left),14 | 5,High,Verified,
+2018_1B_15,2018,1B,16,15,15,5,,2018.JPG,Paper 1B Table (left),15 | 5,High,Verified,
+2018_1B_16,2018,1B,17,16,16,5,,2018.JPG,Paper 1B Table (left),16 | 5,High,Verified,
+2018_1B_17,2018,1B,18,17,17,5,,2018.JPG,Paper 1B Table (left),17 | 5,High,Verified,
+2018_1B_18,2018,1B,19,18,18,6,,2018.JPG,Paper 1B Table (left),18 | 6,High,Verified,
+2018_1B_19,2018,1B,20,19,19,6,,2018.JPG,Paper 1B Table (left),19 | 6,High,Verified,
+2018_1B_20,2018,1B,21,20,20,7,,2018.JPG,Paper 1B Table (left),20 | 7,High,Verified,
+2018_1B_21,2018,1B,22,21,21,8,,2018.JPG,Paper 1B Table (left),21 | 8,High,Verified,
+2018_1B_22,2018,1B,23,22,22,8,,2018.JPG,Paper 1B Table (left),22 | 8,High,Verified,
+2018_1B_23,2018,1B,24,23,23,9,,2018.JPG,Paper 1B Table (left),23 | 9,High,Verified,
+2018_1B_24,2018,1B,25,24,24,10,,2018.JPG,Paper 1B Table (left),24 | 10,High,Verified,
+2018_1B_25,2018,1B,26,25,25,10,,2018.JPG,Paper 1B Table (left),25 | 10,High,Verified,
+2018_1B_26,2018,1B,27,26,26,11,,2018.JPG,Paper 1B Table (left),26 | 11,High,Verified,
+2018_1B_27,2018,1B,28,27,27,12,,2018.JPG,Paper 1B Table (left),27 | 12,High,Verified,
+2018_1B_28,2018,1B,29,28,28,13,,2018.JPG,Paper 1B Table (left),28 | 13,High,Verified,
+2018_1B_29,2018,1B,30,29,29,14,,2018.JPG,Paper 1B Table (left),29 | 14,High,Verified,
+2018_1B_30,2018,1B,31,30,30,15,,2018.JPG,Paper 1B Table (left),30 | 15,High,Verified,
+2018_1B_31,2018,1B,32,31,31,16,,2018.JPG,Paper 1B Table (left),31 | 16,High,Verified,
+2018_1B_32,2018,1B,33,32,32,17,,2018.JPG,Paper 1B Table (left),32 | 17,High,Verified,
+2018_1B_33,2018,1B,34,33,33,19,,2018.JPG,Paper 1B Table (left),33 | 19,High,Verified,
+2018_1B_34,2018,1B,35,34,34,20,,2018.JPG,Paper 1B Table (left),34 | 20,High,Verified,
+2018_1B_35,2018,1B,36,35,35,22,,2018.JPG,Paper 1B Table (left),35 | 22,High,Verified,
+2018_1B_36,2018,1B,37,36,36,23,,2018.JPG,Paper 1B Table (left),36 | 23,High,Verified,
+2018_1B_37,2018,1B,38,37,37,25,,2018.JPG,Paper 1B Table (left),37 | 25,High,Verified,
+2018_1B_38,2018,1B,39,38,38,28,,2018.JPG,Paper 1B Table (left),38 | 28,High,Verified,
+2018_1B_39,2018,1B,40,39,39,31,,2018.JPG,Paper 1B Table (left),39 | 31,High,Verified,
+2018_1B_40,2018,1B,41,40,40,34,,2018.JPG,Paper 1B Table (left),40 | 34,High,Verified,
+2018_1B_41,2018,1B,42,41,41,37,,2018.JPG,Paper 1B Table (left),41 | 37,High,Verified,
+2018_1B_42,2018,1B,43,42,42,40,,2018.JPG,Paper 1B Table (left),42 | 40,High,Verified,
+2018_3B_00,2018,3B,1,0,0,0,,2018.JPG,"Paper 3B Table (middle, 0-42)",0 | 0,High,Verified,
+2018_3B_01,2018,3B,2,1,1,1,,2018.JPG,"Paper 3B Table (middle, 0-42)",1 | 1,High,Verified,
+2018_3B_02,2018,3B,3,2,2,1,,2018.JPG,"Paper 3B Table (middle, 0-42)",2 | 1,High,Verified,
+2018_3B_03,2018,3B,4,3,3,1,,2018.JPG,"Paper 3B Table (middle, 0-42)",3 | 1,High,Verified,
+2018_3B_04,2018,3B,5,4,4,2,,2018.JPG,"Paper 3B Table (middle, 0-42)",4 | 2,High,Verified,
+2018_3B_05,2018,3B,6,5,5,2,,2018.JPG,"Paper 3B Table (middle, 0-42)",5 | 2,High,Verified,
+2018_3B_06,2018,3B,7,6,6,2,,2018.JPG,"Paper 3B Table (middle, 0-42)",6 | 2,High,Verified,
+2018_3B_07,2018,3B,8,7,7,2,,2018.JPG,"Paper 3B Table (middle, 0-42)",7 | 2,High,Verified,
+2018_3B_08,2018,3B,9,8,8,2,,2018.JPG,"Paper 3B Table (middle, 0-42)",8 | 2,High,Verified,
+2018_3B_09,2018,3B,10,9,9,2,,2018.JPG,"Paper 3B Table (middle, 0-42)",9 | 2,High,Verified,
+2018_3B_10,2018,3B,11,10,10,2,,2018.JPG,"Paper 3B Table (middle, 0-42)",10 | 2,High,Verified,
+2018_3B_11,2018,3B,12,11,11,3,,2018.JPG,"Paper 3B Table (middle, 0-42)",11 | 3,High,Verified,
+2018_3B_12,2018,3B,13,12,12,3,,2018.JPG,"Paper 3B Table (middle, 0-42)",12 | 3,High,Verified,
+2018_3B_13,2018,3B,14,13,13,3,,2018.JPG,"Paper 3B Table (middle, 0-42)",13 | 3,High,Verified,
+2018_3B_14,2018,3B,15,14,14,3,,2018.JPG,"Paper 3B Table (middle, 0-42)",14 | 3,High,Verified,
+2018_3B_15,2018,3B,16,15,15,3,,2018.JPG,"Paper 3B Table (middle, 0-42)",15 | 3,High,Verified,
+2018_3B_16,2018,3B,17,16,16,3,,2018.JPG,"Paper 3B Table (middle, 0-42)",16 | 3,High,Verified,
+2018_3B_17,2018,3B,18,17,17,3,,2018.JPG,"Paper 3B Table (middle, 0-42)",17 | 3,High,Verified,
+2018_3B_18,2018,3B,19,18,18,4,,2018.JPG,"Paper 3B Table (middle, 0-42)",18 | 4,High,Verified,
+2018_3B_19,2018,3B,20,19,19,4,,2018.JPG,"Paper 3B Table (middle, 0-42)",19 | 4,High,Verified,
+2018_3B_20,2018,3B,21,20,20,5,,2018.JPG,"Paper 3B Table (middle, 0-42)",20 | 5,High,Verified,
+2018_3B_21,2018,3B,22,21,21,5,,2018.JPG,"Paper 3B Table (middle, 0-42)",21 | 5,High,Verified,
+2018_3B_22,2018,3B,23,22,22,5,,2018.JPG,"Paper 3B Table (middle, 0-42)",22 | 5,High,Verified,
+2018_3B_23,2018,3B,24,23,23,6,,2018.JPG,"Paper 3B Table (middle, 0-42)",23 | 6,High,Verified,
+2018_3B_24,2018,3B,25,24,24,6,,2018.JPG,"Paper 3B Table (middle, 0-42)",24 | 6,High,Verified,
+2018_3B_25,2018,3B,26,25,25,7,,2018.JPG,"Paper 3B Table (middle, 0-42)",25 | 7,High,Verified,
+2018_3B_26,2018,3B,27,26,26,7,,2018.JPG,"Paper 3B Table (middle, 0-42)",26 | 7,High,Verified,
+2018_3B_27,2018,3B,28,27,27,8,,2018.JPG,"Paper 3B Table (middle, 0-42)",27 | 8,High,Verified,
+2018_3B_28,2018,3B,29,28,28,8,,2018.JPG,"Paper 3B Table (middle, 0-42)",28 | 8,High,Verified,
+2018_3B_29,2018,3B,30,29,29,9,,2018.JPG,"Paper 3B Table (middle, 0-42)",29 | 9,High,Verified,
+2018_3B_30,2018,3B,31,30,30,10,,2018.JPG,"Paper 3B Table (middle, 0-42)",30 | 10,High,Verified,
+2018_3B_31,2018,3B,32,31,31,11,,2018.JPG,"Paper 3B Table (middle, 0-42)",31 | 11,High,Verified,
+2018_3B_32,2018,3B,33,32,32,12,,2018.JPG,"Paper 3B Table (middle, 0-42)",32 | 12,High,Verified,
+2018_3B_33,2018,3B,34,33,33,13,,2018.JPG,"Paper 3B Table (middle, 0-42)",33 | 13,High,Verified,
+2018_3B_34,2018,3B,35,34,34,14,,2018.JPG,"Paper 3B Table (middle, 0-42)",34 | 14,High,Verified,
+2018_3B_35,2018,3B,36,35,35,15,,2018.JPG,"Paper 3B Table (middle, 0-42)",35 | 15,High,Verified,
+2018_3B_36,2018,3B,37,36,36,17,,2018.JPG,"Paper 3B Table (middle, 0-42)",36 | 17,High,Verified,
+2018_3B_37,2018,3B,38,37,37,18,,2018.JPG,"Paper 3B Table (middle, 0-42)",37 | 18,High,Verified,
+2018_3B_38,2018,3B,39,38,38,19,,2018.JPG,"Paper 3B Table (middle, 0-42)",38 | 19,High,Verified,
+2018_3B_39,2018,3B,40,39,39,20,,2018.JPG,"Paper 3B Table (middle, 0-42)",39 | 20,High,Verified,
+2018_3B_40,2018,3B,41,40,40,22,,2018.JPG,"Paper 3B Table (middle, 0-42)",40 | 22,High,Verified,
+2018_3B_41,2018,3B,42,41,41,23,,2018.JPG,"Paper 3B Table (middle, 0-42)",41 | 23,High,Verified,
+2018_3B_42,2018,3B,43,42,42,24,,2018.JPG,"Paper 3B Table (middle, 0-42)",42 | 24,High,Verified,
+2018_3B_43,2018,3B,44,43,43,25,,2018.JPG,"Paper 3B Table (right, 43-52)",43 | 25,High,Verified,
+2018_3B_44,2018,3B,45,44,44,27,,2018.JPG,"Paper 3B Table (right, 43-52)",44 | 27,High,Verified,
+2018_3B_45,2018,3B,46,45,45,29,,2018.JPG,"Paper 3B Table (right, 43-52)",45 | 29,High,Verified,
+2018_3B_46,2018,3B,47,46,46,30,,2018.JPG,"Paper 3B Table (right, 43-52)",46 | 30,High,Verified,
+2018_3B_47,2018,3B,48,47,47,32,,2018.JPG,"Paper 3B Table (right, 43-52)",47 | 32,High,Verified,
+2018_3B_48,2018,3B,49,48,48,35,,2018.JPG,"Paper 3B Table (right, 43-52)",48 | 35,High,Verified,
+2018_3B_49,2018,3B,50,49,49,38,,2018.JPG,"Paper 3B Table (right, 43-52)",49 | 38,High,Verified,
+2018_3B_50,2018,3B,51,50,50,41,,2018.JPG,"Paper 3B Table (right, 43-52)",50 | 41,High,Verified,
+2018_3B_51,2018,3B,52,51,51,44,,2018.JPG,"Paper 3B Table (right, 43-52)",51 | 44,High,Verified,
+2018_3B_52,2018,3B,53,52,52,47,,2018.JPG,"Paper 3B Table (right, 43-52)",52 | 47,High,Verified,
+1,2019,1B,1,0,0,0,,2019.JPG,Left Table,0 | 0,High,Verified,Paper 1B Conversion
+2,2019,1B,2,1,1,1,,2019.JPG,Left Table,1 | 1,High,Verified,Paper 1B Conversion
+3,2019,1B,3,2,2,1,,2019.JPG,Left Table,2 | 1,High,Verified,Paper 1B Conversion
+4,2019,1B,4,3,3,2,,2019.JPG,Left Table,3 | 2,High,Verified,Paper 1B Conversion
+5,2019,1B,5,4,4,2,,2019.JPG,Left Table,4 | 2,High,Verified,Paper 1B Conversion
+6,2019,1B,6,5,5,3,,2019.JPG,Left Table,5 | 3,High,Verified,Paper 1B Conversion
+7,2019,1B,7,6,6,3,,2019.JPG,Left Table,6 | 3,High,Verified,Paper 1B Conversion
+8,2019,1B,8,7,7,4,,2019.JPG,Left Table,7 | 4,High,Verified,Paper 1B Conversion
+9,2019,1B,9,8,8,4,,2019.JPG,Left Table,8 | 4,High,Verified,Paper 1B Conversion
+10,2019,1B,10,9,9,4,,2019.JPG,Left Table,9 | 4,High,Verified,Paper 1B Conversion
+11,2019,1B,11,10,10,5,,2019.JPG,Left Table,10 | 5,High,Verified,Paper 1B Conversion
+12,2019,1B,12,11,11,5,,2019.JPG,Left Table,11 | 5,High,Verified,Paper 1B Conversion
+13,2019,1B,13,12,12,5,,2019.JPG,Left Table,12 | 5,High,Verified,Paper 1B Conversion
+14,2019,1B,14,13,13,6,,2019.JPG,Left Table,13 | 6,High,Verified,Paper 1B Conversion
+15,2019,1B,15,14,14,6,,2019.JPG,Left Table,14 | 6,High,Verified,Paper 1B Conversion
+16,2019,1B,16,15,15,6,,2019.JPG,Left Table,15 | 6,High,Verified,Paper 1B Conversion
+17,2019,1B,17,16,16,7,,2019.JPG,Left Table,16 | 7,High,Verified,Paper 1B Conversion
+18,2019,1B,18,17,17,7,,2019.JPG,Left Table,17 | 7,High,Verified,Paper 1B Conversion
+19,2019,1B,19,18,18,8,,2019.JPG,Left Table,18 | 8,High,Verified,Paper 1B Conversion
+20,2019,1B,20,19,19,8,,2019.JPG,Left Table,19 | 8,High,Verified,Paper 1B Conversion
+21,2019,1B,21,20,20,9,,2019.JPG,Left Table,20 | 9,High,Verified,Paper 1B Conversion
+22,2019,1B,22,21,21,9,,2019.JPG,Left Table,21 | 9,High,Verified,Paper 1B Conversion
+23,2019,1B,23,22,22,10,,2019.JPG,Left Table,22 | 10,High,Verified,Paper 1B Conversion
+24,2019,1B,24,23,23,10,,2019.JPG,Left Table,23 | 10,High,Verified,Paper 1B Conversion
+25,2019,1B,25,24,24,11,,2019.JPG,Left Table,24 | 11,High,Verified,Paper 1B Conversion
+26,2019,1B,26,25,25,11,,2019.JPG,Left Table,25 | 11,High,Verified,Paper 1B Conversion
+27,2019,1B,27,26,26,12,,2019.JPG,Left Table,26 | 12,High,Verified,Paper 1B Conversion
+28,2019,1B,28,27,27,13,,2019.JPG,Left Table,27 | 13,High,Verified,Paper 1B Conversion
+29,2019,1B,29,28,28,14,,2019.JPG,Left Table,28 | 14,High,Verified,Paper 1B Conversion
+30,2019,1B,30,29,29,15,,2019.JPG,Left Table,29 | 15,High,Verified,Paper 1B Conversion
+31,2019,1B,31,30,30,16,,2019.JPG,Left Table,30 | 16,High,Verified,Paper 1B Conversion
+32,2019,1B,32,31,31,17,,2019.JPG,Left Table,31 | 17,High,Verified,Paper 1B Conversion
+33,2019,1B,33,32,32,18,,2019.JPG,Left Table,32 | 18,High,Verified,Paper 1B Conversion
+34,2019,1B,34,33,33,20,,2019.JPG,Left Table,33 | 20,High,Verified,Paper 1B Conversion
+35,2019,1B,35,34,34,21,,2019.JPG,Left Table,34 | 21,High,Verified,Paper 1B Conversion
+36,2019,1B,36,35,35,23,,2019.JPG,Left Table,35 | 23,High,Verified,Paper 1B Conversion
+37,2019,1B,37,36,36,25,,2019.JPG,Left Table,36 | 25,High,Verified,Paper 1B Conversion
+38,2019,1B,38,37,37,28,,2019.JPG,Left Table,37 | 28,High,Verified,Paper 1B Conversion
+39,2019,1B,39,38,38,31,,2019.JPG,Left Table,38 | 31,High,Verified,Paper 1B Conversion
+40,2019,1B,40,39,39,33,,2019.JPG,Left Table,39 | 33,High,Verified,Paper 1B Conversion
+41,2019,1B,41,40,40,35,,2019.JPG,Left Table,40 | 35,High,Verified,Paper 1B Conversion
+42,2019,1B,42,41,41,37,,2019.JPG,Left Table,41 | 37,High,Verified,Paper 1B Conversion
+43,2019,1B,43,42,42,39,,2019.JPG,Left Table,42 | 39,High,Verified,Paper 1B Conversion
+44,2019,3B,1,0,0,0,,2019.JPG,Middle Table,0 | 0,High,Verified,Paper 3B Conversion (Middle Table)
+45,2019,3B,2,1,1,1,,2019.JPG,Middle Table,1 | 1,High,Verified,Paper 3B Conversion (Middle Table)
+46,2019,3B,3,2,2,1,,2019.JPG,Middle Table,2 | 1,High,Verified,Paper 3B Conversion (Middle Table)
+47,2019,3B,4,3,3,1,,2019.JPG,Middle Table,3 | 1,High,Verified,Paper 3B Conversion (Middle Table)
+48,2019,3B,5,4,4,1,,2019.JPG,Middle Table,4 | 1,High,Verified,Paper 3B Conversion (Middle Table)
+49,2019,3B,6,5,5,1,,2019.JPG,Middle Table,5 | 1,High,Verified,Paper 3B Conversion (Middle Table)
+50,2019,3B,7,6,6,1,,2019.JPG,Middle Table,6 | 1,High,Verified,Paper 3B Conversion (Middle Table)
+51,2019,3B,8,7,7,1,,2019.JPG,Middle Table,7 | 1,High,Verified,Paper 3B Conversion (Middle Table)
+52,2019,3B,9,8,8,1,,2019.JPG,Middle Table,8 | 1,High,Verified,Paper 3B Conversion (Middle Table)
+53,2019,3B,10,9,9,2,,2019.JPG,Middle Table,9 | 2,High,Verified,Paper 3B Conversion (Middle Table)
+54,2019,3B,11,10,10,2,,2019.JPG,Middle Table,10 | 2,High,Verified,Paper 3B Conversion (Middle Table)
+55,2019,3B,12,11,11,2,,2019.JPG,Middle Table,11 | 2,High,Verified,Paper 3B Conversion (Middle Table)
+56,2019,3B,13,12,12,2,,2019.JPG,Middle Table,12 | 2,High,Verified,Paper 3B Conversion (Middle Table)
+57,2019,3B,14,13,13,2,,2019.JPG,Middle Table,13 | 2,High,Verified,Paper 3B Conversion (Middle Table)
+58,2019,3B,15,14,14,2,,2019.JPG,Middle Table,14 | 2,High,Verified,Paper 3B Conversion (Middle Table)
+59,2019,3B,16,15,15,2,,2019.JPG,Middle Table,15 | 2,High,Verified,Paper 3B Conversion (Middle Table)
+60,2019,3B,17,16,16,2,,2019.JPG,Middle Table,16 | 2,High,Verified,Paper 3B Conversion (Middle Table)
+61,2019,3B,18,17,17,3,,2019.JPG,Middle Table,17 | 3,High,Verified,Paper 3B Conversion (Middle Table)
+62,2019,3B,19,18,18,3,,2019.JPG,Middle Table,18 | 3,High,Verified,Paper 3B Conversion (Middle Table)
+63,2019,3B,20,19,19,3,,2019.JPG,Middle Table,19 | 3,High,Verified,Paper 3B Conversion (Middle Table)
+64,2019,3B,21,20,20,3,,2019.JPG,Middle Table,20 | 3,High,Verified,Paper 3B Conversion (Middle Table)
+65,2019,3B,22,21,21,4,,2019.JPG,Middle Table,21 | 4,High,Verified,Paper 3B Conversion (Middle Table)
+66,2019,3B,23,22,22,4,,2019.JPG,Middle Table,22 | 4,High,Verified,Paper 3B Conversion (Middle Table)
+67,2019,3B,24,23,23,4,,2019.JPG,Middle Table,23 | 4,High,Verified,Paper 3B Conversion (Middle Table)
+68,2019,3B,25,24,24,4,,2019.JPG,Middle Table,24 | 4,High,Verified,Paper 3B Conversion (Middle Table)
+69,2019,3B,26,25,25,5,,2019.JPG,Middle Table,25 | 5,High,Verified,Paper 3B Conversion (Middle Table)
+70,2019,3B,27,26,26,5,,2019.JPG,Middle Table,26 | 5,High,Verified,Paper 3B Conversion (Middle Table)
+71,2019,3B,28,27,27,6,,2019.JPG,Middle Table,27 | 6,High,Verified,Paper 3B Conversion (Middle Table)
+72,2019,3B,29,28,28,6,,2019.JPG,Middle Table,28 | 6,High,Verified,Paper 3B Conversion (Middle Table)
+73,2019,3B,30,29,29,7,,2019.JPG,Middle Table,29 | 7,High,Verified,Paper 3B Conversion (Middle Table)
+74,2019,3B,31,30,30,7,,2019.JPG,Middle Table,30 | 7,High,Verified,Paper 3B Conversion (Middle Table)
+75,2019,3B,32,31,31,8,,2019.JPG,Middle Table,31 | 8,High,Verified,Paper 3B Conversion (Middle Table)
+76,2019,3B,33,32,32,9,,2019.JPG,Middle Table,32 | 9,High,Verified,Paper 3B Conversion (Middle Table)
+77,2019,3B,34,33,33,10,,2019.JPG,Middle Table,33 | 10,High,Verified,Paper 3B Conversion (Middle Table)
+78,2019,3B,35,34,34,11,,2019.JPG,Middle Table,34 | 11,High,Verified,Paper 3B Conversion (Middle Table)
+79,2019,3B,36,35,35,12,,2019.JPG,Middle Table,35 | 12,High,Verified,Paper 3B Conversion (Middle Table)
+80,2019,3B,37,36,36,13,,2019.JPG,Middle Table,36 | 13,High,Verified,Paper 3B Conversion (Middle Table)
+81,2019,3B,38,37,37,14,,2019.JPG,Middle Table,37 | 14,High,Verified,Paper 3B Conversion (Middle Table)
+82,2019,3B,39,38,38,15,,2019.JPG,Middle Table,38 | 15,High,Verified,Paper 3B Conversion (Middle Table)
+83,2019,3B,40,39,39,16,,2019.JPG,Middle Table,39 | 16,High,Verified,Paper 3B Conversion (Middle Table)
+84,2019,3B,41,40,40,17,,2019.JPG,Middle Table,40 | 17,High,Verified,Paper 3B Conversion (Middle Table)
+85,2019,3B,42,41,41,18,,2019.JPG,Middle Table,41 | 18,High,Verified,Paper 3B Conversion (Middle Table)
+86,2019,3B,43,42,42,20,,2019.JPG,Middle Table,42 | 20,High,Verified,Paper 3B Conversion (Middle Table)
+87,2019,3B,44,43,43,21,,2019.JPG,Right Table,43 | 21,High,Verified,Paper 3B Conversion (Right Table)
+88,2019,3B,45,44,44,23,,2019.JPG,Right Table,44 | 23,High,Verified,Paper 3B Conversion (Right Table)
+89,2019,3B,46,45,45,25,,2019.JPG,Right Table,45 | 25,High,Verified,Paper 3B Conversion (Right Table)
+90,2019,3B,47,46,46,27,,2019.JPG,Right Table,46 | 27,High,Verified,Paper 3B Conversion (Right Table)
+91,2019,3B,48,47,47,29,,2019.JPG,Right Table,47 | 29,High,Verified,Paper 3B Conversion (Right Table)
+92,2019,3B,49,48,48,31,,2019.JPG,Right Table,48 | 31,High,Verified,Paper 3B Conversion (Right Table)
+93,2019,3B,50,49,49,33,,2019.JPG,Right Table,49 | 33,High,Verified,Paper 3B Conversion (Right Table)
+94,2019,3B,51,50,50,35,,2019.JPG,Right Table,50 | 35,High,Verified,Paper 3B Conversion (Right Table)
+95,2019,3B,52,51,51,37,,2019.JPG,Right Table,51 | 37,High,Verified,Paper 3B Conversion (Right Table)
+96,2019,3B,53,52,52,40,,2019.JPG,Right Table,52 | 40,High,Verified,Paper 3B Conversion (Right Table)
+97,2019,3B,54,53,53,44,,2019.JPG,Right Table,53 | 44,High,Verified,Paper 3B Conversion (Right Table)
+2020_P1B_00,2020,1B,1,,0,0,,2020.JPG,Left Block,1B1: 0 | 1B2: 0,High,Verified,First row for Paper 1B
+2020_P1B_01,2020,1B,2,,1,1,,2020.JPG,Left Block,1B1: 1 | 1B2: 1,High,Verified,
+2020_P1B_02,2020,1B,3,,2,1,,2020.JPG,Left Block,1B1: 2 | 1B2: 1,High,Verified,
+2020_P1B_03,2020,1B,4,,3,2,,2020.JPG,Left Block,1B1: 3 | 1B2: 2,High,Verified,
+2020_P1B_04,2020,1B,5,,4,2,,2020.JPG,Left Block,1B1: 4 | 1B2: 2,High,Verified,
+2020_P1B_05,2020,1B,6,,5,3,,2020.JPG,Left Block,1B1: 5 | 1B2: 3,High,Verified,
+2020_P1B_06,2020,1B,7,,6,3,,2020.JPG,Left Block,1B1: 6 | 1B2: 3,High,Verified,
+2020_P1B_07,2020,1B,8,,7,4,,2020.JPG,Left Block,1B1: 7 | 1B2: 4,High,Verified,
+2020_P1B_08,2020,1B,9,,8,4,,2020.JPG,Left Block,1B1: 8 | 1B2: 4,High,Verified,
+2020_P1B_09,2020,1B,10,,9,5,,2020.JPG,Left Block,1B1: 9 | 1B2: 5,High,Verified,
+2020_P1B_10,2020,1B,11,,10,5,,2020.JPG,Left Block,1B1: 10 | 1B2: 5,High,Verified,
+2020_P1B_11,2020,1B,12,,11,6,,2020.JPG,Left Block,1B1: 11 | 1B2: 6,High,Verified,
+2020_P1B_12,2020,1B,13,,12,6,,2020.JPG,Left Block,1B1: 12 | 1B2: 6,High,Verified,
+2020_P1B_13,2020,1B,14,,13,7,,2020.JPG,Left Block,1B1: 13 | 1B2: 7,High,Verified,
+2020_P1B_14,2020,1B,15,,14,7,,2020.JPG,Left Block,1B1: 14 | 1B2: 7,High,Verified,
+2020_P1B_15,2020,1B,16,,15,7,,2020.JPG,Left Block,1B1: 15 | 1B2: 7,High,Verified,
+2020_P1B_16,2020,1B,17,,16,8,,2020.JPG,Left Block,1B1: 16 | 1B2: 8,High,Verified,
+2020_P1B_17,2020,1B,18,,17,8,,2020.JPG,Left Block,1B1: 17 | 1B2: 8,High,Verified,
+2020_P1B_18,2020,1B,19,,18,8,,2020.JPG,Left Block,1B1: 18 | 1B2: 8,High,Verified,
+2020_P1B_19,2020,1B,20,,19,9,,2020.JPG,Left Block,1B1: 19 | 1B2: 9,High,Verified,
+2020_P1B_20,2020,1B,21,,20,9,,2020.JPG,Left Block,1B1: 20 | 1B2: 9,High,Verified,
+2020_P1B_21,2020,1B,22,,21,10,,2020.JPG,Left Block,1B1: 21 | 1B2: 10,High,Verified,
+2020_P1B_22,2020,1B,23,,22,10,,2020.JPG,Left Block,1B1: 22 | 1B2: 10,High,Verified,
+2020_P1B_23,2020,1B,24,,23,11,,2020.JPG,Right Block,1B1: 23 | 1B2: 11,High,Verified,
+2020_P1B_24,2020,1B,25,,24,11,,2020.JPG,Right Block,1B1: 24 | 1B2: 11,High,Verified,
+2020_P1B_25,2020,1B,26,,25,12,,2020.JPG,Right Block,1B1: 25 | 1B2: 12,High,Verified,
+2020_P1B_26,2020,1B,27,,26,13,,2020.JPG,Right Block,1B1: 26 | 1B2: 13,High,Verified,
+2020_P1B_27,2020,1B,28,,27,13,,2020.JPG,Right Block,1B1: 27 | 1B2: 13,High,Verified,
+2020_P1B_28,2020,1B,29,,28,14,,2020.JPG,Right Block,1B1: 28 | 1B2: 14,High,Verified,
+2020_P1B_29,2020,1B,30,,29,15,,2020.JPG,Right Block,1B1: 29 | 1B2: 15,High,Verified,
+2020_P1B_30,2020,1B,31,,30,16,,2020.JPG,Right Block,1B1: 30 | 1B2: 16,High,Verified,
+2020_P1B_31,2020,1B,32,,31,17,,2020.JPG,Right Block,1B1: 31 | 1B2: 17,High,Verified,
+2020_P1B_32,2020,1B,33,,32,18,,2020.JPG,Right Block,1B1: 32 | 1B2: 18,High,Verified,
+2020_P1B_33,2020,1B,34,,33,19,,2020.JPG,Right Block,1B1: 33 | 1B2: 19,High,Verified,
+2020_P1B_34,2020,1B,35,,34,20,,2020.JPG,Right Block,1B1: 34 | 1B2: 20,High,Verified,
+2020_P1B_35,2020,1B,36,,35,21,,2020.JPG,Right Block,1B1: 35 | 1B2: 21,High,Verified,
+2020_P1B_36,2020,1B,37,,36,23,,2020.JPG,Right Block,1B1: 36 | 1B2: 23,High,Verified,
+2020_P1B_37,2020,1B,38,,37,25,,2020.JPG,Right Block,1B1: 37 | 1B2: 25,High,Verified,
+2020_P1B_38,2020,1B,39,,38,27,,2020.JPG,Right Block,1B1: 38 | 1B2: 27,High,Verified,
+2020_P1B_39,2020,1B,40,,39,29,,2020.JPG,Right Block,1B1: 39 | 1B2: 29,High,Verified,
+2020_P1B_40,2020,1B,41,,40,32,,2020.JPG,Right Block,1B1: 40 | 1B2: 32,High,Verified,
+2020_P1B_41,2020,1B,42,,41,35,,2020.JPG,Right Block,1B1: 41 | 1B2: 35,High,Verified,
+2020_P1B_42,2020,1B,43,,42,38,,2020.JPG,Right Block,1B1: 42 | 1B2: 38,High,Verified,Last row for Paper 1B
+2020_P3B_00,2020,3B,1,,0,0,,2020.JPG,Left Block,3B1: 0 | 3B2: 0,High,Verified,First row for Paper 3B
+2020_P3B_01,2020,3B,2,,1,1,,2020.JPG,Left Block,3B1: 1 | 3B2: 1,High,Verified,
+2020_P3B_02,2020,3B,3,,2,2,,2020.JPG,Left Block,3B1: 2 | 3B2: 2,High,Verified,
+2020_P3B_03,2020,3B,4,,3,2,,2020.JPG,Left Block,3B1: 3 | 3B2: 2,High,Verified,
+2020_P3B_04,2020,3B,5,,4,2,,2020.JPG,Left Block,3B1: 4 | 3B2: 2,High,Verified,Corrected (Audit ERR_001)
+2020_P3B_05,2020,3B,6,,5,3,,2020.JPG,Left Block,3B1: 5 | 3B2: 3,High,Verified,
+2020_P3B_06,2020,3B,7,,6,3,,2020.JPG,Left Block,3B1: 6 | 3B2: 3,High,Verified,Corrected (Audit ERR_002)
+2020_P3B_07,2020,3B,8,,7,3,,2020.JPG,Left Block,3B1: 7 | 3B2: 3,High,Verified,Corrected (Audit ERR_003)
+2020_P3B_08,2020,3B,9,,8,4,,2020.JPG,Left Block,3B1: 8 | 3B2: 4,High,Verified,Corrected (Audit ERR_004)
+2020_P3B_09,2020,3B,10,,9,4,,2020.JPG,Left Block,3B1: 9 | 3B2: 4,High,Verified,Corrected (Audit ERR_005)
+2020_P3B_10,2020,3B,11,,10,4,,2020.JPG,Left Block,3B1: 10 | 3B2: 4,High,Verified,Corrected (Audit ERR_006)
+2020_P3B_11,2020,3B,12,,11,4,,2020.JPG,Left Block,3B1: 11 | 3B2: 4,High,Verified,Corrected (Audit ERR_007)
+2020_P3B_12,2020,3B,13,,12,4,,2020.JPG,Left Block,3B1: 12 | 3B2: 4,High,Verified,Corrected (Audit ERR_008)
+2020_P3B_13,2020,3B,14,,13,4,,2020.JPG,Left Block,3B1: 13 | 3B2: 4,High,Verified,Corrected (Audit ERR_009)
+2020_P3B_14,2020,3B,15,,14,5,,2020.JPG,Left Block,3B1: 14 | 3B2: 5,High,Verified,Corrected (Audit ERR_010)
+2020_P3B_15,2020,3B,16,,15,5,,2020.JPG,Left Block,3B1: 15 | 3B2: 5,High,Verified,Corrected (Audit ERR_011)
+2020_P3B_16,2020,3B,17,,16,5,,2020.JPG,Left Block,3B1: 16 | 3B2: 5,High,Verified,Corrected (Audit ERR_012)
+2020_P3B_17,2020,3B,18,,17,5,,2020.JPG,Left Block,3B1: 17 | 3B2: 5,High,Verified,Corrected (Audit ERR_013)
+2020_P3B_18,2020,3B,19,,18,5,,2020.JPG,Left Block,3B1: 18 | 3B2: 5,High,Verified,Corrected (Audit ERR_014)
+2020_P3B_19,2020,3B,20,,19,6,,2020.JPG,Left Block,3B1: 19 | 3B2: 6,High,Verified,Corrected (Audit ERR_015)
+2020_P3B_20,2020,3B,21,,20,6,,2020.JPG,Left Block,3B1: 20 | 3B2: 6,High,Verified,
+2020_P3B_21,2020,3B,22,,21,6,,2020.JPG,Left Block,3B1: 21 | 3B2: 6,High,Verified,
+2020_P3B_22,2020,3B,23,,22,7,,2020.JPG,Left Block,3B1: 22 | 3B2: 7,High,Verified,
+2020_P3B_23,2020,3B,24,,23,7,,2020.JPG,Left Block,3B1: 23 | 3B2: 7,High,Verified,
+2020_P3B_24,2020,3B,25,,24,8,,2020.JPG,Left Block,3B1: 24 | 3B2: 8,High,Verified,
+2020_P3B_25,2020,3B,26,,25,8,,2020.JPG,Left Block,3B1: 25 | 3B2: 8,High,Verified,
+2020_P3B_26,2020,3B,27,,26,9,,2020.JPG,Left Block,3B1: 26 | 3B2: 9,High,Verified,
+2020_P3B_27,2020,3B,28,,27,9,,2020.JPG,Right Block,3B1: 27 | 3B2: 9,High,Verified,
+2020_P3B_28,2020,3B,29,,28,10,,2020.JPG,Right Block,3B1: 28 | 3B2: 10,High,Verified,
+2020_P3B_29,2020,3B,30,,29,10,,2020.JPG,Right Block,3B1: 29 | 3B2: 10,High,Verified,
+2020_P3B_30,2020,3B,31,,30,11,,2020.JPG,Right Block,3B1: 30 | 3B2: 11,High,Verified,
+2020_P3B_31,2020,3B,32,,31,12,,2020.JPG,Right Block,3B1: 31 | 3B2: 12,High,Verified,
+2020_P3B_32,2020,3B,33,,32,13,,2020.JPG,Right Block,3B1: 32 | 3B2: 13,High,Verified,
+2020_P3B_33,2020,3B,34,,33,14,,2020.JPG,Right Block,3B1: 33 | 3B2: 14,High,Verified,
+2020_P3B_34,2020,3B,35,,34,14,,2020.JPG,Right Block,3B1: 34 | 3B2: 14,High,Verified,
+2020_P3B_35,2020,3B,36,,35,15,,2020.JPG,Right Block,3B1: 35 | 3B2: 15,High,Verified,
+2020_P3B_36,2020,3B,37,,36,16,,2020.JPG,Right Block,3B1: 36 | 3B2: 16,High,Verified,
+2020_P3B_37,2020,3B,38,,37,17,,2020.JPG,Right Block,3B1: 37 | 3B2: 17,High,Verified,
+2020_P3B_38,2020,3B,39,,38,19,,2020.JPG,Right Block,3B1: 38 | 3B2: 19,High,Verified,
+2020_P3B_39,2020,3B,40,,39,20,,2020.JPG,Right Block,3B1: 39 | 3B2: 20,High,Verified,
+2020_P3B_40,2020,3B,41,,40,21,,2020.JPG,Right Block,3B1: 40 | 3B2: 21,High,Verified,
+2020_P3B_41,2020,3B,42,,41,23,,2020.JPG,Right Block,3B1: 41 | 3B2: 23,High,Verified,
+2020_P3B_42,2020,3B,43,,42,24,,2020.JPG,Right Block,3B1: 42 | 3B2: 24,High,Verified,Corrected (Audit ERR_016)
+2020_P3B_43,2020,3B,44,,43,25,,2020.JPG,Right Block,3B1: 43 | 3B2: 25,High,Verified,Corrected (Audit ERR_017)
+2020_P3B_44,2020,3B,45,,44,27,,2020.JPG,Right Block,3B1: 44 | 3B2: 27,High,Verified,Corrected (Audit ERR_018)
+2020_P3B_45,2020,3B,46,,45,28,,2020.JPG,Right Block,3B1: 45 | 3B2: 28,High,Verified,Corrected (Audit ERR_019)
+2020_P3B_46,2020,3B,47,,46,30,,2020.JPG,Right Block,3B1: 46 | 3B2: 30,High,Verified,Corrected (Audit ERR_020)
+2020_P3B_47,2020,3B,48,,47,32,,2020.JPG,Right Block,3B1: 47 | 3B2: 32,High,Verified,Corrected (Audit ERR_021)
+2020_P3B_48,2020,3B,49,,48,34,,2020.JPG,Right Block,3B1: 48 | 3B2: 34,High,Verified,Corrected (Audit ERR_022)
+2020_P3B_49,2020,3B,50,,49,36,,2020.JPG,Right Block,3B1: 49 | 3B2: 36,High,Verified,Corrected (Audit ERR_023)
+2020_P3B_50,2020,3B,51,,50,38,,2020.JPG,Right Block,3B1: 50 | 3B2: 38,High,Verified,Corrected (Audit ERR_024)
+2020_P3B_51,2020,3B,52,,51,40,,2020.JPG,Right Block,3B1: 51 | 3B2: 40,High,Verified,Corrected (Audit ERR_025)
+2020_P3B_52,2020,3B,53,,52,43,,2020.JPG,Right Block,3B1: 52 | 3B2: 43,High,Verified,
+2020_P3B_53,2020,3B,54,,53,46,,2020.JPG,Right Block,3B1: 53 | 3B2: 46,High,Verified,Last row for Paper 3B
+2021_1B_001,2021,1B,1,0,0,0,,2021.JPG,Left Table,0 | 0,High,Verified,
+2021_1B_002,2021,1B,2,1,1,0,,2021.JPG,Left Table,1 | 0,High,Verified,
+2021_1B_003,2021,1B,3,2,2,1,,2021.JPG,Left Table,2 | 1,High,Verified,
+2021_1B_004,2021,1B,4,3,3,1,,2021.JPG,Left Table,3 | 1,High,Verified,
+2021_1B_005,2021,1B,5,4,4,1,,2021.JPG,Left Table,4 | 1,High,Verified,
+2021_1B_006,2021,1B,6,5,5,2,,2021.JPG,Left Table,5 | 2,High,Verified,
+2021_1B_007,2021,1B,7,6,6,2,,2021.JPG,Left Table,6 | 2,High,Verified,
+2021_1B_008,2021,1B,8,7,7,3,,2021.JPG,Left Table,7 | 3,High,Verified,
+2021_1B_009,2021,1B,9,8,8,3,,2021.JPG,Left Table,8 | 3,High,Verified,
+2021_1B_010,2021,1B,10,9,9,4,,2021.JPG,Left Table,9 | 4,High,Verified,
+2021_1B_011,2021,1B,11,10,10,4,,2021.JPG,Left Table,10 | 4,High,Verified,
+2021_1B_012,2021,1B,12,11,11,5,,2021.JPG,Left Table,11 | 5,High,Verified,
+2021_1B_013,2021,1B,13,12,12,5,,2021.JPG,Left Table,12 | 5,High,Verified,
+2021_1B_014,2021,1B,14,13,13,5,,2021.JPG,Left Table,13 | 5,High,Verified,
+2021_1B_015,2021,1B,15,14,14,6,,2021.JPG,Left Table,14 | 6,High,Verified,
+2021_1B_016,2021,1B,16,15,15,6,,2021.JPG,Left Table,15 | 6,High,Verified,
+2021_1B_017,2021,1B,17,16,16,6,,2021.JPG,Left Table,16 | 6,High,Verified,
+2021_1B_018,2021,1B,18,17,17,7,,2021.JPG,Left Table,17 | 7,High,Verified,
+2021_1B_019,2021,1B,19,18,18,7,,2021.JPG,Left Table,18 | 7,High,Verified,
+2021_1B_020,2021,1B,20,19,19,7,,2021.JPG,Left Table,19 | 7,High,Verified,
+2021_1B_021,2021,1B,21,20,20,8,,2021.JPG,Left Table,20 | 8,High,Verified,
+2021_1B_022,2021,1B,22,21,21,8,,2021.JPG,Left Table,21 | 8,High,Verified,
+2021_1B_023,2021,1B,23,22,22,9,,2021.JPG,Left Table,22 | 9,High,Verified,
+2021_1B_024,2021,1B,24,23,23,9,,2021.JPG,Left Table,23 | 9,High,Verified,
+2021_1B_025,2021,1B,25,24,24,10,,2021.JPG,Left Table,24 | 10,High,Verified,
+2021_1B_026,2021,1B,26,25,25,10,,2021.JPG,Left Table,25 | 10,High,Verified,
+2021_1B_027,2021,1B,27,26,26,11,,2021.JPG,Left Table,26 | 11,High,Verified,
+2021_1B_028,2021,1B,28,27,27,12,,2021.JPG,Left Table,27 | 12,High,Verified,
+2021_1B_029,2021,1B,29,28,28,13,,2021.JPG,Left Table,28 | 13,High,Verified,
+2021_1B_030,2021,1B,30,29,29,14,,2021.JPG,Left Table,29 | 14,High,Verified,
+2021_1B_031,2021,1B,31,30,30,15,,2021.JPG,Left Table,30 | 15,High,Verified,
+2021_1B_032,2021,1B,32,31,31,16,,2021.JPG,Left Table,31 | 16,High,Verified,
+2021_1B_033,2021,1B,33,32,32,17,,2021.JPG,Left Table,32 | 17,High,Verified,
+2021_1B_034,2021,1B,34,33,33,18,,2021.JPG,Left Table,33 | 18,High,Verified,
+2021_1B_035,2021,1B,35,34,34,20,,2021.JPG,Left Table,34 | 20,High,Verified,
+2021_1B_036,2021,1B,36,35,35,22,,2021.JPG,Left Table,35 | 22,High,Verified,
+2021_1B_037,2021,1B,37,36,36,24,,2021.JPG,Left Table,36 | 24,High,Verified,
+2021_1B_038,2021,1B,38,37,37,26,,2021.JPG,Left Table,37 | 26,High,Verified,
+2021_1B_039,2021,1B,39,38,38,28,,2021.JPG,Left Table,38 | 28,High,Verified,
+2021_1B_040,2021,1B,40,39,39,30,,2021.JPG,Left Table,39 | 30,High,Verified,
+2021_1B_041,2021,1B,41,40,40,32,,2021.JPG,Left Table,40 | 32,High,Verified,
+2021_1B_042,2021,1B,42,41,41,35,,2021.JPG,Left Table,41 | 35,High,Verified,
+2021_1B_043,2021,1B,43,42,42,38,,2021.JPG,Left Table,42 | 38,High,Verified,
+2021_3B_001,2021,3B,1,0,0,0,,2021.JPG,Middle Table,0 | 0,High,Verified,
+2021_3B_002,2021,3B,2,1,1,1,,2021.JPG,Middle Table,1 | 1,High,Verified,
+2021_3B_003,2021,3B,3,2,2,1,,2021.JPG,Middle Table,2 | 1,High,Verified,
+2021_3B_004,2021,3B,4,3,3,2,,2021.JPG,Middle Table,3 | 2,High,Verified,
+2021_3B_005,2021,3B,5,4,4,2,,2021.JPG,Middle Table,4 | 2,High,Verified,
+2021_3B_006,2021,3B,6,5,5,3,,2021.JPG,Middle Table,5 | 3,High,Verified,
+2021_3B_007,2021,3B,7,6,6,3,,2021.JPG,Middle Table,6 | 3,High,Verified,
+2021_3B_008,2021,3B,8,7,7,4,,2021.JPG,Middle Table,7 | 4,High,Verified,
+2021_3B_009,2021,3B,9,8,8,4,,2021.JPG,Middle Table,8 | 4,High,Verified,
+2021_3B_010,2021,3B,10,9,9,5,,2021.JPG,Middle Table,9 | 5,High,Verified,
+2021_3B_011,2021,3B,11,10,10,5,,2021.JPG,Middle Table,10 | 5,High,Verified,
+2021_3B_012,2021,3B,12,11,11,6,,2021.JPG,Middle Table,11 | 6,High,Verified,
+2021_3B_013,2021,3B,13,12,12,6,,2021.JPG,Middle Table,12 | 6,High,Verified,
+2021_3B_014,2021,3B,14,13,13,7,,2021.JPG,Middle Table,13 | 7,High,Verified,
+2021_3B_015,2021,3B,15,14,14,7,,2021.JPG,Middle Table,14 | 7,High,Verified,
+2021_3B_016,2021,3B,16,15,15,8,,2021.JPG,Middle Table,15 | 8,High,Verified,
+2021_3B_017,2021,3B,17,16,16,8,,2021.JPG,Middle Table,16 | 8,High,Verified,
+2021_3B_018,2021,3B,18,17,17,9,,2021.JPG,Middle Table,17 | 9,High,Verified,
+2021_3B_019,2021,3B,19,18,18,9,,2021.JPG,Middle Table,18 | 9,High,Verified,
+2021_3B_020,2021,3B,20,19,19,10,,2021.JPG,Middle Table,19 | 10,High,Verified,
+2021_3B_021,2021,3B,21,20,20,10,,2021.JPG,Middle Table,20 | 10,High,Verified,
+2021_3B_022,2021,3B,22,21,21,11,,2021.JPG,Middle Table,21 | 11,High,Verified,
+2021_3B_023,2021,3B,23,22,22,11,,2021.JPG,Middle Table,22 | 11,High,Verified,
+2021_3B_024,2021,3B,24,23,23,11,,2021.JPG,Middle Table,23 | 11,High,Verified,
+2021_3B_025,2021,3B,25,24,24,12,,2021.JPG,Middle Table,24 | 12,High,Verified,
+2021_3B_026,2021,3B,26,25,25,12,,2021.JPG,Middle Table,25 | 12,High,Verified,
+2021_3B_027,2021,3B,27,26,26,12,,2021.JPG,Middle Table,26 | 12,High,Verified,
+2021_3B_028,2021,3B,28,27,27,13,,2021.JPG,Middle Table,27 | 13,High,Verified,
+2021_3B_029,2021,3B,29,28,28,13,,2021.JPG,Middle Table,28 | 13,High,Verified,
+2021_3B_030,2021,3B,30,29,29,14,,2021.JPG,Middle Table,29 | 14,High,Verified,
+2021_3B_031,2021,3B,31,30,30,14,,2021.JPG,Middle Table,30 | 14,High,Verified,
+2021_3B_032,2021,3B,32,31,31,15,,2021.JPG,Middle Table,31 | 15,High,Verified,
+2021_3B_033,2021,3B,33,32,32,15,,2021.JPG,Middle Table,32 | 15,High,Verified,
+2021_3B_034,2021,3B,34,33,33,16,,2021.JPG,Middle Table,33 | 16,High,Verified,
+2021_3B_035,2021,3B,35,34,34,17,,2021.JPG,Middle Table,34 | 17,High,Verified,
+2021_3B_036,2021,3B,36,35,35,17,,2021.JPG,Middle Table,35 | 17,High,Verified,
+2021_3B_037,2021,3B,37,36,36,18,,2021.JPG,Middle Table,36 | 18,High,Verified,
+2021_3B_038,2021,3B,38,37,37,19,,2021.JPG,Middle Table,37 | 19,High,Verified,
+2021_3B_039,2021,3B,39,38,38,19,,2021.JPG,Middle Table,38 | 19,High,Verified,
+2021_3B_040,2021,3B,40,39,39,20,,2021.JPG,Middle Table,39 | 20,High,Verified,
+2021_3B_041,2021,3B,41,40,40,21,,2021.JPG,Middle Table,40 | 21,High,Verified,
+2021_3B_042,2021,3B,42,41,41,22,,2021.JPG,Middle Table,41 | 22,High,Verified,
+2021_3B_043,2021,3B,43,42,42,23,,2021.JPG,Middle Table,42 | 23,High,Verified,
+2021_3B_044,2021,3B,44,43,43,24,,2021.JPG,Right Table,43 | 24,High,Verified,Continuation Table
+2021_3B_045,2021,3B,45,44,44,26,,2021.JPG,Right Table,44 | 26,High,Verified,Continuation Table
+2021_3B_046,2021,3B,46,45,45,27,,2021.JPG,Right Table,45 | 27,High,Verified,Continuation Table
+2021_3B_047,2021,3B,47,46,46,28,,2021.JPG,Right Table,46 | 28,High,Verified,Continuation Table
+2021_3B_048,2021,3B,48,47,47,30,,2021.JPG,Right Table,47 | 30,High,Verified,Continuation Table
+2021_3B_049,2021,3B,49,48,48,32,,2021.JPG,Right Table,48 | 32,High,Verified,Continuation Table
+2021_3B_050,2021,3B,50,49,49,34,,2021.JPG,Right Table,49 | 34,High,Verified,Continuation Table
+2021_3B_051,2021,3B,51,50,50,37,,2021.JPG,Right Table,50 | 37,High,Verified,Continuation Table
+2021_3B_052,2021,3B,52,51,51,40,,2021.JPG,Right Table,51 | 40,High,Verified,Continuation Table
+2021_3B_053,2021,3B,53,52,52,43,,2021.JPG,Right Table,52 | 43,High,Verified,Continuation Table
+2021_3B_054,2021,3B,54,53,53,46,,2021.JPG,Right Table,53 | 46,High,Verified,Continuation Table
+2022_1B_001,2022,1B,1,0,0,0,,2022.JPG,Left Table,0 | 0,High,Verified,Main Paper 1B table
+2022_1B_002,2022,1B,2,1,1,0,,2022.JPG,Left Table,1 | 0,High,Verified,Main Paper 1B table
+2022_1B_003,2022,1B,3,2,2,0,,2022.JPG,Left Table,2 | 0,High,Verified,Main Paper 1B table
+2022_1B_004,2022,1B,4,3,3,0,,2022.JPG,Left Table,3 | 0,High,Verified,Main Paper 1B table
+2022_1B_005,2022,1B,5,4,4,1,,2022.JPG,Left Table,4 | 1,High,Verified,Main Paper 1B table
+2022_1B_006,2022,1B,6,5,5,1,,2022.JPG,Left Table,5 | 1,High,Verified,Main Paper 1B table
+2022_1B_007,2022,1B,7,6,6,1,,2022.JPG,Left Table,6 | 1,High,Verified,Main Paper 1B table
+2022_1B_008,2022,1B,8,7,7,1,,2022.JPG,Left Table,7 | 1,High,Verified,Main Paper 1B table
+2022_1B_009,2022,1B,9,8,8,2,,2022.JPG,Left Table,8 | 2,High,Verified,Main Paper 1B table
+2022_1B_010,2022,1B,10,9,9,2,,2022.JPG,Left Table,9 | 2,High,Verified,Main Paper 1B table
+2022_1B_011,2022,1B,11,10,10,2,,2022.JPG,Left Table,10 | 2,High,Verified,Main Paper 1B table
+2022_1B_012,2022,1B,12,11,11,2,,2022.JPG,Left Table,11 | 2,High,Verified,Main Paper 1B table
+2022_1B_013,2022,1B,13,12,12,3,,2022.JPG,Left Table,12 | 3,High,Verified,Main Paper 1B table
+2022_1B_014,2022,1B,14,13,13,3,,2022.JPG,Left Table,13 | 3,High,Verified,Main Paper 1B table
+2022_1B_015,2022,1B,15,14,14,3,,2022.JPG,Left Table,14 | 3,High,Verified,Main Paper 1B table
+2022_1B_016,2022,1B,16,15,15,3,,2022.JPG,Left Table,15 | 3,High,Verified,Main Paper 1B table
+2022_1B_017,2022,1B,17,16,16,4,,2022.JPG,Left Table,16 | 4,High,Verified,Main Paper 1B table
+2022_1B_018,2022,1B,18,17,17,4,,2022.JPG,Left Table,17 | 4,High,Verified,Main Paper 1B table
+2022_1B_019,2022,1B,19,18,18,4,,2022.JPG,Left Table,18 | 4,High,Verified,Main Paper 1B table
+2022_1B_020,2022,1B,20,19,19,5,,2022.JPG,Left Table,19 | 5,High,Verified,Main Paper 1B table
+2022_1B_021,2022,1B,21,20,20,5,,2022.JPG,Left Table,20 | 5,High,Verified,Main Paper 1B table
+2022_1B_022,2022,1B,22,21,21,5,,2022.JPG,Left Table,21 | 5,High,Verified,Main Paper 1B table
+2022_1B_023,2022,1B,23,22,22,6,,2022.JPG,Left Table,22 | 6,High,Verified,Main Paper 1B table
+2022_1B_024,2022,1B,24,23,23,6,,2022.JPG,Left Table,23 | 6,High,Verified,Main Paper 1B table
+2022_1B_025,2022,1B,25,24,24,7,,2022.JPG,Left Table,24 | 7,High,Verified,Main Paper 1B table
+2022_1B_026,2022,1B,26,25,25,8,,2022.JPG,Left Table,25 | 8,High,Verified,Main Paper 1B table
+2022_1B_027,2022,1B,27,26,26,9,,2022.JPG,Left Table,26 | 9,High,Verified,Main Paper 1B table
+2022_1B_028,2022,1B,28,27,27,10,,2022.JPG,Left Table,27 | 10,High,Verified,Main Paper 1B table
+2022_1B_029,2022,1B,29,28,28,11,,2022.JPG,Left Table,28 | 11,High,Verified,Main Paper 1B table
+2022_1B_030,2022,1B,30,29,29,12,,2022.JPG,Left Table,29 | 12,High,Verified,Main Paper 1B table
+2022_1B_031,2022,1B,31,30,30,13,,2022.JPG,Left Table,30 | 13,High,Verified,Main Paper 1B table
+2022_1B_032,2022,1B,32,31,31,14,,2022.JPG,Left Table,31 | 14,High,Verified,Main Paper 1B table
+2022_1B_033,2022,1B,33,32,32,16,,2022.JPG,Left Table,32 | 16,High,Verified,Main Paper 1B table
+2022_1B_034,2022,1B,34,33,33,18,,2022.JPG,Left Table,33 | 18,High,Verified,Main Paper 1B table
+2022_1B_035,2022,1B,35,34,34,20,,2022.JPG,Left Table,34 | 20,High,Verified,Main Paper 1B table
+2022_1B_036,2022,1B,36,35,35,22,,2022.JPG,Left Table,35 | 22,High,Verified,Main Paper 1B table
+2022_1B_037,2022,1B,37,36,36,24,,2022.JPG,Left Table,36 | 24,High,Verified,Main Paper 1B table
+2022_1B_038,2022,1B,38,37,37,27,,2022.JPG,Left Table,37 | 27,High,Verified,Main Paper 1B table
+2022_1B_039,2022,1B,39,38,38,29,,2022.JPG,Left Table,38 | 29,High,Verified,Main Paper 1B table
+2022_1B_040,2022,1B,40,39,39,31,,2022.JPG,Left Table,39 | 31,High,Verified,Main Paper 1B table
+2022_1B_041,2022,1B,41,40,40,34,,2022.JPG,Left Table,40 | 34,High,Verified,Main Paper 1B table
+2022_1B_042,2022,1B,42,41,41,37,,2022.JPG,Left Table,41 | 37,High,Verified,Main Paper 1B table
+2022_1B_043,2022,1B,43,42,42,40,,2022.JPG,Left Table,42 | 40,High,Verified,Main Paper 1B table
+2022_3B_001,2022,3B,1,0,0,0,,2022.JPG,Middle Table,0 | 0,High,Verified,Main Paper 3B table
+2022_3B_002,2022,3B,2,1,1,1,,2022.JPG,Middle Table,1 | 1,High,Verified,Main Paper 3B table
+2022_3B_003,2022,3B,3,2,2,1,,2022.JPG,Middle Table,2 | 1,High,Verified,Main Paper 3B table
+2022_3B_004,2022,3B,4,3,3,1,,2022.JPG,Middle Table,3 | 1,High,Verified,Main Paper 3B table
+2022_3B_005,2022,3B,5,4,4,1,,2022.JPG,Middle Table,4 | 1,High,Verified,Main Paper 3B table
+2022_3B_006,2022,3B,6,5,5,2,,2022.JPG,Middle Table,5 | 2,High,Verified,Main Paper 3B table
+2022_3B_007,2022,3B,7,6,6,2,,2022.JPG,Middle Table,6 | 2,High,Verified,Main Paper 3B table
+2022_3B_008,2022,3B,8,7,7,2,,2022.JPG,Middle Table,7 | 2,High,Verified,Main Paper 3B table
+2022_3B_009,2022,3B,9,8,8,2,,2022.JPG,Middle Table,8 | 2,High,Verified,Main Paper 3B table
+2022_3B_010,2022,3B,10,9,9,3,,2022.JPG,Middle Table,9 | 3,High,Verified,Main Paper 3B table
+2022_3B_011,2022,3B,11,10,10,3,,2022.JPG,Middle Table,10 | 3,High,Verified,Main Paper 3B table
+2022_3B_012,2022,3B,12,11,11,3,,2022.JPG,Middle Table,11 | 3,High,Verified,Main Paper 3B table
+2022_3B_013,2022,3B,13,12,12,3,,2022.JPG,Middle Table,12 | 3,High,Verified,Main Paper 3B table
+2022_3B_014,2022,3B,14,13,13,4,,2022.JPG,Middle Table,13 | 4,High,Verified,Main Paper 3B table
+2022_3B_015,2022,3B,15,14,14,4,,2022.JPG,Middle Table,14 | 4,High,Verified,Main Paper 3B table
+2022_3B_016,2022,3B,16,15,15,4,,2022.JPG,Middle Table,15 | 4,High,Verified,Main Paper 3B table
+2022_3B_017,2022,3B,17,16,16,5,,2022.JPG,Middle Table,16 | 5,High,Verified,Main Paper 3B table
+2022_3B_018,2022,3B,18,17,17,5,,2022.JPG,Middle Table,17 | 5,High,Verified,Main Paper 3B table
+2022_3B_019,2022,3B,19,18,18,5,,2022.JPG,Middle Table,18 | 5,High,Verified,Main Paper 3B table
+2022_3B_020,2022,3B,20,19,19,6,,2022.JPG,Middle Table,19 | 6,High,Verified,Main Paper 3B table
+2022_3B_021,2022,3B,21,20,20,6,,2022.JPG,Middle Table,20 | 6,High,Verified,Main Paper 3B table
+2022_3B_022,2022,3B,22,21,21,6,,2022.JPG,Middle Table,21 | 6,High,Verified,Main Paper 3B table
+2022_3B_023,2022,3B,23,22,22,7,,2022.JPG,Middle Table,22 | 7,High,Verified,Main Paper 3B table
+2022_3B_024,2022,3B,24,23,23,7,,2022.JPG,Middle Table,23 | 7,High,Verified,Main Paper 3B table
+2022_3B_025,2022,3B,25,24,24,8,,2022.JPG,Middle Table,24 | 8,High,Verified,Main Paper 3B table
+2022_3B_026,2022,3B,26,25,25,8,,2022.JPG,Middle Table,25 | 8,High,Verified,Main Paper 3B table
+2022_3B_027,2022,3B,27,26,26,9,,2022.JPG,Middle Table,26 | 9,High,Verified,Main Paper 3B table
+2022_3B_028,2022,3B,28,27,27,9,,2022.JPG,Middle Table,27 | 9,High,Verified,Main Paper 3B table
+2022_3B_029,2022,3B,29,28,28,10,,2022.JPG,Middle Table,28 | 10,High,Verified,Main Paper 3B table
+2022_3B_030,2022,3B,30,29,29,10,,2022.JPG,Middle Table,29 | 10,High,Verified,Main Paper 3B table
+2022_3B_031,2022,3B,31,30,30,11,,2022.JPG,Middle Table,30 | 11,High,Verified,Main Paper 3B table
+2022_3B_032,2022,3B,32,31,31,11,,2022.JPG,Middle Table,31 | 11,High,Verified,Main Paper 3B table
+2022_3B_033,2022,3B,33,32,32,12,,2022.JPG,Middle Table,32 | 12,High,Verified,Main Paper 3B table
+2022_3B_034,2022,3B,34,33,33,13,,2022.JPG,Middle Table,33 | 13,High,Verified,Main Paper 3B table
+2022_3B_035,2022,3B,35,34,34,13,,2022.JPG,Middle Table,34 | 13,High,Verified,Main Paper 3B table
+2022_3B_036,2022,3B,36,35,35,14,,2022.JPG,Middle Table,35 | 14,High,Verified,Main Paper 3B table
+2022_3B_037,2022,3B,37,36,36,15,,2022.JPG,Middle Table,36 | 15,High,Verified,Main Paper 3B table
+2022_3B_038,2022,3B,38,37,37,16,,2022.JPG,Middle Table,37 | 16,High,Verified,Main Paper 3B table
+2022_3B_039,2022,3B,39,38,38,17,,2022.JPG,Middle Table,38 | 17,High,Verified,Main Paper 3B table
+2022_3B_040,2022,3B,40,39,39,18,,2022.JPG,Middle Table,39 | 18,High,Verified,Main Paper 3B table
+2022_3B_041,2022,3B,41,40,40,19,,2022.JPG,Middle Table,40 | 19,High,Verified,Main Paper 3B table
+2022_3B_042,2022,3B,42,41,41,20,,2022.JPG,Middle Table,41 | 20,High,Verified,Main Paper 3B table
+2022_3B_043,2022,3B,43,42,42,21,,2022.JPG,Middle Table,42 | 21,High,Verified,Main Paper 3B table
+2022_3B_044,2022,3B,44,43,43,22,,2022.JPG,Right Table,43 | 22,High,Verified,Top-right Paper 3B table
+2022_3B_045,2022,3B,45,44,44,23,,2022.JPG,Right Table,44 | 23,High,Verified,Top-right Paper 3B table
+2022_3B_046,2022,3B,46,45,45,24,,2022.JPG,Right Table,45 | 24,High,Verified,Top-right Paper 3B table
+2022_3B_047,2022,3B,47,46,46,26,,2022.JPG,Right Table,46 | 26,High,Verified,Top-right Paper 3B table
+2022_3B_048,2022,3B,48,47,47,28,,2022.JPG,Right Table,47 | 28,High,Verified,Top-right Paper 3B table
+2022_3B_049,2022,3B,49,48,48,30,,2022.JPG,Right Table,48 | 30,High,Verified,Top-right Paper 3B table
+2022_3B_050,2022,3B,50,49,49,33,,2022.JPG,Right Table,49 | 33,High,Verified,Top-right Paper 3B table
+2022_3B_051,2022,3B,51,50,50,36,,2022.JPG,Right Table,50 | 36,High,Verified,Top-right Paper 3B table
+2022_3B_052,2022,3B,52,51,51,39,,2022.JPG,Right Table,51 | 39,High,Verified,Top-right Paper 3B table
+2022_3B_053,2022,3B,53,52,52,42,,2022.JPG,Right Table,52 | 42,High,Verified,Top-right Paper 3B table
+2022_3B_054,2022,3B,54,53,53,45,,2022.JPG,Right Table,53 | 45,High,Verified,Top-right Paper 3B table
+2023_1B_001,2023,1B,1,0,0,0,,2023.JPG,Paper 1B Table (left),0 | 0,High,Verified,
+2023_1B_002,2023,1B,2,1,1,0,,2023.JPG,Paper 1B Table (left),1 | 0,High,Verified,
+2023_1B_003,2023,1B,3,2,2,1,,2023.JPG,Paper 1B Table (left),2 | 1,High,Verified,
+2023_1B_004,2023,1B,4,3,3,1,,2023.JPG,Paper 1B Table (left),3 | 1,High,Verified,
+2023_1B_005,2023,1B,5,4,4,2,,2023.JPG,Paper 1B Table (left),4 | 2,High,Verified,
+2023_1B_006,2023,1B,6,5,5,2,,2023.JPG,Paper 1B Table (left),5 | 2,High,Verified,
+2023_1B_007,2023,1B,7,6,6,3,,2023.JPG,Paper 1B Table (left),6 | 3,High,Verified,
+2023_1B_008,2023,1B,8,7,7,3,,2023.JPG,Paper 1B Table (left),7 | 3,High,Verified,
+2023_1B_009,2023,1B,9,8,8,3,,2023.JPG,Paper 1B Table (left),8 | 3,High,Verified,
+2023_1B_010,2023,1B,10,9,9,4,,2023.JPG,Paper 1B Table (left),9 | 4,High,Verified,
+2023_1B_011,2023,1B,11,10,10,4,,2023.JPG,Paper 1B Table (left),10 | 4,High,Verified,
+2023_1B_012,2023,1B,12,11,11,4,,2023.JPG,Paper 1B Table (left),11 | 4,High,Verified,
+2023_1B_013,2023,1B,13,12,12,4,,2023.JPG,Paper 1B Table (left),12 | 4,High,Verified,
+2023_1B_014,2023,1B,14,13,13,5,,2023.JPG,Paper 1B Table (left),13 | 5,High,Verified,
+2023_1B_015,2023,1B,15,14,14,5,,2023.JPG,Paper 1B Table (left),14 | 5,High,Verified,
+2023_1B_016,2023,1B,16,15,15,5,,2023.JPG,Paper 1B Table (left),15 | 5,High,Verified,
+2023_1B_017,2023,1B,17,16,16,6,,2023.JPG,Paper 1B Table (left),16 | 6,High,Verified,
+2023_1B_018,2023,1B,18,17,17,6,,2023.JPG,Paper 1B Table (left),17 | 6,High,Verified,
+2023_1B_019,2023,1B,19,18,18,6,,2023.JPG,Paper 1B Table (left),18 | 6,High,Verified,
+2023_1B_020,2023,1B,20,19,19,7,,2023.JPG,Paper 1B Table (left),19 | 7,High,Verified,
+2023_1B_021,2023,1B,21,20,20,7,,2023.JPG,Paper 1B Table (left),20 | 7,High,Verified,
+2023_1B_022,2023,1B,22,21,21,7,,2023.JPG,Paper 1B Table (left),21 | 7,High,Verified,
+2023_1B_023,2023,1B,23,22,22,8,,2023.JPG,Paper 1B Table (left),22 | 8,High,Verified,
+2023_1B_024,2023,1B,24,23,23,8,,2023.JPG,Paper 1B Table (left),23 | 8,High,Verified,
+2023_1B_025,2023,1B,25,24,24,9,,2023.JPG,Paper 1B Table (left),24 | 9,High,Verified,
+2023_1B_026,2023,1B,26,25,25,9,,2023.JPG,Paper 1B Table (left),25 | 9,High,Verified,
+2023_1B_027,2023,1B,27,26,26,10,,2023.JPG,Paper 1B Table (left),26 | 10,High,Verified,
+2023_1B_028,2023,1B,28,27,27,10,,2023.JPG,Paper 1B Table (left),27 | 10,High,Verified,
+2023_1B_029,2023,1B,29,28,28,11,,2023.JPG,Paper 1B Table (left),28 | 11,High,Verified,
+2023_1B_030,2023,1B,30,29,29,12,,2023.JPG,Paper 1B Table (left),29 | 12,High,Verified,
+2023_1B_031,2023,1B,31,30,30,13,,2023.JPG,Paper 1B Table (left),30 | 13,High,Verified,
+2023_1B_032,2023,1B,32,31,31,14,,2023.JPG,Paper 1B Table (left),31 | 14,High,Verified,
+2023_1B_033,2023,1B,33,32,32,15,,2023.JPG,Paper 1B Table (left),32 | 15,High,Verified,
+2023_1B_034,2023,1B,34,33,33,17,,2023.JPG,Paper 1B Table (left),33 | 17,High,Verified,
+2023_1B_035,2023,1B,35,34,34,19,,2023.JPG,Paper 1B Table (left),34 | 19,High,Verified,
+2023_1B_036,2023,1B,36,35,35,21,,2023.JPG,Paper 1B Table (left),35 | 21,High,Verified,
+2023_1B_037,2023,1B,37,36,36,23,,2023.JPG,Paper 1B Table (left),36 | 23,High,Verified,
+2023_1B_038,2023,1B,38,37,37,25,,2023.JPG,Paper 1B Table (left),37 | 25,High,Verified,
+2023_1B_039,2023,1B,39,38,38,27,,2023.JPG,Paper 1B Table (left),38 | 27,High,Verified,
+2023_1B_040,2023,1B,40,39,39,30,,2023.JPG,Paper 1B Table (left),39 | 30,High,Verified,
+2023_1B_041,2023,1B,41,40,40,33,,2023.JPG,Paper 1B Table (left),40 | 33,High,Verified,
+2023_1B_042,2023,1B,42,41,41,36,,2023.JPG,Paper 1B Table (left),41 | 36,High,Verified,
+2023_1B_043,2023,1B,43,42,42,39,,2023.JPG,Paper 1B Table (left),42 | 39,High,Verified,
+2023_3B_001,2023,3B,1,0,0,0,,2023.JPG,Paper 3B Table (middle),0 | 0,High,Verified,First section of Paper 3B (marks 0 to 42)
+2023_3B_002,2023,3B,2,1,1,1,,2023.JPG,Paper 3B Table (middle),1 | 1,High,Verified,First section of Paper 3B (marks 0 to 42)
+2023_3B_003,2023,3B,3,2,2,2,,2023.JPG,Paper 3B Table (middle),2 | 2,High,Verified,First section of Paper 3B (marks 0 to 42)
+2023_3B_004,2023,3B,4,3,3,2,,2023.JPG,Paper 3B Table (middle),3 | 2,High,Verified,First section of Paper 3B (marks 0 to 42)
+2023_3B_005,2023,3B,5,4,4,2,,2023.JPG,Paper 3B Table (middle),4 | 2,High,Verified,First section of Paper 3B (marks 0 to 42)
+2023_3B_006,2023,3B,6,5,5,3,,2023.JPG,Paper 3B Table (middle),5 | 3,High,Verified,First section of Paper 3B (marks 0 to 42)
+2023_3B_007,2023,3B,7,6,6,3,,2023.JPG,Paper 3B Table (middle),6 | 3,High,Verified,First section of Paper 3B (marks 0 to 42)
+2023_3B_008,2023,3B,8,7,7,3,,2023.JPG,Paper 3B Table (middle),7 | 3,High,Verified,First section of Paper 3B (marks 0 to 42)
+2023_3B_009,2023,3B,9,8,8,4,,2023.JPG,Paper 3B Table (middle),8 | 4,High,Verified,First section of Paper 3B (marks 0 to 42)
+2023_3B_010,2023,3B,10,9,9,4,,2023.JPG,Paper 3B Table (middle),9 | 4,High,Verified,First section of Paper 3B (marks 0 to 42)
+2023_3B_011,2023,3B,11,10,10,4,,2023.JPG,Paper 3B Table (middle),10 | 4,High,Verified,First section of Paper 3B (marks 0 to 42)
+2023_3B_012,2023,3B,12,11,11,5,,2023.JPG,Paper 3B Table (middle),11 | 5,High,Verified,First section of Paper 3B (marks 0 to 42)
+2023_3B_013,2023,3B,13,12,12,5,,2023.JPG,Paper 3B Table (middle),12 | 5,High,Verified,First section of Paper 3B (marks 0 to 42)
+2023_3B_014,2023,3B,14,13,13,5,,2023.JPG,Paper 3B Table (middle),13 | 5,High,Verified,First section of Paper 3B (marks 0 to 42)
+2023_3B_015,2023,3B,15,14,14,6,,2023.JPG,Paper 3B Table (middle),14 | 6,High,Verified,First section of Paper 3B (marks 0 to 42)
+2023_3B_016,2023,3B,16,15,15,6,,2023.JPG,Paper 3B Table (middle),15 | 6,High,Verified,First section of Paper 3B (marks 0 to 42)
+2023_3B_017,2023,3B,17,16,16,6,,2023.JPG,Paper 3B Table (middle),16 | 6,High,Verified,First section of Paper 3B (marks 0 to 42)
+2023_3B_018,2023,3B,18,17,17,7,,2023.JPG,Paper 3B Table (middle),17 | 7,High,Verified,First section of Paper 3B (marks 0 to 42)
+2023_3B_019,2023,3B,19,18,18,7,,2023.JPG,Paper 3B Table (middle),18 | 7,High,Verified,First section of Paper 3B (marks 0 to 42)
+2023_3B_020,2023,3B,20,19,19,7,,2023.JPG,Paper 3B Table (middle),19 | 7,High,Verified,First section of Paper 3B (marks 0 to 42)
+2023_3B_021,2023,3B,21,20,20,8,,2023.JPG,Paper 3B Table (middle),20 | 8,High,Verified,First section of Paper 3B (marks 0 to 42)
+2023_3B_022,2023,3B,22,21,21,8,,2023.JPG,Paper 3B Table (middle),21 | 8,High,Verified,First section of Paper 3B (marks 0 to 42)
+2023_3B_023,2023,3B,23,22,22,9,,2023.JPG,Paper 3B Table (middle),22 | 9,High,Verified,First section of Paper 3B (marks 0 to 42)
+2023_3B_024,2023,3B,24,23,23,9,,2023.JPG,Paper 3B Table (middle),23 | 9,High,Verified,First section of Paper 3B (marks 0 to 42)
+2023_3B_025,2023,3B,25,24,24,10,,2023.JPG,Paper 3B Table (middle),24 | 10,High,Verified,First section of Paper 3B (marks 0 to 42)
+2023_3B_026,2023,3B,26,25,25,10,,2023.JPG,Paper 3B Table (middle),25 | 10,High,Verified,First section of Paper 3B (marks 0 to 42)
+2023_3B_027,2023,3B,27,26,26,11,,2023.JPG,Paper 3B Table (middle),26 | 11,High,Verified,First section of Paper 3B (marks 0 to 42)
+2023_3B_028,2023,3B,28,27,27,12,,2023.JPG,Paper 3B Table (middle),27 | 12,High,Verified,First section of Paper 3B (marks 0 to 42)
+2023_3B_029,2023,3B,29,28,28,12,,2023.JPG,Paper 3B Table (middle),28 | 12,High,Verified,First section of Paper 3B (marks 0 to 42)
+2023_3B_030,2023,3B,30,29,29,13,,2023.JPG,Paper 3B Table (middle),29 | 13,High,Verified,First section of Paper 3B (marks 0 to 42)
+2023_3B_031,2023,3B,31,30,30,14,,2023.JPG,Paper 3B Table (middle),30 | 14,High,Verified,First section of Paper 3B (marks 0 to 42)
+2023_3B_032,2023,3B,32,31,31,14,,2023.JPG,Paper 3B Table (middle),31 | 14,High,Verified,First section of Paper 3B (marks 0 to 42)
+2023_3B_033,2023,3B,33,32,32,15,,2023.JPG,Paper 3B Table (middle),32 | 15,High,Verified,First section of Paper 3B (marks 0 to 42)
+2023_3B_034,2023,3B,34,33,33,16,,2023.JPG,Paper 3B Table (middle),33 | 16,High,Verified,First section of Paper 3B (marks 0 to 42)
+2023_3B_035,2023,3B,35,34,34,16,,2023.JPG,Paper 3B Table (middle),34 | 16,High,Verified,First section of Paper 3B (marks 0 to 42)
+2023_3B_036,2023,3B,36,35,35,17,,2023.JPG,Paper 3B Table (middle),35 | 17,High,Verified,First section of Paper 3B (marks 0 to 42)
+2023_3B_037,2023,3B,37,36,36,18,,2023.JPG,Paper 3B Table (middle),36 | 18,High,Verified,First section of Paper 3B (marks 0 to 42)
+2023_3B_038,2023,3B,38,37,37,19,,2023.JPG,Paper 3B Table (middle),37 | 19,High,Verified,First section of Paper 3B (marks 0 to 42)
+2023_3B_039,2023,3B,39,38,38,20,,2023.JPG,Paper 3B Table (middle),38 | 20,High,Verified,First section of Paper 3B (marks 0 to 42)
+2023_3B_040,2023,3B,40,39,39,21,,2023.JPG,Paper 3B Table (middle),39 | 21,High,Verified,First section of Paper 3B (marks 0 to 42)
+2023_3B_041,2023,3B,41,40,40,22,,2023.JPG,Paper 3B Table (middle),40 | 22,High,Verified,First section of Paper 3B (marks 0 to 42)
+2023_3B_042,2023,3B,42,41,41,23,,2023.JPG,Paper 3B Table (middle),41 | 23,High,Verified,First section of Paper 3B (marks 0 to 42)
+2023_3B_043,2023,3B,43,42,42,25,,2023.JPG,Paper 3B Table (middle),42 | 25,High,Verified,First section of Paper 3B (marks 0 to 42)
+2023_3B_044,2023,3B,44,43,43,26,,2023.JPG,Paper 3B Table (right),43 | 26,High,Verified,Second section of Paper 3B (marks 43 to 53)
+2023_3B_045,2023,3B,45,44,44,28,,2023.JPG,Paper 3B Table (right),44 | 28,High,Verified,Second section of Paper 3B (marks 43 to 53)
+2023_3B_046,2023,3B,46,45,45,29,,2023.JPG,Paper 3B Table (right),45 | 29,High,Verified,Second section of Paper 3B (marks 43 to 53)
+2023_3B_047,2023,3B,47,46,46,31,,2023.JPG,Paper 3B Table (right),46 | 31,High,Verified,Second section of Paper 3B (marks 43 to 53)
+2023_3B_048,2023,3B,48,47,47,32,,2023.JPG,Paper 3B Table (right),47 | 32,High,Verified,Second section of Paper 3B (marks 43 to 53)
+2023_3B_049,2023,3B,49,48,48,34,,2023.JPG,Paper 3B Table (right),48 | 34,High,Verified,Second section of Paper 3B (marks 43 to 53)
+2023_3B_050,2023,3B,50,49,49,36,,2023.JPG,Paper 3B Table (right),49 | 36,High,Verified,Second section of Paper 3B (marks 43 to 53)
+2023_3B_051,2023,3B,51,50,50,38,,2023.JPG,Paper 3B Table (right),50 | 38,High,Verified,Second section of Paper 3B (marks 43 to 53)
+2023_3B_052,2023,3B,52,51,51,40,,2023.JPG,Paper 3B Table (right),51 | 40,High,Verified,Second section of Paper 3B (marks 43 to 53)
+2023_3B_053,2023,3B,53,52,52,43,,2023.JPG,Paper 3B Table (right),52 | 43,High,Verified,Second section of Paper 3B (marks 43 to 53)
+2023_3B_054,2023,3B,54,53,53,46,,2023.JPG,Paper 3B Table (right),53 | 46,High,Verified,Second section of Paper 3B (marks 43 to 53)
+2024_1B_001,2024,1B,1,0,0,0,,2024.JPG,Paper 1B table (bottom),0 | 0,High,Verified,
+2024_1B_002,2024,1B,2,1,1,0,,2024.JPG,Paper 1B table (bottom),1 | 0,High,Verified,
+2024_1B_003,2024,1B,3,2,2,0,,2024.JPG,Paper 1B table (bottom),2 | 0,High,Verified,
+2024_1B_004,2024,1B,4,3,3,1,,2024.JPG,Paper 1B table (bottom),3 | 1,High,Verified,
+2024_1B_005,2024,1B,5,4,4,1,,2024.JPG,Paper 1B table (bottom),4 | 1,High,Verified,
+2024_1B_006,2024,1B,6,5,5,1,,2024.JPG,Paper 1B table (bottom),5 | 1,High,Verified,
+2024_1B_007,2024,1B,7,6,6,2,,2024.JPG,Paper 1B table (bottom),6 | 2,High,Verified,
+2024_1B_008,2024,1B,8,7,7,2,,2024.JPG,Paper 1B table (bottom),7 | 2,High,Verified,
+2024_1B_009,2024,1B,9,8,8,2,,2024.JPG,Paper 1B table (bottom),8 | 2,High,Verified,
+2024_1B_010,2024,1B,10,9,9,3,,2024.JPG,Paper 1B table (bottom),9 | 3,High,Verified,
+2024_1B_011,2024,1B,11,10,10,3,,2024.JPG,Paper 1B table (bottom),10 | 3,High,Verified,
+2024_1B_012,2024,1B,12,11,11,3,,2024.JPG,Paper 1B table (bottom),11 | 3,High,Verified,
+2024_1B_013,2024,1B,13,12,12,3,,2024.JPG,Paper 1B table (bottom),12 | 3,High,Verified,
+2024_1B_014,2024,1B,14,13,13,4,,2024.JPG,Paper 1B table (bottom),13 | 4,High,Verified,
+2024_1B_015,2024,1B,15,14,14,4,,2024.JPG,Paper 1B table (bottom),14 | 4,High,Verified,
+2024_1B_016,2024,1B,16,15,15,4,,2024.JPG,Paper 1B table (bottom),15 | 4,High,Verified,
+2024_1B_017,2024,1B,17,16,16,5,,2024.JPG,Paper 1B table (bottom),16 | 5,High,Verified,
+2024_1B_018,2024,1B,18,17,17,5,,2024.JPG,Paper 1B table (bottom),17 | 5,High,Verified,
+2024_1B_019,2024,1B,19,18,18,5,,2024.JPG,Paper 1B table (bottom),18 | 5,High,Verified,
+2024_1B_020,2024,1B,20,19,19,6,,2024.JPG,Paper 1B table (bottom),19 | 6,High,Verified,
+2024_1B_021,2024,1B,21,20,20,6,,2024.JPG,Paper 1B table (bottom),20 | 6,High,Verified,
+2024_1B_022,2024,1B,22,21,21,6,,2024.JPG,Paper 1B table (bottom),21 | 6,High,Verified,
+2024_1B_023,2024,1B,23,22,22,7,,2024.JPG,Paper 1B table (bottom),22 | 7,High,Verified,
+2024_1B_024,2024,1B,24,23,23,7,,2024.JPG,Paper 1B table (bottom),23 | 7,High,Verified,
+2024_1B_025,2024,1B,25,24,24,8,,2024.JPG,Paper 1B table (bottom),24 | 8,High,Verified,
+2024_1B_026,2024,1B,26,25,25,8,,2024.JPG,Paper 1B table (bottom),25 | 8,High,Verified,
+2024_1B_027,2024,1B,27,26,26,9,,2024.JPG,Paper 1B table (bottom),26 | 9,High,Verified,
+2024_1B_028,2024,1B,28,27,27,9,,2024.JPG,Paper 1B table (bottom),27 | 9,High,Verified,
+2024_1B_029,2024,1B,29,28,28,10,,2024.JPG,Paper 1B table (bottom),28 | 10,High,Verified,
+2024_1B_030,2024,1B,30,29,29,10,,2024.JPG,Paper 1B table (bottom),29 | 10,High,Verified,
+2024_1B_031,2024,1B,31,30,30,11,,2024.JPG,Paper 1B table (bottom),30 | 11,High,Verified,
+2024_1B_032,2024,1B,32,31,31,12,,2024.JPG,Paper 1B table (bottom),31 | 12,High,Verified,
+2024_1B_033,2024,1B,33,32,32,13,,2024.JPG,Paper 1B table (bottom),32 | 13,High,Verified,
+2024_1B_034,2024,1B,34,33,33,14,,2024.JPG,Paper 1B table (bottom),33 | 14,High,Verified,
+2024_1B_035,2024,1B,35,34,34,16,,2024.JPG,Paper 1B table (bottom),34 | 16,High,Verified,
+2024_1B_036,2024,1B,36,35,35,18,,2024.JPG,Paper 1B table (bottom),35 | 18,High,Verified,
+2024_1B_037,2024,1B,37,36,36,20,,2024.JPG,Paper 1B table (bottom),36 | 20,High,Verified,
+2024_1B_038,2024,1B,38,37,37,23,,2024.JPG,Paper 1B table (bottom),37 | 23,High,Verified,
+2024_1B_039,2024,1B,39,38,38,27,,2024.JPG,Paper 1B table (bottom),38 | 27,High,Verified,
+2024_1B_040,2024,1B,40,39,39,32,,2024.JPG,Paper 1B table (bottom),39 | 32,High,Verified,
+2024_1B_041,2024,1B,41,40,40,37,,2024.JPG,Paper 1B table (bottom),40 | 37,High,Verified,
+2024_1B_042,2024,1B,42,41,41,41,,2024.JPG,Paper 1B table (bottom),41 | 41,High,Verified,
+2024_1B_043,2024,1B,43,42,42,42,,2024.JPG,Paper 1B table (bottom),42 | 42,High,Verified,
+2024_3B_001,2024,3B,1,0,0,0,,2024.JPG,Paper 3B table (middle),0 | 0,High,Verified,
+2024_3B_002,2024,3B,2,1,1,0,,2024.JPG,Paper 3B table (middle),1 | 0,High,Verified,
+2024_3B_003,2024,3B,3,2,2,0,,2024.JPG,Paper 3B table (middle),2 | 0,High,Verified,
+2024_3B_004,2024,3B,4,3,3,1,,2024.JPG,Paper 3B table (middle),3 | 1,High,Verified,
+2024_3B_005,2024,3B,5,4,4,1,,2024.JPG,Paper 3B table (middle),4 | 1,High,Verified,
+2024_3B_006,2024,3B,6,5,5,1,,2024.JPG,Paper 3B table (middle),5 | 1,High,Verified,
+2024_3B_007,2024,3B,7,6,6,1,,2024.JPG,Paper 3B table (middle),6 | 1,High,Verified,
+2024_3B_008,2024,3B,8,7,7,1,,2024.JPG,Paper 3B table (middle),7 | 1,High,Verified,
+2024_3B_009,2024,3B,9,8,8,1,,2024.JPG,Paper 3B table (middle),8 | 1,High,Verified,
+2024_3B_010,2024,3B,10,9,9,1,,2024.JPG,Paper 3B table (middle),9 | 1,High,Verified,
+2024_3B_011,2024,3B,11,10,10,1,,2024.JPG,Paper 3B table (middle),10 | 1,High,Verified,
+2024_3B_012,2024,3B,12,11,11,2,,2024.JPG,Paper 3B table (middle),11 | 2,High,Verified,
+2024_3B_013,2024,3B,13,12,12,2,,2024.JPG,Paper 3B table (middle),12 | 2,High,Verified,
+2024_3B_014,2024,3B,14,13,13,2,,2024.JPG,Paper 3B table (middle),13 | 2,High,Verified,
+2024_3B_015,2024,3B,15,14,14,2,,2024.JPG,Paper 3B table (middle),14 | 2,High,Verified,
+2024_3B_016,2024,3B,16,15,15,2,,2024.JPG,Paper 3B table (middle),15 | 2,High,Verified,
+2024_3B_017,2024,3B,17,16,16,2,,2024.JPG,Paper 3B table (middle),16 | 2,High,Verified,
+2024_3B_018,2024,3B,18,17,17,3,,2024.JPG,Paper 3B table (middle),17 | 3,High,Verified,
+2024_3B_019,2024,3B,19,18,18,3,,2024.JPG,Paper 3B table (middle),18 | 3,High,Verified,
+2024_3B_020,2024,3B,20,19,19,3,,2024.JPG,Paper 3B table (middle),19 | 3,High,Verified,
+2024_3B_021,2024,3B,21,20,20,3,,2024.JPG,Paper 3B table (middle),20 | 3,High,Verified,
+2024_3B_022,2024,3B,22,21,21,4,,2024.JPG,Paper 3B table (middle),21 | 4,High,Verified,
+2024_3B_023,2024,3B,23,22,22,4,,2024.JPG,Paper 3B table (middle),22 | 4,High,Verified,
+2024_3B_024,2024,3B,24,23,23,4,,2024.JPG,Paper 3B table (middle),23 | 4,High,Verified,
+2024_3B_025,2024,3B,25,24,24,5,,2024.JPG,Paper 3B table (middle),24 | 5,High,Verified,
+2024_3B_026,2024,3B,26,25,25,5,,2024.JPG,Paper 3B table (middle),25 | 5,High,Verified,
+2024_3B_027,2024,3B,27,26,26,6,,2024.JPG,Paper 3B table (middle),26 | 6,High,Verified,
+2024_3B_028,2024,3B,28,27,27,6,,2024.JPG,Paper 3B table (middle),27 | 6,High,Verified,
+2024_3B_029,2024,3B,29,28,28,7,,2024.JPG,Paper 3B table (middle),28 | 7,High,Verified,
+2024_3B_030,2024,3B,30,29,29,7,,2024.JPG,Paper 3B table (middle),29 | 7,High,Verified,
+2024_3B_031,2024,3B,31,30,30,8,,2024.JPG,Paper 3B table (middle),30 | 8,High,Verified,
+2024_3B_032,2024,3B,32,31,31,9,,2024.JPG,Paper 3B table (middle),31 | 9,High,Verified,
+2024_3B_033,2024,3B,33,32,32,10,,2024.JPG,Paper 3B table (middle),32 | 10,High,Verified,
+2024_3B_034,2024,3B,34,33,33,11,,2024.JPG,Paper 3B table (middle),33 | 11,High,Verified,
+2024_3B_035,2024,3B,35,34,34,12,,2024.JPG,Paper 3B table (middle),34 | 12,High,Verified,
+2024_3B_036,2024,3B,36,35,35,13,,2024.JPG,Paper 3B table (middle),35 | 13,High,Verified,
+2024_3B_037,2024,3B,37,36,36,14,,2024.JPG,Paper 3B table (middle),36 | 14,High,Verified,
+2024_3B_038,2024,3B,38,37,37,15,,2024.JPG,Paper 3B table (middle),37 | 15,High,Verified,
+2024_3B_039,2024,3B,39,38,38,16,,2024.JPG,Paper 3B table (middle),38 | 16,High,Verified,
+2024_3B_040,2024,3B,40,39,39,17,,2024.JPG,Paper 3B table (middle),39 | 17,High,Verified,
+2024_3B_041,2024,3B,41,40,40,19,,2024.JPG,Paper 3B table (middle),40 | 19,High,Verified,
+2024_3B_042,2024,3B,42,41,41,20,,2024.JPG,Paper 3B table (middle),41 | 20,High,Verified,
+2024_3B_043,2024,3B,43,42,42,21,,2024.JPG,Paper 3B table (middle),42 | 21,High,Verified,
+2024_3B_044,2024,3B,44,43,43,23,,2024.JPG,Paper 3B table (top right),43 | 23,High,Verified,
+2024_3B_045,2024,3B,45,44,44,24,,2024.JPG,Paper 3B table (top right),44 | 24,High,Verified,
+2024_3B_046,2024,3B,46,45,45,26,,2024.JPG,Paper 3B table (top right),45 | 26,High,Verified,
+2024_3B_047,2024,3B,47,46,46,28,,2024.JPG,Paper 3B table (top right),46 | 28,High,Verified,
+2024_3B_048,2024,3B,48,47,47,30,,2024.JPG,Paper 3B table (top right),47 | 30,High,Verified,
+2024_3B_049,2024,3B,49,48,48,32,,2024.JPG,Paper 3B table (top right),48 | 32,High,Verified,
+2024_3B_050,2024,3B,50,49,49,35,,2024.JPG,Paper 3B table (top right),49 | 35,High,Verified,
+2024_3B_051,2024,3B,51,50,50,38,,2024.JPG,Paper 3B table (top right),50 | 38,High,Verified,
+2024_3B_052,2024,3B,52,51,51,41,,2024.JPG,Paper 3B table (top right),51 | 41,High,Verified,
+2024_3B_053,2024,3B,53,52,52,44,,2024.JPG,Paper 3B table (top right),52 | 44,High,Verified,
+2024_3B_054,2024,3B,54,53,53,47,,2024.JPG,Paper 3B table (top right),53 | 47,High,Verified,
+2025_1B_00,2025,1B,1,0,0,0,,2025.JPG,Paper 1B Table,0 | 0,High,Verified,
+2025_1B_01,2025,1B,2,1,1,1,,2025.JPG,Paper 1B Table,1 | 1,High,Verified,
+2025_1B_02,2025,1B,3,2,2,1,,2025.JPG,Paper 1B Table,2 | 1,High,Verified,
+2025_1B_03,2025,1B,4,3,3,2,,2025.JPG,Paper 1B Table,3 | 2,High,Verified,
+2025_1B_04,2025,1B,5,4,4,2,,2025.JPG,Paper 1B Table,4 | 2,High,Verified,
+2025_1B_05,2025,1B,6,5,5,2,,2025.JPG,Paper 1B Table,5 | 2,High,Verified,
+2025_1B_06,2025,1B,7,6,6,3,,2025.JPG,Paper 1B Table,6 | 3,High,Verified,
+2025_1B_07,2025,1B,8,7,7,3,,2025.JPG,Paper 1B Table,7 | 3,High,Verified,
+2025_1B_08,2025,1B,9,8,8,3,,2025.JPG,Paper 1B Table,8 | 3,High,Verified,
+2025_1B_09,2025,1B,10,9,9,4,,2025.JPG,Paper 1B Table,9 | 4,High,Verified,
+2025_1B_10,2025,1B,11,10,10,4,,2025.JPG,Paper 1B Table,10 | 4,High,Verified,
+2025_1B_11,2025,1B,12,11,11,4,,2025.JPG,Paper 1B Table,11 | 4,High,Verified,
+2025_1B_12,2025,1B,13,12,12,4,,2025.JPG,Paper 1B Table,12 | 4,High,Verified,
+2025_1B_13,2025,1B,14,13,13,5,,2025.JPG,Paper 1B Table,13 | 5,High,Verified,
+2025_1B_14,2025,1B,15,14,14,5,,2025.JPG,Paper 1B Table,14 | 5,High,Verified,
+2025_1B_15,2025,1B,16,15,15,5,,2025.JPG,Paper 1B Table,15 | 5,High,Verified,
+2025_1B_16,2025,1B,17,16,16,5,,2025.JPG,Paper 1B Table,16 | 5,High,Verified,
+2025_1B_17,2025,1B,18,17,17,6,,2025.JPG,Paper 1B Table,17 | 6,High,Verified,
+2025_1B_18,2025,1B,19,18,18,6,,2025.JPG,Paper 1B Table,18 | 6,High,Verified,
+2025_1B_19,2025,1B,20,19,19,6,,2025.JPG,Paper 1B Table,19 | 6,High,Verified,
+2025_1B_20,2025,1B,21,20,20,6,,2025.JPG,Paper 1B Table,20 | 6,High,Verified,
+2025_1B_21,2025,1B,22,21,21,7,,2025.JPG,Paper 1B Table,21 | 7,High,Verified,
+2025_1B_22,2025,1B,23,22,22,7,,2025.JPG,Paper 1B Table,22 | 7,High,Verified,
+2025_1B_23,2025,1B,24,23,23,7,,2025.JPG,Paper 1B Table,23 | 7,High,Verified,
+2025_1B_24,2025,1B,25,24,24,8,,2025.JPG,Paper 1B Table,24 | 8,High,Verified,
+2025_1B_25,2025,1B,26,25,25,8,,2025.JPG,Paper 1B Table,25 | 8,High,Verified,
+2025_1B_26,2025,1B,27,26,26,8,,2025.JPG,Paper 1B Table,26 | 8,High,Verified,
+2025_1B_27,2025,1B,28,27,27,9,,2025.JPG,Paper 1B Table,27 | 9,High,Verified,
+2025_1B_28,2025,1B,29,28,28,9,,2025.JPG,Paper 1B Table,28 | 9,High,Verified,
+2025_1B_29,2025,1B,30,29,29,10,,2025.JPG,Paper 1B Table,29 | 10,High,Verified,
+2025_1B_30,2025,1B,31,30,30,11,,2025.JPG,Paper 1B Table,30 | 11,High,Verified,
+2025_1B_31,2025,1B,32,31,31,12,,2025.JPG,Paper 1B Table,31 | 12,High,Verified,
+2025_1B_32,2025,1B,33,32,32,13,,2025.JPG,Paper 1B Table,32 | 13,High,Verified,
+2025_1B_33,2025,1B,34,33,33,14,,2025.JPG,Paper 1B Table,33 | 14,High,Verified,
+2025_1B_34,2025,1B,35,34,34,15,,2025.JPG,Paper 1B Table,34 | 15,High,Verified,
+2025_1B_35,2025,1B,36,35,35,17,,2025.JPG,Paper 1B Table,35 | 17,High,Verified,
+2025_1B_36,2025,1B,37,36,36,19,,2025.JPG,Paper 1B Table,36 | 19,High,Verified,
+2025_1B_37,2025,1B,38,37,37,21,,2025.JPG,Paper 1B Table,37 | 21,High,Verified,
+2025_1B_38,2025,1B,39,38,38,24,,2025.JPG,Paper 1B Table,38 | 24,High,Verified,
+2025_1B_39,2025,1B,40,39,39,27,,2025.JPG,Paper 1B Table,39 | 27,High,Verified,
+2025_1B_40,2025,1B,41,40,40,30,,2025.JPG,Paper 1B Table,40 | 30,High,Verified,
+2025_1B_41,2025,1B,42,41,41,34,,2025.JPG,Paper 1B Table,41 | 34,High,Verified,
+2025_1B_42,2025,1B,43,42,42,38,,2025.JPG,Paper 1B Table,42 | 38,High,Verified,
+2025_3B_00,2025,3B,1,0,0,0,,2025.JPG,Paper 3B Table (Part 1),0 | 0,High,Verified,
+2025_3B_43,2025,3B,1,43,43,23,,2025.JPG,Paper 3B Table (Part 2),43 | 23,High,Verified,
+2025_3B_01,2025,3B,2,1,1,1,,2025.JPG,Paper 3B Table (Part 1),1 | 1,High,Verified,
+2025_3B_44,2025,3B,2,44,44,24,,2025.JPG,Paper 3B Table (Part 2),44 | 24,High,Verified,
+2025_3B_02,2025,3B,3,2,2,2,,2025.JPG,Paper 3B Table (Part 1),2 | 2,High,Verified,
+2025_3B_45,2025,3B,3,45,45,25,,2025.JPG,Paper 3B Table (Part 2),45 | 25,High,Verified,
+2025_3B_03,2025,3B,4,3,3,2,,2025.JPG,Paper 3B Table (Part 1),3 | 2,High,Verified,
+2025_3B_46,2025,3B,4,46,46,26,,2025.JPG,Paper 3B Table (Part 2),46 | 26,High,Verified,
+2025_3B_04,2025,3B,5,4,4,3,,2025.JPG,Paper 3B Table (Part 1),4 | 3,High,Verified,
+2025_3B_47,2025,3B,5,47,47,28,,2025.JPG,Paper 3B Table (Part 2),47 | 28,High,Verified,
+2025_3B_05,2025,3B,6,5,5,3,,2025.JPG,Paper 3B Table (Part 1),5 | 3,High,Verified,
+2025_3B_48,2025,3B,6,48,48,30,,2025.JPG,Paper 3B Table (Part 2),48 | 30,High,Verified,
+2025_3B_06,2025,3B,7,6,6,3,,2025.JPG,Paper 3B Table (Part 1),6 | 3,High,Verified,
+2025_3B_49,2025,3B,7,49,49,33,,2025.JPG,Paper 3B Table (Part 2),49 | 33,High,Verified,
+2025_3B_07,2025,3B,8,7,7,4,,2025.JPG,Paper 3B Table (Part 1),7 | 4,High,Verified,
+2025_3B_50,2025,3B,8,50,50,36,,2025.JPG,Paper 3B Table (Part 2),50 | 36,High,Verified,
+2025_3B_08,2025,3B,9,8,8,4,,2025.JPG,Paper 3B Table (Part 1),8 | 4,High,Verified,
+2025_3B_51,2025,3B,9,51,51,39,,2025.JPG,Paper 3B Table (Part 2),51 | 39,High,Verified,
+2025_3B_09,2025,3B,10,9,9,4,,2025.JPG,Paper 3B Table (Part 1),9 | 4,High,Verified,
+2025_3B_52,2025,3B,10,52,52,43,,2025.JPG,Paper 3B Table (Part 2),52 | 43,High,Verified,
+2025_3B_10,2025,3B,11,10,10,5,,2025.JPG,Paper 3B Table (Part 1),10 | 5,High,Verified,
+2025_3B_53,2025,3B,11,53,53,47,,2025.JPG,Paper 3B Table (Part 2),53 | 47,High,Verified,
+2025_3B_11,2025,3B,12,11,11,5,,2025.JPG,Paper 3B Table (Part 1),11 | 5,High,Verified,
+2025_3B_12,2025,3B,13,12,12,5,,2025.JPG,Paper 3B Table (Part 1),12 | 5,High,Verified,
+2025_3B_13,2025,3B,14,13,13,6,,2025.JPG,Paper 3B Table (Part 1),13 | 6,High,Verified,
+2025_3B_14,2025,3B,15,14,14,6,,2025.JPG,Paper 3B Table (Part 1),14 | 6,High,Verified,
+2025_3B_15,2025,3B,16,15,15,6,,2025.JPG,Paper 3B Table (Part 1),15 | 6,High,Verified,
+2025_3B_16,2025,3B,17,16,16,6,,2025.JPG,Paper 3B Table (Part 1),16 | 6,High,Verified,
+2025_3B_17,2025,3B,18,17,17,7,,2025.JPG,Paper 3B Table (Part 1),17 | 7,High,Verified,
+2025_3B_18,2025,3B,19,18,18,7,,2025.JPG,Paper 3B Table (Part 1),18 | 7,High,Verified,
+2025_3B_19,2025,3B,20,19,19,7,,2025.JPG,Paper 3B Table (Part 1),19 | 7,High,Verified,
+2025_3B_20,2025,3B,21,20,20,8,,2025.JPG,Paper 3B Table (Part 1),20 | 8,High,Verified,
+2025_3B_21,2025,3B,22,21,21,8,,2025.JPG,Paper 3B Table (Part 1),21 | 8,High,Verified,
+2025_3B_22,2025,3B,23,22,22,9,,2025.JPG,Paper 3B Table (Part 1),22 | 9,High,Verified,
+2025_3B_23,2025,3B,24,23,23,9,,2025.JPG,Paper 3B Table (Part 1),23 | 9,High,Verified,
+2025_3B_24,2025,3B,25,24,24,10,,2025.JPG,Paper 3B Table (Part 1),24 | 10,High,Verified,
+2025_3B_25,2025,3B,26,25,25,10,,2025.JPG,Paper 3B Table (Part 1),25 | 10,High,Verified,
+2025_3B_26,2025,3B,27,26,26,10,,2025.JPG,Paper 3B Table (Part 1),26 | 10,High,Verified,
+2025_3B_27,2025,3B,28,27,27,11,,2025.JPG,Paper 3B Table (Part 1),27 | 11,High,Verified,
+2025_3B_28,2025,3B,29,28,28,11,,2025.JPG,Paper 3B Table (Part 1),28 | 11,High,Verified,
+2025_3B_29,2025,3B,30,29,29,12,,2025.JPG,Paper 3B Table (Part 1),29 | 12,High,Verified,
+2025_3B_30,2025,3B,31,30,30,12,,2025.JPG,Paper 3B Table (Part 1),30 | 12,High,Verified,
+2025_3B_31,2025,3B,32,31,31,13,,2025.JPG,Paper 3B Table (Part 1),31 | 13,High,Verified,
+2025_3B_32,2025,3B,33,32,32,14,,2025.JPG,Paper 3B Table (Part 1),32 | 14,High,Verified,
+2025_3B_33,2025,3B,34,33,33,14,,2025.JPG,Paper 3B Table (Part 1),33 | 14,High,Verified,
+2025_3B_34,2025,3B,35,34,34,15,,2025.JPG,Paper 3B Table (Part 1),34 | 15,High,Verified,
+2025_3B_35,2025,3B,36,35,35,15,,2025.JPG,Paper 3B Table (Part 1),35 | 15,High,Verified,
+2025_3B_36,2025,3B,37,36,36,16,,2025.JPG,Paper 3B Table (Part 1),36 | 16,High,Verified,
+2025_3B_37,2025,3B,38,37,37,17,,2025.JPG,Paper 3B Table (Part 1),37 | 17,High,Verified,
+2025_3B_38,2025,3B,39,38,38,17,,2025.JPG,Paper 3B Table (Part 1),38 | 17,High,Verified,
+2025_3B_39,2025,3B,40,39,39,18,,2025.JPG,Paper 3B Table (Part 1),39 | 18,High,Verified,
+2025_3B_40,2025,3B,41,40,40,19,,2025.JPG,Paper 3B Table (Part 1),40 | 19,High,Verified,
+2025_3B_41,2025,3B,42,41,41,20,,2025.JPG,Paper 3B Table (Part 1),41 | 20,High,Verified,
+2025_3B_42,2025,3B,43,42,42,22,,2025.JPG,Paper 3B Table (Part 1),42 | 22,High,Verified,
