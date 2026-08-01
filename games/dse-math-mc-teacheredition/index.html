@@ -1,0 +1,803 @@
+<!DOCTYPE html>
+<html lang="zh-HK" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#2563eb">
+<title>HKDSE 數學（卷二）自我操練與成績追蹤</title>
+<link rel="manifest" href="manifest.json">
+<style>
+:root{--bg:#f6f7fb;--card:#fff;--fg:#111827;--muted:#6b7280;--line:#e5e7eb;--pri:#2563eb;--ok:#16a34a;--warn:#d97706;--bad:#dc2626;--chip:#eef2ff}
+[data-theme=dark]{--bg:#0f172a;--card:#1e293b;--fg:#e2e8f0;--muted:#94a3b8;--line:#334155;--pri:#3b82f6;--chip:#1e3a8a}
+*{box-sizing:border-box}
+body{margin:0;font:15px/1.6 -apple-system,"Noto Sans TC","Microsoft JhengHei",sans-serif;background:var(--bg);color:var(--fg)}
+header{position:sticky;top:0;z-index:50;background:var(--card);border-bottom:1px solid var(--line);padding:8px 12px;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+h1{font-size:16px;margin:0;flex:1}
+nav{display:flex;gap:4px;overflow-x:auto;padding:6px 12px;background:var(--card);border-bottom:1px solid var(--line);position:sticky;top:49px;z-index:49}
+nav button{white-space:nowrap;border:1px solid var(--line);background:transparent;color:var(--fg);padding:6px 10px;border-radius:999px;cursor:pointer;font-size:13px}
+nav button[aria-current=page]{background:var(--pri);color:#fff;border-color:var(--pri)}
+main{padding:12px;max-width:1000px;margin:0 auto}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px;margin-bottom:12px}
+.card h2{font-size:15px;margin:0 0 10px}
+button{font:inherit}
+.btn{background:var(--pri);color:#fff;border:0;padding:9px 14px;border-radius:8px;cursor:pointer}
+.btn.sec{background:transparent;color:var(--fg);border:1px solid var(--line)}
+.btn.danger{background:var(--bad)}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+label{display:block;font-size:13px;color:var(--muted);margin:8px 0 3px}
+input,select,textarea{width:100%;padding:8px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--fg);font:inherit}
+.grid{display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(150px,1fr))}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th,td{border-bottom:1px solid var(--line);padding:7px 6px;text-align:left}
+th{color:var(--muted);font-weight:600}
+.badge{display:inline-block;padding:2px 8px;border-radius:999px;font-size:12px;background:var(--chip);color:var(--pri)}
+.badge.ok{background:#dcfce7;color:#166534}.badge.warn{background:#fef3c7;color:#92400e}.badge.bad{background:#fee2e2;color:#991b1b}
+[data-theme=dark] .badge.ok{background:#14532d;color:#bbf7d0}[data-theme=dark] .badge.warn{background:#78350f;color:#fde68a}[data-theme=dark] .badge.bad{background:#7f1d1d;color:#fecaca}
+.q{display:grid;grid-template-columns:34px repeat(5,1fr);gap:4px;align-items:center;margin-bottom:5px}
+.q b{font-size:12px;color:var(--muted)}
+.opt{border:1px solid var(--line);background:var(--card);color:var(--fg);border-radius:8px;padding:9px 0;cursor:pointer;font-size:14px;min-height:40px}
+.opt[aria-pressed=true]{background:var(--pri);color:#fff;border-color:var(--pri)}
+.opt.na[aria-pressed=true]{background:var(--muted);border-color:var(--muted)}
+.muted{color:var(--muted);font-size:13px}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+dialog{border:0;border-radius:14px;padding:18px;max-width:440px;width:92%;background:var(--card);color:var(--fg)}
+dialog::backdrop{background:rgba(0,0,0,.5)}
+#toast{position:fixed;left:50%;transform:translateX(-50%);bottom:16px;z-index:99;display:flex;flex-direction:column;gap:8px;width:min(92%,440px)}
+.tst{background:#111827;color:#fff;padding:11px 14px;border-radius:10px;box-shadow:0 6px 24px rgba(0,0,0,.25);display:flex;gap:10px;align-items:center;font-size:14px}
+.tst button{background:transparent;border:1px solid #ffffff55;color:#fff;border-radius:6px;padding:3px 8px;cursor:pointer;font-size:12px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+canvas{max-width:100%}
+@media print{header,nav,.noprint{display:none!important}.card{break-inside:avoid;border:1px solid #999}}
+</style>
+</head>
+<body>
+<header>
+  <h1>DSE 數學・卷二操練</h1>
+  <span id="syncBadge" class="badge">—</span>
+  <button class="btn sec" id="themeBtn" title="切換主題">🌓</button>
+</header>
+<nav id="nav"></nav>
+<div id="live" class="sr" aria-live="polite"></div>
+<main id="app"></main>
+<div id="toast"></div>
+
+<dialog id="dlg"><div id="dlgBody"></div>
+<div class="row" style="justify-content:flex-end;margin-top:14px">
+<button class="btn sec" id="dlgNo">取消</button><button class="btn" id="dlgYes">確定</button></div></dialog>
+
+<script src="data.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<script>
+/* =========================================================
+   HKDSE 數學卷二 自我操練與成績追蹤
+   共識文件 CONSENSUS-FINAL v1.0 — D-001 ~ D-017
+   本檔不含任何真實試題內容，僅以「Q題號＋年份」索引提示錯題。
+   ========================================================= */
+'use strict';
+var CFG = window.APP_CONFIG || {};
+var PAPERS = CFG.papers || [];
+var SCHEMA = 3;                                   // D-013 版本 +1
+
+var K = { rec:'hkdse_records', queue:'hkdse_sync_queue', stu:'hkdse_student',
+          wrong:'hkdse_wrong_questions', papers:'hkdse_papers_custom',
+          set:'hkdse_settings', draft:'hkdse_draft', backup:'LS_BACKUP', meta:'hkdse_meta' };
+
+var FORM_OPTIONS  = ['Form 1','Form 2','Form 3','Form 4','Form 5','Form 6'];       // D-015
+var CLASS_OPTIONS = ['A','B','C','D','E','BCD1','BCD2','BCD3'];                    // D-015
+
+/* ---------- 儲存層 (D-004) ---------- */
+function LS(k,d){ try{var v=localStorage.getItem(k);return v?JSON.parse(v):d;}catch(e){return d;} }
+function SS(k,v){
+  try{ localStorage.setItem(K.backup+'_'+k, localStorage.getItem(k)||'null');
+       localStorage.setItem(k, JSON.stringify(v)); return {ok:true}; }
+  catch(e){ if(e && e.name==='QuotaExceededError'){ toast('儲存空間已滿，請匯出備份後清理舊紀錄','bad'); }
+            return {ok:false,error:String(e)}; }
+}
+function uuid(){
+  if(window.crypto && crypto.randomUUID && window.isSecureContext) return crypto.randomUUID();
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g,function(c){
+    var r=Math.random()*16|0, v=c==='x'?r:(r&0x3|0x8); return v.toString(16); });
+}
+function nowISO(){ return new Date().toISOString(); }
+
+/* ---------- 遷移 (D-013) ---------- */
+function migrateData(){
+  var meta = LS(K.meta,{schemaVersion:0});
+  if(meta.schemaVersion === SCHEMA) return;
+  var recs = LS(K.rec,[]);
+  recs.forEach(function(r){
+    if(!r.attemptId){ r.attemptId = uuid(); r.syncStatus = 'legacy'; }
+    if(!r.syncStatus) r.syncStatus = 'legacy';
+    if(!r.student) r.student = {form:'',cls:'',classNo:null,displayName:'',classLabel:''};
+  });
+  SS(K.rec,recs);
+  SS(K.meta,{schemaVersion:SCHEMA, migratedAt:nowISO()});
+}
+
+/* ---------- 計分 ---------- */
+function getPaper(year){
+  var custom = LS(K.papers,[]);
+  var c = custom.filter(function(p){return +p.year===+year;})[0];
+  return c || PAPERS.filter(function(p){return +p.year===+year;})[0];
+}
+function calculateMcqResult(answers, key){
+  var c=0,w=0,u=0, detail=[];
+  for(var i=0;i<key.length;i++){
+    var a = answers[i];
+    if(a===null||a===undefined||a===''||a==='NA'){u++;detail.push({q:i+1,ans:'NA',key:key[i],res:'na'});}
+    else if(a===key[i]){c++;detail.push({q:i+1,ans:a,key:key[i],res:'ok'});}
+    else{w++;detail.push({q:i+1,ans:a,key:key[i],res:'bad'});}
+  }
+  var attempted = c+w;
+  return {correct:c,wrong:w,unanswered:u,detail:detail,
+          accuracy: attempted? +(c/attempted*100).toFixed(1) : 0};
+}
+function calculateWeightedScore(mcqPct, written, mcqWeight){
+  if(!written || !written.length) return +mcqPct.toFixed(2);
+  var sum = written.reduce(function(s,x){return s+(+x.weight||0);},0) + (+mcqWeight||0);
+  var norm = (sum>1.5)?100:1;
+  var t = mcqPct*(mcqWeight/norm);
+  written.forEach(function(x){ t += (x.full? (x.score/x.full*100):0) * ((+x.weight||0)/norm); });
+  return +t.toFixed(2);
+}
+function estimateGrade(pct, cut){
+  if(!cut) return 'U';
+  var order=['5**','5*','5','4','3','2','1'];
+  for(var i=0;i<order.length;i++){ var v=cut[order[i]]; if(v!=null && pct>=v) return order[i]; }
+  return 'U';
+}
+function nextGradeGap(pct, cut, total){
+  var order=['1','2','3','4','5','5*','5**'];
+  for(var i=0;i<order.length;i++){
+    var v=cut[order[i]];
+    if(v!=null && pct < v) return {grade:order[i], gapPct:+(v-pct).toFixed(1), gapMarks:Math.ceil((v-pct)/100*total)};
+  }
+  return null;
+}
+function parseAnswers(txt,n){
+  var s=(txt||'').toUpperCase().replace(/[^ABCDN]/g,'').replace(/NA/g,'N').split('');
+  return s.slice(0,n).map(function(x){return x==='N'?null:x;});
+}
+function validatePaperConfig(p){
+  var e=[];
+  if(!p.year) e.push('缺少年份');
+  if(!p.mcq||!p.mcq.questionCount) e.push('缺少題數');
+  if(!p.mcq||!p.mcq.answers||p.mcq.answers.length!==p.mcq.questionCount) e.push('答案數量與題數不符');
+  var order=['5**','5*','5','4','3','2','1'], prev=Infinity;
+  order.forEach(function(g){ var v=p.cutoffs?p.cutoffs[g]:null;
+    if(v!=null){ if(v>prev) e.push('cutoffs 未遞減：'+g); prev=v; } });
+  return {valid:e.length===0, errors:e};
+}
+
+/* ---------- 學生身分 (D-015) ---------- */
+function normClassNo(v){
+  if(v===null||v===undefined) return {ok:false,msg:'Class Number 必填'};
+  var s=String(v).trim();
+  if(!/^\d+$/.test(s)) return {ok:false,msg:'Class Number 只接受 1–50 的整數（不接受小數）'};
+  var n=parseInt(s.replace(/^0+/,'')||'0',10);          // 07 -> 7
+  if(!(n>=1&&n<=50)) return {ok:false,msg:'Class Number 必須介乎 1 至 50'};
+  return {ok:true,value:n};
+}
+function validateStudent(s){
+  var e=[];
+  if(FORM_OPTIONS.indexOf(s.form)===-1) e.push('請選擇 Form');
+  if(CLASS_OPTIONS.indexOf(s.cls)===-1) e.push('請選擇 Class');
+  var n=normClassNo(s.classNo); if(!n.ok) e.push(n.msg);
+  return {valid:e.length===0, errors:e, classNo:n.ok?n.value:null};
+}
+function studentSnapshot(){
+  var s=LS(K.stu,null); if(!s) return null;
+  return {form:s.form, cls:s.cls, classNo:s.classNo,
+          displayName:s.displayName||'', classLabel:s.form+' '+s.cls};
+}
+
+/* ---------- 同步引擎 (D-005/D-008/D-012) ---------- */
+var SYNC = { timer:null, running:false, backoff:[5000,15000,45000,120000,300000], max:5 };
+function settings(){ return LS(K.set,{url:(CFG.sync&&CFG.sync.defaultWebAppUrl)||'',key:(CFG.sync&&CFG.sync.syncKey)||'',theme:'light'}); }
+function queue(){ return LS(K.queue,[]); }
+function pendingCount(){ return queue().filter(function(q){return q.status!=='synced';}).length; }
+
+function enqueue(attemptId){                       // 僅正式成績進入（D-008）
+  var q=queue();
+  if(q.filter(function(x){return x.attemptId===attemptId;}).length) return;
+  q.push({attemptId:attemptId,status:'pending',attempts:0,lastError:'',lastAt:null});
+  SS(K.queue,q);
+  renderSyncUI();
+}
+function recordById(id){ return LS(K.rec,[]).filter(function(r){return r.attemptId===id;})[0]; }
+function setRecStatus(id,st,extra){
+  var recs=LS(K.rec,[]);
+  recs.forEach(function(r){ if(r.attemptId===id){ r.syncStatus=st; if(extra) for(var k in extra) r[k]=extra[k]; }});
+  SS(K.rec,recs);
+}
+function postRecord(rec){                          // D-003 text/plain，不觸發 preflight
+  var st=settings();
+  if(!st.url) return Promise.resolve({ok:false,code:'NO_URL',message:'尚未設定 Web App URL'});
+  var ctl=new AbortController();
+  var to=setTimeout(function(){ctl.abort();},30000); // D-008 30 秒逾時
+  return fetch(st.url,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},
+    body:JSON.stringify({syncKey:st.key,record:rec}),signal:ctl.signal,redirect:'follow'})
+    .then(function(r){return r.text();})
+    .then(function(t){ try{return JSON.parse(t);}catch(e){return {ok:false,code:'BAD_RESPONSE',message:'回應無法解析'};} })
+    .catch(function(e){ return {ok:false,code:(e.name==='AbortError'?'TIMEOUT':'NETWORK_ERROR'),message:String(e)}; })
+    .finally(function(){clearTimeout(to);});
+}
+function syncOnce(){
+  if(SYNC.running) return Promise.resolve();
+  var q=queue().filter(function(x){return x.status!=='synced' && x.attempts<SYNC.max;});
+  if(!q.length){ renderSyncUI(); return Promise.resolve(); }
+  SYNC.running=true; renderSyncUI('同步中…');
+  var item=q[0], rec=recordById(item.attemptId);
+  if(!rec){ dropQueue(item.attemptId); SYNC.running=false; return Promise.resolve(); }
+  return postRecord(rec).then(function(res){
+    var all=queue(), it=all.filter(function(x){return x.attemptId===item.attemptId;})[0];
+    if(it){
+      it.attempts++; it.lastAt=nowISO();
+      if(res && res.ok===true){                    // 只有明確成功（含 duplicate）才算已同步
+        it.status='synced'; it.lastError='';
+        setRecStatus(item.attemptId,'synced',{syncedAt:nowISO(),sheetRow:res.row||null});
+      }else{
+        it.status = (it.attempts>=SYNC.max)?'failed':'pending';
+        it.lastError=(res&&(res.code+': '+(res.message||'')))||'未知錯誤';
+        setRecStatus(item.attemptId, it.status==='failed'?'failed':'pending',{lastSyncError:it.lastError});
+      }
+    }
+    SS(K.queue,all); SYNC.running=false; renderSyncUI();
+    var left=queue().filter(function(x){return x.status==='pending'&&x.attempts<SYNC.max;});
+    if(left.length){ var d=SYNC.backoff[Math.min(left[0].attempts,SYNC.backoff.length-1)];
+      clearTimeout(SYNC.timer); SYNC.timer=setTimeout(syncOnce,d); }
+  });
+}
+function dropQueue(id){ SS(K.queue, queue().filter(function(x){return x.attemptId!==id;})); }
+function resetRetries(){                            // App 啟動／online／手動 → 重置計數
+  var q=queue(); q.forEach(function(x){ if(x.status!=='synced'){x.status='pending';x.attempts=0;} });
+  SS(K.queue,q);
+}
+function renderSyncUI(txt){
+  var b=document.getElementById('syncBadge'), n=pendingCount();
+  var failed=queue().filter(function(x){return x.status==='failed';}).length;
+  if(txt){ b.textContent=txt; b.className='badge'; }
+  else if(!navigator.onLine){ b.textContent='離線'; b.className='badge warn'; }
+  else if(failed){ b.textContent='同步失敗 '+failed; b.className='badge bad'; }
+  else if(n){ b.textContent='待同步 '+n; b.className='badge warn'; }
+  else { b.textContent='已同步'; b.className='badge ok'; }
+  var el=document.getElementById('syncCard'); if(el) el.innerHTML=syncCardHTML();
+}
+window.addEventListener('online', function(){ resetRetries(); syncOnce(); say('已恢復網絡，正在自動同步'); });
+window.addEventListener('offline', function(){ renderSyncUI(); });
+
+/* ---------- UI 工具 ---------- */
+function say(m){ document.getElementById('live').textContent=m; }
+function toast(msg,kind,action){
+  var d=document.createElement('div'); d.className='tst';
+  d.innerHTML='<span style="flex:1">'+msg+'</span>';
+  if(action){ var b=document.createElement('button'); b.textContent=action.label;
+    b.onclick=function(){action.fn();d.remove();}; d.appendChild(b); }
+  var x=document.createElement('button'); x.textContent='✕'; x.onclick=function(){d.remove();}; d.appendChild(x);
+  document.getElementById('toast').appendChild(d); say(msg);
+  if(!action) setTimeout(function(){d.remove();},4000);
+}
+function confirmDlg(html){
+  return new Promise(function(res){
+    var dlg=document.getElementById('dlg');
+    document.getElementById('dlgBody').innerHTML=html; dlg.showModal();
+    document.getElementById('dlgYes').onclick=function(){dlg.close();res(true);};
+    document.getElementById('dlgNo').onclick=function(){dlg.close();res(false);};
+  });
+}
+function esc(s){ return String(s==null?'':s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];}); }
+
+/* ---------- 路由 ---------- */
+var PAGES=[['home','主頁'],['new','新增練習'],['records','練習紀錄'],['analysis','進度分析'],
+           ['wrong','錯題重溫'],['papers','試卷資料'],['backup','匯入匯出'],['help','使用說明']];
+var cur='home';
+function go(p){ cur=p;
+  document.querySelectorAll('#nav button').forEach(function(b){
+    b.setAttribute('aria-current', b.dataset.p===p?'page':'false'); });
+  var m=document.getElementById('app'); m.innerHTML='';
+  ({home:pgHome,new:pgNew,records:pgRecords,analysis:pgAnalysis,wrong:pgWrong,
+    papers:pgPapers,backup:pgBackup,help:pgHelp})[p](m);
+  window.scrollTo(0,0); renderSyncUI();
+}
+window.go=go;
+
+/* ---------- 主頁 ---------- */
+function syncCardHTML(){
+  var st=settings(), q=queue(), n=pendingCount();
+  var last=LS(K.rec,[]).filter(function(r){return r.syncedAt;}).sort(function(a,b){return b.syncedAt<a.syncedAt?-1:1;})[0];
+  var fails=q.filter(function(x){return x.status==='failed';});
+  return '<h2>雲端同步</h2>'+
+   '<p class="muted">端點：'+(st.url?'已設定':'<b>未設定</b>（成績仍會儲存在本機）')+'</p>'+
+   '<p>待同步：<b>'+n+'</b> 筆　最後成功：'+(last&&last.syncedAt? new Date(last.syncedAt).toLocaleString('zh-HK'):'—')+'</p>'+
+   (fails.length? '<p class="muted">最近錯誤：'+esc(fails[0].lastError)+'</p>':'')+
+   '<div class="row"><button class="btn" onclick="resetRetries();syncOnce()">立即同步</button>'+
+   '<button class="btn sec" onclick="go(\'backup\')">同步設定</button></div>';
+}
+function pgHome(m){
+  var recs=LS(K.rec,[]), s=LS(K.stu,null);
+  var last=recs[recs.length-1];
+  var avg=recs.length? (recs.reduce(function(a,r){return a+r.percentage;},0)/recs.length).toFixed(1):'—';
+  m.innerHTML=
+   '<div class="card"><h2>學生資料</h2>'+(s?
+     '<p><b>'+esc(s.form+' '+s.cls)+'</b>　學號 '+s.classNo+(s.displayName?'　'+esc(s.displayName):'')+'</p>':
+     '<p class="muted">尚未設定，首次儲存成績時需填寫。</p>')+
+     '<button class="btn sec" onclick="editStudent()">'+(s?'修改':'設定')+'學生資料</button>'+
+     '<p class="muted" style="margin-top:6px">修改只影響之後建立的新成績，不會改寫舊紀錄。</p></div>'+
+   '<div class="card" id="syncCard">'+syncCardHTML()+'</div>'+
+   '<div class="card"><h2>概況</h2><div class="grid">'+
+     '<div><div class="muted">總練習次數</div><div style="font-size:22px"><b>'+recs.length+'</b></div></div>'+
+     '<div><div class="muted">平均百分比</div><div style="font-size:22px"><b>'+avg+'</b></div></div>'+
+     '<div><div class="muted">最近一次</div><div style="font-size:22px"><b>'+(last?last.percentage+'% ('+last.estimatedGrade+')':'—')+'</b></div></div>'+
+     '<div><div class="muted">未掌握錯題</div><div style="font-size:22px"><b>'+LS(K.wrong,[]).filter(function(w){return !w.mastered;}).length+'</b></div></div>'+
+   '</div><div class="row" style="margin-top:12px"><button class="btn" onclick="go(\'new\')">開始新練習</button>'+
+   '<button class="btn sec" onclick="go(\'wrong\')">錯題重溫</button></div></div>'+
+   '<div class="card"><h2>重要聲明</h2><p class="muted">本工具<b>不含任何真實試題內容</b>，只以「Q題號＋年份」索引提示錯題。'+
+   '請自行翻查合法途徑取得的試卷。等級臨界分數為粗略估算，並非考評局官方界線。</p></div>';
+}
+function editStudent(){
+  var s=LS(K.stu,{form:'',cls:'',classNo:'',displayName:''});
+  var f=FORM_OPTIONS.map(function(x){return '<option'+(s.form===x?' selected':'')+'>'+x+'</option>';}).join('');
+  var c=CLASS_OPTIONS.map(function(x){return '<option'+(s.cls===x?' selected':'')+'>'+x+'</option>';}).join('');
+  confirmDlg('<h2 style="margin:0 0 8px;font-size:16px">學生資料</h2>'+
+    '<label>Form（必填）</label><select id="sF"><option value="">— 請選擇 —</option>'+f+'</select>'+
+    '<label>Class（必填）</label><select id="sC"><option value="">— 請選擇 —</option>'+c+'</select>'+
+    '<label>Class Number（必填，1–50）</label><input id="sN" inputmode="numeric" value="'+esc(s.classNo||'')+'">'+
+    '<label>Display Name（選填）</label><input id="sD" value="'+esc(s.displayName||'')+'">'
+  ).then(function(y){
+    if(!y) return;
+    var v={form:document.getElementById('sF').value,cls:document.getElementById('sC').value,
+           classNo:document.getElementById('sN').value,displayName:document.getElementById('sD').value.trim()};
+    var r=validateStudent(v);
+    if(!r.valid){ toast(r.errors.join('；'),'bad'); return editStudent(); }
+    v.classNo=r.classNo;                       // 標準化：07 -> 7
+    SS(K.stu,v); toast('已儲存學生資料'); go(cur);
+  });
+}
+window.editStudent=editStudent;
+
+/* ---------- 新增練習 ---------- */
+var draft={year:null,ans:[],written:[]};
+function pgNew(m){
+  var years=PAPERS.map(function(p){return p.year;}).concat(LS(K.papers,[]).map(function(p){return p.year;}));
+  years=years.filter(function(v,i,a){return a.indexOf(v)===i;}).sort(function(a,b){return b-a;});
+  var d=LS(K.draft,null); if(d&&d.year) draft=d;
+  m.innerHTML='<div class="card"><h2>選擇年份</h2><select id="yr"><option value="">— 請選擇 —</option>'+
+    years.map(function(y){return '<option value="'+y+'"'+(draft.year==y?' selected':'')+'>'+y+' 卷二</option>';}).join('')+
+    '</select><p class="muted">草稿會自動儲存，可隨時離開再回來。</p></div><div id="sheet"></div>';
+  document.getElementById('yr').onchange=function(){ draft={year:+this.value,ans:[],written:[]}; SS(K.draft,draft); renderSheet(); };
+  if(draft.year) renderSheet();
+}
+function renderSheet(){
+  var p=getPaper(draft.year); if(!p) return;
+  var n=p.mcq.questionCount, host=document.getElementById('sheet');
+  if(draft.ans.length!==n) draft.ans=new Array(n).fill(null);
+  var h='<div class="card"><h2>'+p.year+' 卷二　共 '+n+' 題</h2>'+
+        '<div class="row noprint" style="margin-bottom:8px"><button class="btn sec" onclick="fillNA()">其餘全部標為未答</button>'+
+        '<button class="btn sec" onclick="clearDraft()">清空</button></div>';
+  for(var i=0;i<n;i++){
+    h+='<div class="q"><b>Q'+(i+1)+'</b>';
+    ['A','B','C','D'].forEach(function(o){
+      h+='<button class="opt" data-i="'+i+'" data-v="'+o+'" aria-pressed="'+(draft.ans[i]===o)+'" aria-label="第'+(i+1)+'題選'+o+'">'+o+'</button>';
+    });
+    h+='<button class="opt na" data-i="'+i+'" data-v="NA" aria-pressed="'+(draft.ans[i]==='NA')+'">未答</button></div>';
+  }
+  h+='</div>';
+  if(p.writtenSections && p.writtenSections.length){
+    h+='<div class="card"><h2>書寫部分</h2>';
+    p.writtenSections.forEach(function(s,i){
+      h+='<label>'+esc(s.name||('第'+(i+1)+'部分'))+'（滿分 '+s.fullMarks+'）</label>'+
+         '<input class="wsec" data-i="'+i+'" type="number" min="0" max="'+s.fullMarks+'" step="0.5" value="'+((draft.written[i]&&draft.written[i].score)||'')+'">';
+    });
+    h+='</div>';
+  }
+  h+='<div class="card noprint"><div class="row"><button class="btn sec" onclick="preview()">只計算結果（不儲存、不上傳）</button>'+
+     '<button class="btn" onclick="submitAttempt()">儲存成績</button></div>'+
+     '<p class="muted">「只計算結果」不會建立紀錄，也不會進入同步流程。</p></div><div id="prev"></div>';
+  host.innerHTML=h;
+  host.querySelectorAll('.opt').forEach(function(b){
+    b.onclick=function(){
+      var i=+this.dataset.i, v=this.dataset.v;
+      draft.ans[i]=(draft.ans[i]===v)?null:v; SS(K.draft,draft);
+      host.querySelectorAll('.opt[data-i="'+i+'"]').forEach(function(x){
+        x.setAttribute('aria-pressed', String(draft.ans[i]===x.dataset.v)); });
+    };
+  });
+}
+function fillNA(){ for(var i=0;i<draft.ans.length;i++) if(!draft.ans[i]) draft.ans[i]='NA'; SS(K.draft,draft); renderSheet(); }
+function clearDraft(){ draft.ans=draft.ans.map(function(){return null;}); SS(K.draft,draft); renderSheet(); }
+window.fillNA=fillNA; window.clearDraft=clearDraft;
+
+function computeCurrent(){
+  var p=getPaper(draft.year);
+  var key=p.mcq.answers;
+  var mcq=calculateMcqResult(draft.ans,key);
+  var total=p.mcq.questionCount*p.mcq.marksPerQuestion;
+  var raw=mcq.correct*p.mcq.marksPerQuestion;
+  var mcqPct=total? raw/total*100:0;
+  var written=[];
+  document.querySelectorAll('.wsec').forEach(function(el,i){
+    var s=p.writtenSections[i];
+    written.push({id:s.id||('s'+(i+1)),name:s.name,score:+el.value||0,full:s.fullMarks,weight:s.weight});
+  });
+  var pct=calculateWeightedScore(mcqPct,written,p.mcqWeight);
+  return {paper:p,mcq:mcq,total:total,raw:raw,pct:pct,written:written,
+          grade:estimateGrade(pct,p.cutoffs), gap:nextGradeGap(pct,p.cutoffs,total)};
+}
+function resultHTML(r){
+  return '<div class="card"><h2>結果（'+r.paper.year+' 卷二）</h2><div class="grid">'+
+   '<div><div class="muted">答對</div><b style="font-size:20px">'+r.mcq.correct+'</b></div>'+
+   '<div><div class="muted">答錯</div><b style="font-size:20px">'+r.mcq.wrong+'</b></div>'+
+   '<div><div class="muted">未答</div><b style="font-size:20px">'+r.mcq.unanswered+'</b></div>'+
+   '<div><div class="muted">準確率</div><b style="font-size:20px">'+r.mcq.accuracy+'%</b></div>'+
+   '<div><div class="muted">百分比</div><b style="font-size:20px">'+r.pct+'%</b></div>'+
+   '<div><div class="muted">估計等級</div><span class="badge ok" style="font-size:18px">'+r.grade+'</span></div></div>'+
+   (r.gap? '<p class="muted">距離 '+r.gap.grade+' 級尚差約 '+r.gap.gapPct+'%（約 '+r.gap.gapMarks+' 分）</p>':'<p class="muted">已達最高等級估算</p>')+
+   '<p class="muted">臨界版本：'+esc(r.paper.cutoffVersion)+'（粗略估算，非官方界線）</p></div>';
+}
+function preview(){ var r=computeCurrent(); document.getElementById('prev').innerHTML=resultHTML(r); say('已計算結果，未儲存'); }
+window.preview=preview;
+
+function submitAttempt(){
+  var s=LS(K.stu,null);
+  if(!s){ toast('請先設定學生資料'); return editStudent(); }
+  var vs=validateStudent(s); if(!vs.valid){ toast(vs.errors.join('；'),'bad'); return editStudent(); }
+  var r=computeCurrent();
+  confirmDlg('<h2 style="margin:0 0 8px;font-size:16px">確認儲存</h2><p>'+r.paper.year+' 卷二<br>'+
+    '答對 '+r.mcq.correct+'／答錯 '+r.mcq.wrong+'／未答 '+r.mcq.unanswered+'<br>百分比 '+r.pct+'%　等級 '+r.grade+'</p>'+
+    '<p class="muted">儲存後會先寫入本機，再自動上傳雲端。</p>').then(function(y){
+    if(!y) return;
+    var rec={
+      attemptId:uuid(), appVersion:CFG.appVersion||'', schemaVersion:SCHEMA,
+      student:studentSnapshot(),                       // 提交當刻快照（D-005）
+      subject:(CFG.subject&&CFG.subject.id)||'math-cp',
+      year:r.paper.year, paperId:r.paper.paperId, paperName:r.paper.paperName,
+      cutoffVersion:r.paper.cutoffVersion, mode:(r.mcq.unanswered? 'partial':'full'),
+      mcq:{correct:r.mcq.correct,wrong:r.mcq.wrong,unanswered:r.mcq.unanswered,
+           accuracy:r.mcq.accuracy,answers:draft.ans.slice(),detail:r.mcq.detail},
+      written:r.written, rawScore:r.raw, totalMarks:r.total,
+      percentage:r.pct, estimatedGrade:r.grade,
+      submittedAt:nowISO(), syncStatus:'pending'
+    };
+    var recs=LS(K.rec,[]); recs.push(rec);
+    var w=SS(K.rec,recs);
+    if(!w.ok){ toast('本機儲存失敗，未上傳：'+w.error,'bad'); return; }   // 本機優先（D-004）
+    updateWrong(rec);
+    localStorage.removeItem(K.draft); draft={year:rec.year,ans:[],written:[]};
+    enqueue(rec.attemptId);                                              // 本機成功後才排入同步
+    toast('已儲存至本機，開始上傳…');
+    syncOnce();
+    go('records');
+  });
+}
+window.submitAttempt=submitAttempt;
+
+function updateWrong(rec){
+  var wq=LS(K.wrong,[]);
+  rec.mcq.detail.forEach(function(d){
+    var id=rec.year+'-Q'+d.q;
+    var e=wq.filter(function(x){return x.id===id;})[0];
+    if(d.res==='ok'){ if(e){ e.lastCorrect=true; e.lastAns=d.ans; } return; }
+    if(!e){ e={id:id,year:rec.year,q:d.q,count:0,mastered:false,reviewed:false}; wq.push(e); }
+    e.count++; e.lastAns=d.ans; e.key=d.key; e.lastCorrect=false; e.lastAt=rec.submittedAt;
+  });
+  SS(K.wrong,wq);
+}
+
+/* ---------- 練習紀錄 ---------- */
+function pgRecords(m){
+  var recs=LS(K.rec,[]).slice().reverse();
+  if(!recs.length){ m.innerHTML='<div class="card"><p class="muted">尚無紀錄。</p></div>'; return; }
+  var q=queue();
+  var rows=recs.map(function(r,i){
+    var prev=recs[i+1];
+    var diff=prev? (r.percentage-prev.percentage):null;
+    var st=r.syncStatus==='synced'?'<span class="badge ok">已同步</span>':
+           r.syncStatus==='failed'?'<span class="badge bad">同步失敗</span>':
+           r.syncStatus==='legacy'?'<span class="badge">歷史</span>':'<span class="badge warn">待同步</span>';
+    return '<tr><td>'+new Date(r.submittedAt).toLocaleDateString('zh-HK')+'</td><td>'+r.year+'</td>'+
+      '<td>'+r.percentage+'%</td><td><span class="badge">'+r.estimatedGrade+'</span></td>'+
+      '<td>'+(diff===null?'—':(diff>0?'▲ +':'▼ ')+diff.toFixed(1))+'</td><td>'+st+'</td>'+
+      '<td class="noprint"><button class="btn sec" onclick="detail(\''+r.attemptId+'\')">明細</button> '+
+      '<button class="btn sec" onclick="redo('+r.year+')">再做</button> '+
+      '<button class="btn sec" onclick="del(\''+r.attemptId+'\')">刪除</button></td></tr>';
+  }).join('');
+  m.innerHTML='<div class="card"><h2>練習紀錄（'+recs.length+'）</h2>'+
+    '<div class="row noprint" style="margin-bottom:8px"><button class="btn sec" onclick="window.print()">列印</button></div>'+
+    '<div style="overflow:auto"><table><tr><th>日期</th><th>年份</th><th>百分比</th><th>等級</th><th>與上次</th><th>同步</th><th class="noprint"></th></tr>'+
+    rows+'</table></div></div><div id="det"></div>';
+}
+function detail(id){
+  var r=recordById(id); if(!r) return;
+  var cells=r.mcq.detail.map(function(d){
+    var c=d.res==='ok'?'ok':(d.res==='na'?'':'bad');
+    return '<span class="badge '+c+'" style="margin:2px">Q'+d.q+' '+d.ans+(d.res==='ok'?'':'→'+d.key)+'</span>';
+  }).join('');
+  document.getElementById('det').innerHTML='<div class="card"><h2>'+r.year+' 逐題明細</h2>'+
+    '<p class="muted">Attempt ID：'+esc(r.attemptId)+'</p>'+cells+'</div>';
+}
+function redo(y){ draft={year:y,ans:[],written:[]}; SS(K.draft,draft); go('new'); }
+function del(id){
+  confirmDlg('<p>確定刪除此紀錄？</p>').then(function(y){
+    if(!y) return;
+    SS(K.rec, LS(K.rec,[]).filter(function(r){return r.attemptId!==id;}));
+    dropQueue(id); toast('已刪除'); go('records');
+  });
+}
+window.detail=detail; window.redo=redo; window.del=del;
+
+/* ---------- 進度分析 ---------- */
+var chart=null, chartMode='trend', chartLimit=0;
+function pgAnalysis(m){
+  m.innerHTML='<div class="card"><div class="row noprint">'+
+   '<select id="cm" style="max-width:200px">'+
+    [['trend','分數趨勢'],['acc','MC 準確率'],['byyear','各年份表現'],['grade','等級分布'],['wrong','各年未掌握錯題']]
+    .map(function(x){return '<option value="'+x[0]+'"'+(chartMode===x[0]?' selected':'')+'>'+x[1]+'</option>';}).join('')+'</select>'+
+   '<select id="cl" style="max-width:140px"><option value="0">全部</option><option value="5">最近 5 次</option><option value="10">最近 10 次</option></select>'+
+   '<button class="btn sec" onclick="exportPNG()">匯出 PNG</button><button class="btn sec" onclick="exportCSV()">匯出 CSV</button>'+
+   '</div><canvas id="cv" height="240"></canvas></div>';
+  document.getElementById('cm').onchange=function(){chartMode=this.value;drawChart();};
+  document.getElementById('cl').onchange=function(){chartLimit=+this.value;drawChart();};
+  drawChart();
+}
+function subset(){ var r=LS(K.rec,[]); return chartLimit? r.slice(-chartLimit):r; }
+function drawChart(){
+  if(typeof Chart==='undefined'){ document.getElementById('cv').outerHTML='<p class="muted">離線且未快取圖表程式庫。</p>'; return; }
+  var recs=subset(), cfg;
+  if(chartMode==='trend') cfg={type:'line',data:{labels:recs.map(function(r){return r.year;}),
+      datasets:[{label:'百分比',data:recs.map(function(r){return r.percentage;}),borderColor:'#2563eb',tension:.3}]}};
+  else if(chartMode==='acc') cfg={type:'line',data:{labels:recs.map(function(r){return r.year;}),
+      datasets:[{label:'MC 準確率',data:recs.map(function(r){return r.mcq.accuracy;}),borderColor:'#16a34a',tension:.3}]}};
+  else if(chartMode==='byyear'){
+    var ys={}; recs.forEach(function(r){ (ys[r.year]=ys[r.year]||[]).push(r.percentage); });
+    var ks=Object.keys(ys).sort();
+    cfg={type:'bar',data:{labels:ks,datasets:[
+      {label:'最佳',data:ks.map(function(k){return Math.max.apply(null,ys[k]);}),backgroundColor:'#2563eb'},
+      {label:'最新',data:ks.map(function(k){return ys[k][ys[k].length-1];}),backgroundColor:'#60a5fa'},
+      {label:'平均',data:ks.map(function(k){return +(ys[k].reduce(function(a,b){return a+b;},0)/ys[k].length).toFixed(1);}),backgroundColor:'#93c5fd'}]}};
+  }
+  else if(chartMode==='grade'){
+    var g={}; recs.forEach(function(r){ g[r.estimatedGrade]=(g[r.estimatedGrade]||0)+1; });
+    var gk=['5**','5*','5','4','3','2','1','U'].filter(function(k){return g[k];});
+    cfg={type:'doughnut',data:{labels:gk,datasets:[{data:gk.map(function(k){return g[k];}),
+      backgroundColor:['#1d4ed8','#2563eb','#3b82f6','#60a5fa','#93c5fd','#bfdbfe','#dbeafe','#e5e7eb']}]}};
+  } else {
+    var wq=LS(K.wrong,[]).filter(function(w){return !w.mastered;}), yy={};
+    wq.forEach(function(w){ yy[w.year]=(yy[w.year]||0)+1; });
+    var yk=Object.keys(yy).sort();
+    cfg={type:'bar',data:{labels:yk,datasets:[{label:'未掌握錯題',data:yk.map(function(k){return yy[k];}),backgroundColor:'#dc2626'}]}};
+  }
+  cfg.options={responsive:true,plugins:{legend:{display:true}}};
+  if(chart) chart.destroy();
+  chart=new Chart(document.getElementById('cv'),cfg);
+}
+function exportPNG(){ var a=document.createElement('a'); a.href=document.getElementById('cv').toDataURL('image/png');
+  a.download='dse-'+chartMode+'.png'; a.click(); }
+function exportCSV(){
+  var recs=LS(K.rec,[]);
+  var csv='date,year,percentage,grade,correct,wrong,unanswered,accuracy,syncStatus\n'+
+    recs.map(function(r){return [r.submittedAt,r.year,r.percentage,r.estimatedGrade,r.mcq.correct,r.mcq.wrong,r.mcq.unanswered,r.mcq.accuracy,r.syncStatus].join(',');}).join('\n');
+  dl('records.csv',csv);
+}
+window.exportPNG=exportPNG; window.exportCSV=exportCSV;
+function dl(name,txt,type){
+  var b=new Blob(['\ufeff'+txt],{type:type||'text/csv;charset=utf-8'});
+  var a=document.createElement('a'); a.href=URL.createObjectURL(b); a.download=name; a.click();
+}
+
+/* ---------- 錯題重溫 ---------- */
+function pgWrong(m){
+  var wq=LS(K.wrong,[]);
+  m.innerHTML='<div class="card"><h2>錯題重溫（'+wq.filter(function(w){return !w.mastered;}).length+' 題未掌握）</h2>'+
+   '<div class="row noprint"><input id="ws" placeholder="搜尋年份或題號，例如 2019 或 Q12" style="max-width:260px">'+
+   '<button class="btn sec" onclick="wAll(true)">全部標為已掌握</button>'+
+   '<button class="btn sec" onclick="wAll(false)">全部取消掌握</button>'+
+   '<button class="btn sec" onclick="wCSV()">匯出 CSV</button></div>'+
+   '<p class="muted">本工具不含試題內容，請按「年份＋題號」自行翻查試卷。</p>'+
+   '<div id="wl"></div></div>';
+  document.getElementById('ws').oninput=function(){ wList(this.value); };
+  wList('');
+}
+function wList(f){
+  var wq=LS(K.wrong,[]).filter(function(w){
+    if(!f) return true; var s=(w.year+' Q'+w.q).toLowerCase(); return s.indexOf(f.toLowerCase())>=0; })
+    .sort(function(a,b){ return (a.mastered-b.mastered)||(b.count-a.count); });
+  document.getElementById('wl').innerHTML='<div style="overflow:auto"><table>'+
+   '<tr><th>索引</th><th>答錯次數</th><th>最後作答</th><th>正確答案</th><th>最近</th><th>狀態</th><th class="noprint"></th></tr>'+
+   wq.map(function(w){
+     return '<tr><td><b>'+w.year+' Q'+w.q+'</b></td><td>'+w.count+'</td><td>'+esc(w.lastAns||'—')+'</td><td>'+esc(w.key||'—')+'</td>'+
+     '<td>'+(w.lastCorrect?'<span class="badge ok">已答對</span>':'<span class="badge bad">仍錯</span>')+'</td>'+
+     '<td>'+(w.mastered?'<span class="badge ok">已掌握</span>':(w.reviewed?'<span class="badge warn">已重溫</span>':'<span class="badge">待處理</span>'))+'</td>'+
+     '<td class="noprint"><button class="btn sec" onclick="wMark(\''+w.id+'\',\'reviewed\')">已重溫</button> '+
+     '<button class="btn sec" onclick="wMark(\''+w.id+'\',\'mastered\')">已掌握</button></td></tr>';
+   }).join('')+'</table></div>';
+}
+function wMark(id,field){
+  var wq=LS(K.wrong,[]); wq.forEach(function(w){ if(w.id===id) w[field]=!w[field]; });
+  SS(K.wrong,wq); wList(document.getElementById('ws').value);
+}
+function wAll(v){ var wq=LS(K.wrong,[]); wq.forEach(function(w){w.mastered=v;}); SS(K.wrong,wq); go('wrong'); }
+function wCSV(){ var wq=LS(K.wrong,[]);
+  dl('wrong-questions.csv','index,year,question,wrongCount,lastAnswer,correctAnswer,mastered\n'+
+    wq.map(function(w){return [w.id,w.year,'Q'+w.q,w.count,w.lastAns||'',w.key||'',w.mastered].join(',');}).join('\n')); }
+window.wMark=wMark; window.wAll=wAll; window.wCSV=wCSV;
+
+/* ---------- 試卷資料管理 ---------- */
+function pgPapers(m){
+  var custom=LS(K.papers,[]);
+  m.innerHTML='<div class="card"><h2>內建試卷（'+PAPERS.length+'）</h2><div style="overflow:auto"><table>'+
+   '<tr><th>年份</th><th>題數</th><th>臨界版本</th></tr>'+
+   PAPERS.map(function(p){return '<tr><td>'+p.year+'</td><td>'+p.mcq.questionCount+'</td><td class="muted">'+esc(p.cutoffVersion)+'</td></tr>';}).join('')+
+   '</table></div></div>'+
+   '<div class="card"><h2>新增／覆寫試卷</h2>'+
+   '<label>年份</label><input id="pY" type="number" value="2027">'+
+   '<label>題數</label><input id="pN" type="number" value="45">'+
+   '<label>答案字串（例如 ABCDA…；未定義用 N）</label><textarea id="pA" rows="3"></textarea>'+
+   '<div class="grid">'+['5**','5*','5','4','3','2','1'].map(function(g){
+      return '<div><label>'+g+' 臨界 %</label><input class="cut" data-g="'+g+'" type="number"></div>';}).join('')+'</div>'+
+   '<div class="row" style="margin-top:10px"><button class="btn" onclick="savePaper()">驗證並儲存</button></div>'+
+   '<div id="pMsg"></div></div>'+
+   (custom.length? '<div class="card"><h2>自訂試卷（'+custom.length+'）</h2>'+
+     custom.map(function(p){return '<div class="row"><span>'+p.year+'（'+p.mcq.questionCount+' 題）</span>'+
+       '<button class="btn sec" onclick="delPaper('+p.year+')">刪除</button></div>';}).join('')+'</div>':'');
+}
+function savePaper(){
+  var y=+document.getElementById('pY').value, n=+document.getElementById('pN').value;
+  var ans=parseAnswers(document.getElementById('pA').value,n);
+  var cut={}; document.querySelectorAll('.cut').forEach(function(el){ cut[el.dataset.g]= el.value===''?null:+el.value; });
+  var p={year:y,paperId:'paper2',paperName:'卷二（多項選擇題）',
+    mcq:{questionCount:n,options:['A','B','C','D'],marksPerQuestion:1,allowMultiple:false,answers:ans},
+    writtenSections:[],mcqWeight:1,cutoffs:cut,cutoffVersion:y+'-user-v1',note:'使用者輸入'};
+  var v=validatePaperConfig(p);
+  if(!v.valid){ document.getElementById('pMsg').innerHTML='<p class="badge bad">'+v.errors.join('；')+'</p>'; return; }
+  var c=LS(K.papers,[]).filter(function(x){return x.year!==y;}); c.push(p); SS(K.papers,c);
+  toast('已儲存 '+y+' 試卷'); go('papers');
+}
+function delPaper(y){ SS(K.papers, LS(K.papers,[]).filter(function(p){return p.year!==y;})); go('papers'); }
+window.savePaper=savePaper; window.delPaper=delPaper;
+
+/* ---------- 匯入匯出 / 設定 ---------- */
+function pgBackup(m){
+  var st=settings();
+  m.innerHTML='<div class="card"><h2>雲端同步設定</h2>'+
+   '<label>Google Apps Script Web App URL</label><input id="uUrl" value="'+esc(st.url)+'" placeholder="https://script.google.com/macros/s/…/exec">'+
+   '<label>同步密鑰（syncKey）</label><input id="uKey" value="'+esc(st.key)+'">'+
+   '<p class="muted">密鑰只能阻擋隨機掃描與誤觸，並非真正機密；請勿在 Sheet 存放敏感個人資料。</p>'+
+   '<div class="row"><button class="btn" onclick="saveSync()">儲存設定</button>'+
+   '<button class="btn sec" onclick="testConn()">測試連線</button>'+
+   '<button class="btn sec" onclick="resendLegacy()">補傳歷史紀錄</button></div><div id="tMsg"></div></div>'+
+   '<div class="card"><h2>備份</h2><div class="row">'+
+   '<button class="btn sec" onclick="expJSON()">匯出 JSON</button>'+
+   '<button class="btn sec" onclick="document.getElementById(\'imp\').click()">匯入</button>'+
+   '<input type="file" id="imp" accept="application/json" style="display:none">'+
+   '<button class="btn danger" onclick="wipe()">全部清除</button></div>'+
+   '<p class="muted">匯入時可選擇「合併」或「取代」。清除需輸入確認字串。</p></div>'+
+   '<div class="card"><h2>開發者</h2><button class="btn sec" onclick="runSelfTests()">執行自我測試（結果見 Console）</button></div>';
+  document.getElementById('imp').onchange=impJSON;
+}
+function saveSync(){
+  var st=settings(); st.url=document.getElementById('uUrl').value.trim(); st.key=document.getElementById('uKey').value.trim();
+  SS(K.set,st); toast('已儲存同步設定'); resetRetries(); syncOnce();
+}
+function testConn(){
+  var st=settings(); if(!st.url) return toast('請先填入 URL','bad');
+  document.getElementById('tMsg').innerHTML='<p class="muted">測試中…</p>';
+  fetch(st.url,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},
+    body:JSON.stringify({action:'ping',syncKey:st.key})}).then(function(r){return r.text();})
+    .then(function(t){ var j; try{j=JSON.parse(t);}catch(e){j=null;}
+      document.getElementById('tMsg').innerHTML= (j&&j.ok)?
+        '<p class="badge ok">連線成功　密鑰：'+(j.authOk?'正確':'不符')+'</p>':'<p class="badge bad">回應異常</p>'; })
+    .catch(function(e){ document.getElementById('tMsg').innerHTML='<p class="badge bad">連線失敗：'+esc(e)+'</p>'; });
+}
+function resendLegacy(){
+  var recs=LS(K.rec,[]).filter(function(r){return r.syncStatus==='legacy';});
+  if(!recs.length) return toast('沒有歷史紀錄需要補傳');
+  confirmDlg('<p>將補傳 '+recs.length+' 筆歷史紀錄至 Google Sheet，確定？</p>').then(function(y){
+    if(!y) return; recs.forEach(function(r){ setRecStatus(r.attemptId,'pending'); enqueue(r.attemptId); });
+    syncOnce();
+  });
+}
+function expJSON(){
+  dl('hkdse-backup-'+Date.now()+'.json', JSON.stringify({
+    schemaVersion:SCHEMA, exportedAt:nowISO(),
+    records:LS(K.rec,[]), wrong:LS(K.wrong,[]), student:LS(K.stu,null),
+    papers:LS(K.papers,[]), queue:queue()},null,2),'application/json');
+}
+function impJSON(e){
+  var f=e.target.files[0]; if(!f) return;
+  var rd=new FileReader();
+  rd.onload=function(){
+    var d; try{d=JSON.parse(rd.result);}catch(err){return toast('檔案格式錯誤','bad');}
+    confirmDlg('<p>選擇匯入方式：</p><p class="muted">「確定」＝合併，「取消」＝取代（會覆蓋現有資料）</p>').then(function(merge){
+      var recs = merge? LS(K.rec,[]).concat(d.records||[]) : (d.records||[]);
+      var seen={}; recs=recs.filter(function(r){ if(seen[r.attemptId])return false; seen[r.attemptId]=1; return true; });
+      SS(K.rec,recs); SS(K.wrong, merge? LS(K.wrong,[]).concat(d.wrong||[]) : (d.wrong||[]));
+      if(d.papers) SS(K.papers,d.papers);
+      toast('匯入完成（'+recs.length+' 筆）'); go('records');
+    });
+  };
+  rd.readAsText(f);
+}
+function wipe(){
+  confirmDlg('<p>此操作會清除所有本機資料，無法復原。</p><label>請輸入 <b>DELETE ALL</b> 以確認</label><input id="wc">')
+  .then(function(y){
+    if(!y) return;
+    if(document.getElementById('wc') && document.getElementById('wc').value!=='DELETE ALL'){ return toast('確認字串不符，已取消','bad'); }
+    [K.rec,K.queue,K.stu,K.wrong,K.papers,K.draft].forEach(function(k){localStorage.removeItem(k);});
+    toast('已清除全部資料'); go('home');
+  });
+}
+window.saveSync=saveSync; window.testConn=testConn; window.resendLegacy=resendLegacy;
+window.expJSON=expJSON; window.wipe=wipe;
+
+/* ---------- 使用說明 ---------- */
+function pgHelp(m){
+  m.innerHTML='<div class="card"><h2>使用說明</h2>'+
+  '<ol><li>先在主頁設定學生資料（Form、Class、Class Number 必填）。</li>'+
+  '<li>「新增練習」選年份，逐題按 A–D，未作答按「未答」。</li>'+
+  '<li>「只計算結果」不會儲存也不會上傳；按「儲存成績」才會建立正式紀錄。</li>'+
+  '<li>成績先寫入本機，成功後自動上傳。離線時會保留為待同步，恢復網絡自動重試。</li>'+
+  '<li>「錯題重溫」按年份＋題號索引，請自行翻查試卷。</li></ol>'+
+  '<h2>同步規則</h2><ul>'+
+  '<li>每筆成績有唯一 Attempt ID，重試沿用同一 ID，Google Sheet 不會重複寫入。</li>'+
+  '<li>只有後端明確回覆成功才標記「已同步」；逾時或回應不明一律維持「待同步」。</li>'+
+  '<li>自動重試 5 次（5 秒／15 秒／45 秒／2 分／5 分），之後可按「立即同步」再試。</li>'+
+  '<li>修改學生資料只影響之後的新成績，不會改寫既有紀錄與待同步項目。</li></ul>'+
+  '<h2>免責聲明</h2><p class="muted">本工具不含任何真實試題內容。等級臨界分數為粗略估算，2026 年答案取自第三方題解，並非考評局官方資料。</p></div>';
+}
+
+/* ---------- 自我測試 (D-014) ---------- */
+function runSelfTests(){
+  var P=0,F=0; function t(n,c){ try{ if(c()){P++;console.log('✅ '+n);} else {F++;console.error('❌ '+n);} }catch(e){F++;console.error('❌ '+n,e);} }
+  t('計分：全對', function(){ var r=calculateMcqResult(['A','B'],['A','B']); return r.correct===2&&r.accuracy===100; });
+  t('計分：未答不計入準確率', function(){ var r=calculateMcqResult(['A',null],['A','B']); return r.unanswered===1&&r.accuracy===100; });
+  t('加權：無長題等於 MC', function(){ return calculateWeightedScore(80,[],1)===80; });
+  t('加權：權重總和 100 可用', function(){ return calculateWeightedScore(100,[{score:0,full:100,weight:50}],50)===50; });
+  t('等級：對照 cutoffs', function(){ return estimateGrade(93,{'5**':92,'5*':85,'5':77,'4':62,'3':49,'2':34,'1':20})==='5**'; });
+  t('等級：低於最低為 U', function(){ return estimateGrade(10,{'1':20})==='U'; });
+  t('下一級差距', function(){ var g=nextGradeGap(60,{'4':62,'3':49},45); return g.grade==='4'&&g.gapPct===2; });
+  t('cutoffs 遞減驗證會擋錯誤', function(){ return !validatePaperConfig({year:1,mcq:{questionCount:1,answers:['A']},cutoffs:{'5':50,'4':60}}).valid; });
+  t('答案解析：N 轉未答', function(){ var a=parseAnswers('ABN',3); return a[2]===null&&a[0]==='A'; });
+  t('Class No 前置零正規化 07→7', function(){ return normClassNo('07').value===7; });
+  t('Class No 拒絕 0', function(){ return !normClassNo('0').ok; });
+  t('Class No 拒絕 51', function(){ return !normClassNo('51').ok; });
+  t('Class No 拒絕小數', function(){ return !normClassNo('3.5').ok; });
+  t('Form 白名單', function(){ return FORM_OPTIONS.length===6 && FORM_OPTIONS.indexOf('Form 7')===-1; });
+  t('Class 白名單八選項', function(){ return CLASS_OPTIONS.length===8 && CLASS_OPTIONS.indexOf('BCD3')>=0; });
+  t('標準化班別格式', function(){ return ('Form 3'+' '+'BCD2')==='Form 3 BCD2'; });
+  t('Attempt ID 唯一', function(){ return uuid()!==uuid(); });
+  t('Attempt ID 格式', function(){ return /^[0-9a-f-]{36}$/i.test(uuid()); });
+  t('退避間隔遞增', function(){ return SYNC.backoff[0]<SYNC.backoff[4] && SYNC.backoff.length===SYNC.max; });
+  t('只有 ok===true 才算成功', function(){ var r={ok:false,code:'TIMEOUT'}; return !(r&&r.ok===true); });
+  t('duplicate 也算成功', function(){ var r={ok:true,duplicate:true}; return r.ok===true; });
+  t('schema 版本', function(){ return SCHEMA>=3; });
+  console.log('%c測試完成：'+P+' 通過、'+F+' 失敗','font-weight:bold');
+  toast('自我測試：'+P+' 通過、'+F+' 失敗', F?'bad':'ok');
+  return {passed:P,failed:F};
+}
+window.runSelfTests=runSelfTests;
+
+/* ---------- 啟動 ---------- */
+(function init(){
+  migrateData();
+  var st=settings();
+  document.documentElement.setAttribute('data-theme', st.theme||'light');
+  document.getElementById('themeBtn').onclick=function(){
+    var s=settings(); s.theme=(s.theme==='dark')?'light':'dark'; SS(K.set,s);
+    document.documentElement.setAttribute('data-theme',s.theme);
+  };
+  document.getElementById('nav').innerHTML=PAGES.map(function(p){
+    return '<button data-p="'+p[0]+'" onclick="go(\''+p[0]+'\')">'+p[1]+'</button>';}).join('');
+  go('home');
+  resetRetries();                                   // 重開 App 重置並重試（D-008）
+  setTimeout(syncOnce,1200);
+  if('serviceWorker' in navigator){
+    navigator.serviceWorker.register('sw.js').catch(function(){});
+    navigator.serviceWorker.addEventListener('message',function(e){
+      if(e.data && e.data.type==='SW_CONTENT_UPDATED')
+        toast('已有新版本','ok',{label:'重新載入',fn:function(){location.reload();}});
+    });
+  }
+})();
+</script>
+</body>
+</html>
