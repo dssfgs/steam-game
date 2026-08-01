@@ -1,0 +1,16 @@
+{
+  "name": "HKDSE 數學（卷二）自我操練與成績追蹤",
+  "short_name": "DSE 數學卷二",
+  "description": "離線可用的 HKDSE 數學必修部分卷二自我操練與成績追蹤工具（不含試題內容）",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#0f172a",
+  "theme_color": "#2563eb",
+  "lang": "zh-HK",
+  "icons": [
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ]
+}
