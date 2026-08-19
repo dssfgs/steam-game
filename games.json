@@ -1,9 +1,9 @@
 [
   {
     "id": "record-webapp",
-    "title": "練習記錄上載（Google Apps Script）",
+    "title": "DSE 數學P1練習記錄上載",
     "url": "https://script.google.com/macros/s/AKfycbzbd6nNHgSoanwA4fRJGt3NgCYVenS5FAlxMgQXQXVYE_s--G8LqyPu-_lHIEVhaLI7/exec",
-    "subject": ["工具"],
+    "subject": ["數學"],
     "year": "2026",
     "author": "",
     "desc": "點入即直接開啟 Google Apps Script 網頁應用程式，用來提交或查看練習記錄。如未能在頁內顯示，請按「↗ 新分頁開啟」。",
