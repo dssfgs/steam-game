@@ -1,60 +1,74 @@
-[{
-  "id": "dse-quick-mc-practice",
-  "folder": "dse-quick-mc-practice",
-  "title": "數學 MC 練習系統",
-  "subject": "數學",
-  "author": "GRF(teacher)",
-  "year": "2026",
-  "tags": ["選擇題", "計時", "錯題重溫", "成績分析"],
-  "desc": "學生自製的多選題練習系統，支援計時、錯題重溫、按科目分析，並可上傳成績到老師 Google Sheet。",
-  "thumb": "games/dse-quick-mc-practice/thumb.png",
-  "updated": "2026-07-03"
-},
-{
-  "id": "tsa-math-mc",
-  "folder": "tsa-math-mc",
-  "title": "TSA 中三數學 MC 溫習 App",
-  "subject": "數學",
-  "author": "GRF(teacher)",
-  "year": "2026",
-  "tags": ["選擇題", "計時", "錯題重溫", "成績分析"],
-  "desc": "TSA 中三數學甲部選擇題溫習系統，收錄 2024 及 2025 共 160 題（已對照官方評卷參考），支援分題練習、按卷練習、計時測驗、錯題簿，並可匯出／匯入進度於不同裝置間轉移。",
-  "thumb": "games/tsa-math-mc/thumb.png",
-  "updated": "2026-07-04"
-},
-{
-  "id": "dse-math-mc",
-  "folder": "dse-math-mc",
-  "title": "記錄你數學DSE卷二的成績teacheredition",
-  "subject": "數學",
-  "author": "GRF(teacher)",
-  "year": "2026",
-  "tags": ["選擇題", "計時", "錯題重溫", "成績分析"],
-  "desc": "一個輕量級、純前端的多項選擇題（MC）數學練習網頁應用程式。它能夠從 JavaScript 檔案動態載入題庫，並使用本機儲存（Local Storage）來追蹤使用者的學習進度與錯題紀錄。",
-  "thumb": "games/dse-math-mc/image_1784102526543771.png",
-  "updated": "2026-07-15"
-},
-{
-  "id": "eng-b1b2con",
-  "folder": "eng-b1b2con",
-  "title": "Record your english grade",
-  "subject": "英國語文",
-  "author": "GRF(teacher)",
-  "year": "2026",
-  "tags": ["conversion table", "成績分析"],
-  "desc": "實用、結構清晰的 HKDSE 英文 B1／B2 分數換算網頁應用程式。",
-  "thumb": "games/eng-b1b2con/image_1784258596149222.png",
-  "updated": "2026-07-16"
-},
-{
-  "id": "dse-math-mc-teacheredition",
-  "folder": "dse-math-mc-teacheredition",
-  "title": "記錄你數學DSE卷二的成績",
-  "subject": "數學",
-  "author": "GRF(teacher)",
-  "year": "2026",
-  "tags": ["選擇題", "計時", "錯題重溫", "成績分析"],
-  "desc": "一個輕量級、純前端的多項選擇題（MC）數學練習網頁應用程式。它能夠從 JavaScript 檔案動態載入題庫，並使用google sheet來追蹤使用者的學習進度與錯題紀錄。",
-  "thumb": "games/dse-math-mc/image_1784102526543771.png",
-  "updated": "2026-08-01"
-}]
+[
+  {
+    "id": "record-webapp",
+    "title": "練習記錄上載（Google Apps Script）",
+    "url": "https://script.google.com/macros/s/AKfycbzbd6nNHgSoanwA4fRJGt3NgCYVenS5FAlxMgQXQXVYE_s--G8LqyPu-_lHIEVhaLI7/exec",
+    "subject": ["工具"],
+    "year": "2026",
+    "author": "",
+    "desc": "點入即直接開啟 Google Apps Script 網頁應用程式，用來提交或查看練習記錄。如未能在頁內顯示，請按「↗ 新分頁開啟」。",
+    "thumb": "",
+    "tags": ["Google Sheet", "記錄", "外部連結"],
+    "updated": "2026-08-19"
+  },
+  {
+    "id": "eng-b1b2con",
+    "folder": "eng-b1b2con",
+    "title": "HKDSE English B1／B2 換算追蹤器",
+    "subject": ["英文"],
+    "year": "2026",
+    "author": "",
+    "desc": "以 B1-to-B2-conversion-unified.csv 驅動的分數換算工具：選年份與卷別、輸入原始分即得對應分數，可儲存練習記錄並匯出 CSV。",
+    "thumb": "games/eng-b1b2con/image_1784258596149222.png",
+    "tags": ["B1/B2", "分數換算", "CSV"],
+    "updated": "2026-08-19"
+  },
+  {
+    "id": "dse-quick-mc-practice",
+    "folder": "dse-quick-mc-practice",
+    "title": "DSE 數學 MC 速練",
+    "subject": ["數學"],
+    "year": "2026",
+    "author": "",
+    "desc": "按課題抽 10／15／20 題即時作答，附詳解、錯題簿、計時與課題強弱分析，並可把成績上載到 Google Sheet。",
+    "thumb": "games/dse-quick-mc-practice/thumb.png",
+    "tags": ["MC", "錯題簿", "課題分析"],
+    "updated": "2026-08-19"
+  },
+  {
+    "id": "tsa-math-mc",
+    "folder": "tsa-math-mc",
+    "title": "TSA 數學 MC 練習",
+    "subject": ["數學"],
+    "year": "2026",
+    "author": "",
+    "desc": "中三 TSA 2024 及 2025 共約 160 條選擇題，分課題／分卷練習，附圖解、錯項分析、計時測驗與 CSV 匯出。",
+    "thumb": "games/tsa-math-mc/thumb.png",
+    "tags": ["TSA", "中三", "MC"],
+    "updated": "2026-08-19"
+  },
+  {
+    "id": "dse-math-mc",
+    "folder": "dse-math-mc",
+    "title": "HKDSE 數學卷二成績追蹤（學生版）",
+    "subject": ["數學"],
+    "year": "2026",
+    "author": "",
+    "desc": "輸入歷屆卷答案自動計分、估算等級與距下一級差距，內建錯題簿、進度圖表、JSON／CSV 備份與還原。",
+    "thumb": "games/dse-math-mc/image_1784102526543771.png",
+    "tags": ["成績追蹤", "等級估算", "圖表"],
+    "updated": "2026-08-19"
+  },
+  {
+    "id": "dse-math-mc-teacheredition",
+    "folder": "dse-math-mc-teacheredition",
+    "title": "HKDSE 數學成績追蹤（老師版）",
+    "subject": ["數學"],
+    "year": "2026",
+    "author": "",
+    "desc": "老師版：可安裝為 PWA，記錄附班別學號，並以同步佇列自動把每次作答上傳到 Google Apps Script／Sheet，支援重試與連線測試。",
+    "thumb": "games/dse-math-mc-teacheredition/image_1784102526543771.png",
+    "tags": ["PWA", "雲端同步", "班級管理"],
+    "updated": "2026-08-19"
+  }
+]
