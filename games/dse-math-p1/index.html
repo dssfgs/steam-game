@@ -191,11 +191,11 @@ function confirmDlg(html){
   });
 }
 
-var PAGES=[['home','主頁'],['new','新增練習'],['records','練習紀錄'],['analysis','進度分析'],['weak','錯題重溫'],['papers','試卷資料'],['backup','匯入匯出'],['help','使用說明']];
+var PAGES=[['home','主頁'],['new','輸入分數'],['result','成績報告'],['records','練習紀錄'],['class','班級報告'],['analysis','進度分析'],['weak','錯題重溫'],['papers','試卷資料'],['backup','匯入匯出'],['help','使用說明']];
 var cur='home';
 function go(p){ cur=p; document.querySelectorAll('#nav button').forEach(function(b){ b.setAttribute('aria-current', b.dataset.p===p?'page':'false'); });
   var m=document.getElementById('app'); m.innerHTML='';
-  ({home:pgHome,new:pgNew,records:pgRecords,analysis:pgAnalysis,weak:pgWeak,papers:pgPapers,backup:pgBackup,help:pgHelp})[p](m);
+  ({home:pgHome,new:pgNew,result:pgResult,records:pgRecords,'class':pgClass,analysis:pgAnalysis,weak:pgWeak,papers:pgPapers,backup:pgBackup,help:pgHelp})[p](m);
   window.scrollTo(0,0); renderSyncUI();
 }
 window.go=go;
@@ -205,11 +205,8 @@ function pgHome(m){
   var avg=recs.length?(recs.reduce(function(a,r){return a+r.percentage;},0)/recs.length).toFixed(1):'—';
   var st=settings();
   m.innerHTML=
-   '<div class="card"><h2>學生資料</h2>'+(s?
-     '<p><b>'+esc(s.form+' '+s.cls)+'</b>　學號 '+s.classNo+(s.displayName?'　'+esc(s.displayName):'')+'</p>':
-     '<p class="muted">尚未設定。儲存成績前建議先填班別學號。</p>')+
-     '<button class="btn sec" onclick="editStudent()">'+(s?'修改':'設定')+'學生資料</button></div>'+
-   '<div class="card"><h2>雲端同步</h2><p class="muted">端點：'+(st.url?'已設定':'未設定（成績仍會儲存在本機）')+'</p>'+
+   studentFieldsHTML()+
+   '<div class="card"><h2>雲端同步（老師收取）</h2><p class="muted">端點：'+(st.url?'已設定':'未設定（成績仍會儲存在本機）')+'</p>'+
      '<p>待同步：<b>'+pendingCount()+'</b></p>'+
      '<div class="row"><button class="btn sec" onclick="resetRetries();syncOnce()">立即同步</button>'+
      '<button class="btn ghost" onclick="go(\'backup\')">同步設定</button></div></div>'+
@@ -238,9 +235,23 @@ function editStudent(){
 }
 window.editStudent=editStudent;
 
+function studentFieldsHTML(){
+  var s=student()||{form:'',cls:'',classNo:'',displayName:''};
+  return '<div class="card"><h2>① 你的資料</h2><p class="muted">學生只要填班別學號，再輸入分數。老師會收到完整成績報告。</p>'+
+    '<div class="grid"><div><label>Form</label><select id="sf" onchange="commitStu()"><option value="">— 請選擇 —</option>'+FORM_OPTIONS.map(function(f){return '<option'+(s.form===f?' selected':'')+'>'+f+'</option>';}).join('')+'</select></div>'+
+    '<div><label>Class</label><select id="sc" onchange="commitStu()"><option value="">— 請選擇 —</option>'+CLASS_OPTIONS.map(function(f){return '<option'+(s.cls===f?' selected':'')+'>'+f+'</option>';}).join('')+'</select></div>'+
+    '<div><label>學號（1–50）</label><input id="sn" value="'+esc(s.classNo||'')+'" onchange="commitStu()"></div>'+
+    '<div><label>姓名（選填）</label><input id="sd" value="'+esc(s.displayName||'')+'" onchange="commitStu()"></div></div></div>';
+}
+function commitStu(){
+  var obj={form:document.getElementById('sf').value, cls:document.getElementById('sc').value, classNo:document.getElementById('sn').value, displayName:document.getElementById('sd').value};
+  var v=validateStudent(obj); if(!v.valid) return;
+  obj.classNo=v.classNo; obj.classLabel=obj.form+' '+obj.cls; SS(K.stu,obj);
+}
+window.commitStu=commitStu;
 function pgNew(m){
   var d=draft(); var list=papers();
-  m.innerHTML='<div class="card"><h2>選擇年份</h2><label>試卷</label><select id="yr"><option value="">— 請選擇 —</option>'+
+  m.innerHTML=studentFieldsHTML()+'<div class="card"><h2>② 選擇年份</h2><label>試卷</label><select id="yr"><option value="">— 請選擇 —</option>'+
     list.map(function(p){return '<option value="'+p.year+'"'+(d.year===p.year?' selected':'')+'>'+p.year+' 卷一'+(p.custom?'（自訂）':'')+' · '+p.questions.length+' 題 / '+p.fullMarks+' 分</option>';}).join('')+
     '</select><div class="row" style="margin-top:10px">'+
     '<label class="badge" style="padding:8px 12px"><input type="radio" name="md" value="questions"'+(d.mode==='questions'?' checked':'')+'> 逐題輸入</label>'+
@@ -334,7 +345,7 @@ function saveAttempt(){
   saveDraft({year:paper.year,mode:d.mode,scores:{},sections:{},notes:'',practicedOn:d.practicedOn});
   if(rec.syncStatus==='pending') enqueue(rec.attemptId);
   toast('已儲存 '+paper.year+' 卷一　'+c.raw+'/'+paper.fullMarks+'　'+c.grade);
-  syncOnce(); go('records');
+  syncOnce(); SS('hkdse_p1_last', rec.attemptId); go('result');
 }
 function updateWeak(rec,paper){
   if(rec.mode!=='questions') return;
@@ -351,6 +362,97 @@ function updateWeak(rec,paper){
 }
 window.setQ=setQ; window.stepQ=stepQ; window.setSec=setSec; window.fillRest0=fillRest0; window.fillAll=fillAll; window.clearScores=clearScores; window.previewOnly=previewOnly; window.saveAttempt=saveAttempt;
 
+function lastId(){ return localStorage.getItem('hkdse_p1_last')||''; }
+function findRec(id){ var recs=records(); return recs.filter(function(r){return r.attemptId===id;})[0]||recs[recs.length-1]; }
+function resLabel(res){ return res==='ok'?'滿分':res==='mid'?'一半或以上':res==='bad'?'弱項':'未做'; }
+function printAttempt(id){
+  var a=findRec(id); if(!a) return toast('找不到紀錄');
+  var paper=getPaper(a.year);
+  var stu=a.student; var name=stu? (stu.form+' '+stu.cls+'　學號 '+stu.classNo+(stu.displayName?'　'+stu.displayName:'')):'（未填）';
+  var rows='';
+  if(a.mode==='questions'&&paper){
+    (a.scores||[]).forEach(function(s){
+      var q=(paper.questions||[]).filter(function(x){return x.q===s.q;})[0];
+      var full=q?q.fullMarks:0; var res=resultOf(s.score,full);
+      rows+='<tr><td>Q'+s.q+'</td><td>'+esc(q?SECTION_LABEL[q.section]:'')+'</td><td>'+esc(q?q.topic:'')+'</td><td>'+(s.score==null?'未做':s.score)+'</td><td>'+full+'</td><td>'+(q&&q.hkAvg!=null?q.hkAvg:'—')+'</td><td>'+resLabel(res)+'</td></tr>';
+    });
+  } else rows='<tr><td colspan="7">分部輸入：甲一 '+a.sectionScores.A1+'／甲二 '+a.sectionScores.A2+'／乙 '+a.sectionScores.B+'</td></tr>';
+  var weak=[];
+  if(a.mode==='questions'&&paper){
+    (a.scores||[]).forEach(function(s){ var q=(paper.questions||[]).filter(function(x){return x.q===s.q;})[0]; if(q&&resultOf(s.score,q.fullMarks)==='bad') weak.push('Q'+s.q+' '+q.topic+'（'+s.score+'/'+q.fullMarks+'）'); });
+  }
+  var html='<!DOCTYPE html><html lang="zh-HK"><head><meta charset="utf-8"><title>卷一成績報告</title><style>body{font-family:sans-serif;padding:24px;max-width:900px;margin:0 auto}table{border-collapse:collapse;width:100%;font-size:13px}th,td{border:1px solid #999;padding:6px}th{background:#eef2f7}.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}.stat{background:#f4f6f9;padding:10px;text-align:center;border-radius:8px}</style></head><body>'+
+    '<h1>HKDSE 數學卷一成績報告</h1><p>列印日期：'+new Date().toLocaleString('zh-HK')+'</p>'+
+    '<p><b>學生：</b>'+esc(name)+'</p><p><b>試卷：</b>'+a.year+'　'+esc(a.paperName)+'　操卷 '+esc(a.practicedOn)+'</p>'+
+    '<div class="grid"><div class="stat">得分<br><b>'+a.rawScore+' / '+a.totalMarks+'</b></div><div class="stat">百分比<br><b>'+a.percentage+'%</b></div><div class="stat">等級<br><b>'+esc(a.estimatedGrade)+'</b></div><div class="stat">甲一/甲二/乙<br><b>'+a.sectionScores.A1+'/'+a.sectionScores.A2+'/'+a.sectionScores.B+'</b></div></div>'+
+    '<h2>逐題明細</h2><table><tr><th>題</th><th>分部</th><th>課題</th><th>得分</th><th>滿分</th><th>全港</th><th>結果</th></tr>'+rows+'</table>'+
+    '<p><b>弱項：</b>'+esc(weak.join('、')||'（無）')+'</p><p>未做 '+a.unanswered+' 題　備註：'+esc(a.notes||'（無）')+'</p>'+
+    '<p style="color:#666;font-size:12px">此等級只按歷年粗略界線估算，並非正式評級。本報告不含試題原文。</p></body></html>';
+  var w=window.open('','_blank'); if(!w) return toast('請允許彈出式視窗'); w.document.write(html); w.document.close(); setTimeout(function(){w.print();},250);
+}
+function printClass(rows){
+  rows=rows||records();
+  var n=rows.length, avg=n? (rows.reduce(function(s,r){return s+r.percentage;},0)/n).toFixed(1):'0';
+  var body=rows.map(function(r){
+    var st=r.student||{};
+    return '<tr><td>'+esc((st.form||'')+' '+(st.cls||''))+'</td><td>'+(st.classNo||'—')+'</td><td>'+esc(st.displayName||'')+'</td><td>'+r.year+'</td><td>'+esc((r.practicedOn||'').slice(0,10))+'</td><td>'+r.sectionScores.A1+'</td><td>'+r.sectionScores.A2+'</td><td>'+r.sectionScores.B+'</td><td>'+r.rawScore+'/'+r.totalMarks+'</td><td>'+r.percentage+'%</td><td>'+esc(r.estimatedGrade)+'</td></tr>';
+  }).join('');
+  var html='<!DOCTYPE html><html lang="zh-HK"><head><meta charset="utf-8"><title>班級成績報告</title><style>body{font-family:sans-serif;padding:24px}table{border-collapse:collapse;width:100%;font-size:13px}th,td{border:1px solid #999;padding:6px}th{background:#eef2f7}</style></head><body>'+
+    '<h1>HKDSE 數學卷一　班級成績報告</h1><p>列印日期：'+new Date().toLocaleString('zh-HK')+'　共 '+n+' 筆　平均 '+avg+'%</p>'+
+    '<table><tr><th>班別</th><th>學號</th><th>姓名</th><th>年份</th><th>日期</th><th>甲一</th><th>甲二</th><th>乙</th><th>總分</th><th>%</th><th>等級</th></tr>'+body+'</table>'+
+    '<p style="color:#666;font-size:12px">估算等級僅供操卷參考，並非正式評級。</p></body></html>';
+  var w=window.open('','_blank'); if(!w) return toast('請允許彈出式視窗'); w.document.write(html); w.document.close(); setTimeout(function(){w.print();},250);
+}
+function pgResult(m){
+  var a=findRec(lastId());
+  if(!a){ m.innerHTML='<div class="card"><p class="muted">尚無成績報告。請先輸入分數並儲存。</p><button class="btn" onclick="go(\'new\')">輸入分數</button></div>'; return; }
+  var paper=getPaper(a.year); var stu=a.student;
+  var qhtml='';
+  if(a.mode==='questions'&&paper){
+    qhtml='<table><tr><th>題</th><th>課題</th><th>得分</th><th>全港</th><th>結果</th></tr>';
+    (a.scores||[]).forEach(function(s){
+      var q=(paper.questions||[]).filter(function(x){return x.q===s.q;})[0];
+      var full=q?q.fullMarks:0; var res=resultOf(s.score,full);
+      qhtml+='<tr><td>Q'+s.q+' <span class="muted">'+(q?SECTION_LABEL[q.section]:'')+'</span></td><td>'+esc(q?q.topic:'')+'</td><td>'+(s.score==null?'未做':(s.score+'/'+full))+'</td><td>'+(q&&q.hkAvg!=null?q.hkAvg:'—')+'</td><td>'+resLabel(res)+'</td></tr>';
+    });
+    qhtml+='</table>';
+  } else qhtml='<p class="muted">此筆只記錄分部總分。</p>';
+  m.innerHTML='<div class="card"><h2>📊 計算結果　'+a.year+' 卷一</h2>'+
+    '<p>'+(stu?('<b>'+esc(stu.form+' '+stu.cls)+'</b>　學號 '+stu.classNo+(stu.displayName?'　'+esc(stu.displayName):'')):'未填學生資料')+'</p>'+
+    '<div class="grid"><div><div class="muted">得分</div><b style="font-size:22px">'+a.rawScore+' / '+a.totalMarks+'</b></div>'+
+    '<div><div class="muted">百分比</div><b style="font-size:22px">'+a.percentage+'%</b></div>'+
+    '<div><div class="muted">估算等級</div><span class="badge ok" style="font-size:18px">'+esc(a.estimatedGrade)+'</span></div>'+
+    '<div><div class="muted">甲一 / 甲二 / 乙</div><b>'+a.sectionScores.A1+' / '+a.sectionScores.A2+' / '+a.sectionScores.B+'</b></div></div>'+
+    '<p class="muted">⚠️ 此等級只按歷年粗略界線估算，並非正式評級。</p></div>'+
+    '<div class="card"><h2>逐題明細</h2>'+qhtml+(a.notes?'<p>備註：'+esc(a.notes)+'</p>':'')+'</div>'+
+    '<div class="card noprint"><div class="row"><button class="btn" onclick="printAttempt(\''+a.attemptId+'\')">列印／下載成績報告</button>'+
+    '<button class="btn sec" onclick="go(\'class\')">班級報告</button>'+
+    '<button class="btn sec" onclick="go(\'weak\')">錯題重溫</button>'+
+    '<button class="btn ghost" onclick="redoYear('+a.year+')">再做此年</button>'+
+    '<button class="btn ghost" onclick="go(\'records\')">練習紀錄</button></div>'+
+    '<p class="muted">已寫入本機'+(a.syncStatus==='legacy'?'。':'，並會上載到老師的 Google 試算表。')+'</p></div>';
+}
+function pgClass(m){
+  var recs=records();
+  var years=Array.from(new Set(recs.map(function(r){return r.year;}))).sort(function(a,b){return b-a;});
+  m.innerHTML='<div class="card"><h2>班級成績報告</h2><p class="muted">學生輸入資料與分數後，老師可在此一次看全班，或列印／匯出。雲端則見 Google 試算表「卷一」。</p>'+
+    '<div class="row noprint"><select id="cf"><option value="">全部 Form</option>'+FORM_OPTIONS.map(function(f){return '<option>'+f+'</option>';}).join('')+'</select>'+
+    '<select id="cc"><option value="">全部 Class</option>'+CLASS_OPTIONS.map(function(f){return '<option>'+f+'</option>';}).join('')+'</select>'+
+    '<select id="cy"><option value="">全部年份</option>'+years.map(function(y){return '<option>'+y+'</option>';}).join('')+'</select>'+
+    '<button class="btn sec" id="cp">列印班級報告</button></div><div id="ct"></div></div>';
+  function draw(){
+    var f=document.getElementById('cf').value, c=document.getElementById('cc').value, y=document.getElementById('cy').value;
+    var rows=recs.filter(function(r){ var s=r.student||{}; if(f&&s.form!==f) return false; if(c&&s.cls!==c) return false; if(y&&String(r.year)!==y) return false; return true; });
+    var avg=rows.length?(rows.reduce(function(a,r){return a+r.percentage;},0)/rows.length).toFixed(1):'—';
+    var stuN=new Set(rows.map(function(r){ var s=r.student||{}; return s.form+'-'+s.cls+'-'+s.classNo; })).size;
+    document.getElementById('ct').innerHTML='<p>紀錄 <b>'+rows.length+'</b>　學生 <b>'+stuN+'</b>　平均 <b>'+(avg==='—'?'—':avg+'%')+'</b></p>'+
+      (rows.length?'<table><tr><th>班別</th><th>學號</th><th>姓名</th><th>年份</th><th>日期</th><th>甲一/甲二/乙</th><th>總分</th><th>等級</th><th class="noprint"></th></tr>'+
+        rows.map(function(r){ var s=r.student||{}; return '<tr><td>'+esc((s.form||'')+' '+(s.cls||''))+'</td><td>'+(s.classNo||'—')+'</td><td>'+esc(s.displayName||'—')+'</td><td>'+r.year+'</td><td>'+esc((r.practicedOn||'').slice(0,10))+'</td><td>'+r.sectionScores.A1+'/'+r.sectionScores.A2+'/'+r.sectionScores.B+'</td><td>'+r.rawScore+'/'+r.totalMarks+'（'+r.percentage+'%）</td><td><span class="badge">'+esc(r.estimatedGrade)+'</span></td><td class="noprint"><button class="btn ghost" onclick="SS(\'hkdse_p1_last\',\''+r.attemptId+'\');go(\'result\')">完整報告</button></td></tr>'; }).join('')+'</table>':'<p class="muted">尚無紀錄。</p>');
+    document.getElementById('cp').onclick=function(){ printClass(rows); };
+  }
+  document.getElementById('cf').onchange=draw; document.getElementById('cc').onchange=draw; document.getElementById('cy').onchange=draw; draw();
+}
+window.printAttempt=printAttempt; window.printClass=printClass;
 function pgRecords(m){
   var recs=records().slice().reverse();
   if(!recs.length){ m.innerHTML='<div class="card"><p class="muted">尚無紀錄。請先在「新增練習」儲存一卷。</p></div>'; return; }
@@ -372,7 +474,7 @@ function pgRecords(m){
       rows.map(function(r){
         var sec=r.sectionScores||{};
         return '<tr><td>'+esc((r.practicedOn||r.submittedAt||'').slice(0,10))+'</td><td>'+r.year+'</td><td>'+r.rawScore+'/'+r.totalMarks+'（'+r.percentage+'%）</td><td><span class="badge">'+esc(r.estimatedGrade)+'</span></td><td>'+(sec.A1||0)+'/'+(sec.A2||0)+'/'+(sec.B||0)+'</td>'+
-          '<td class="noprint"><button class="btn sec" onclick="redoYear('+r.year+')">重做</button> <button class="btn ghost" onclick="delRec(\''+r.attemptId+'\')">刪除</button></td></tr>';
+          '<td class="noprint"><button class="btn sec" onclick="SS(\'hkdse_p1_last\',\''+r.attemptId+'\');go(\'result\')">完整報告</button> <button class="btn ghost" onclick="printAttempt(\''+r.attemptId+'\')">列印</button> <button class="btn ghost" onclick="redoYear('+r.year+')">重做</button> <button class="btn ghost" onclick="delRec(\''+r.attemptId+'\')">刪除</button></td></tr>';
       }).join('')+'</tbody></table>';
   }
   document.getElementById('fy').onchange=draw; document.getElementById('fs').onchange=draw; draw();
@@ -497,8 +599,8 @@ window.saveSync=saveSync; window.testConn=testConn; window.resendLegacy=resendLe
 
 function pgHelp(m){
   m.innerHTML='<div class="card"><h2>使用說明</h2><ol>'+
-    '<li>先設定學生資料（Form、Class、學號）。</li>'+
-    '<li>新增練習選年份，逐題以 0.5 分加減，或只填分部總分。</li>'+
+    '<li>學生在「輸入分數」填 Form、Class、學號，再選年份輸入各題得分。</li>'+
+    '<li>按「儲存並產生成績報告」後立刻出現完整報告（分部、逐題、弱項、估算等級），可列印。老師在「班級報告」一次看全班。</li>'+
     '<li>未做題以 0 分計入 105 分總分，但不會寫入錯題簿。低於該題一半列入弱項。</li>'+
     '<li>「只計算結果」不儲存；「儲存成績」才建立紀錄並可上載 Google Sheet。</li>'+
     '<li>卷一滿分 105：甲一 35、甲二 35、乙部 35。估計等級僅供操卷參考。</li></ol>'+

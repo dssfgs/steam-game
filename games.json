@@ -2,73 +2,110 @@
   {
     "id": "dse-math-p1",
     "folder": "dse-math-p1",
-    "title": "HKDSE 數學卷一成績記錄（老師版）",
-    "subject": ["數學"],
+    "title": "HKDSE 數學卷一成績記錄",
+    "subject": [
+      "數學"
+    ],
     "year": "2026",
     "author": "",
-    "desc": "老師版：2012–2026 卷一逐題／分部記分、等級估算、錯題重溫與進度圖表；記錄附班別學號，可同步至 Google Sheet「卷一」工作表。",
+    "desc": "學生填班別學號與卷一分數，即時產生完整成績報告（分部、逐題、弱項、估算等級），老師可看班級報告並同步 Google Sheet。2012–2026。",
     "thumb": "games/dse-math-p1/thumb.svg",
-    "tags": ["卷一", "成績追蹤", "雲端同步", "PWA"],
+    "tags": [
+      "卷一",
+      "成績報告",
+      "班級報告",
+      "雲端同步"
+    ],
     "updated": "2026-09-16"
   },
   {
     "id": "eng-b1b2con",
     "folder": "eng-b1b2con",
     "title": "HKDSE English B1／B2 換算追蹤器",
-    "subject": ["英文"],
+    "subject": [
+      "英文"
+    ],
     "year": "2026",
     "author": "",
     "desc": "以 B1-to-B2-conversion-unified.csv 驅動的分數換算工具：選年份與卷別、輸入原始分即得對應分數，可儲存練習記錄並匯出 CSV。",
     "thumb": "games/eng-b1b2con/image_1784258596149222.png",
-    "tags": ["B1/B2", "分數換算", "CSV"],
+    "tags": [
+      "B1/B2",
+      "分數換算",
+      "CSV"
+    ],
     "updated": "2026-08-19"
   },
   {
     "id": "dse-quick-mc-practice",
     "folder": "dse-quick-mc-practice",
     "title": "DSE 數學 MC 速練",
-    "subject": ["數學"],
+    "subject": [
+      "數學"
+    ],
     "year": "2026",
     "author": "",
     "desc": "按課題抽 10／15／20 題即時作答，附詳解、錯題簿、計時與課題強弱分析，並可把成績上載到 Google Sheet。",
     "thumb": "games/dse-quick-mc-practice/thumb.png",
-    "tags": ["MC", "錯題簿", "課題分析"],
+    "tags": [
+      "MC",
+      "錯題簿",
+      "課題分析"
+    ],
     "updated": "2026-08-19"
   },
   {
     "id": "tsa-math-mc",
     "folder": "tsa-math-mc",
     "title": "TSA 數學 MC 練習",
-    "subject": ["數學"],
+    "subject": [
+      "數學"
+    ],
     "year": "2026",
     "author": "",
     "desc": "中三 TSA 2024 及 2025 共約 160 條選擇題，分課題／分卷練習，附圖解、錯項分析、計時測驗與 CSV 匯出。",
     "thumb": "games/tsa-math-mc/thumb.png",
-    "tags": ["TSA", "中三", "MC"],
+    "tags": [
+      "TSA",
+      "中三",
+      "MC"
+    ],
     "updated": "2026-08-19"
   },
   {
     "id": "dse-math-mc",
     "folder": "dse-math-mc",
     "title": "HKDSE 數學卷二成績追蹤（學生版）",
-    "subject": ["數學"],
+    "subject": [
+      "數學"
+    ],
     "year": "2026",
     "author": "",
     "desc": "輸入歷屆卷答案自動計分、估算等級與距下一級差距，內建錯題簿、進度圖表、JSON／CSV 備份與還原。",
     "thumb": "games/dse-math-mc/image_1784102526543771.png",
-    "tags": ["成績追蹤", "等級估算", "圖表"],
+    "tags": [
+      "成績追蹤",
+      "等級估算",
+      "圖表"
+    ],
     "updated": "2026-08-19"
   },
   {
     "id": "dse-math-mc-teacheredition",
     "folder": "dse-math-mc-teacheredition",
     "title": "HKDSE 數學成績追蹤（老師版）",
-    "subject": ["數學"],
+    "subject": [
+      "數學"
+    ],
     "year": "2026",
     "author": "",
     "desc": "老師版：可安裝為 PWA，記錄附班別學號，並以同步佇列自動把每次作答上傳到 Google Apps Script／Sheet，支援重試與連線測試。",
     "thumb": "games/dse-math-mc-teacheredition/image_1784102526543771.png",
-    "tags": ["PWA", "雲端同步", "班級管理"],
+    "tags": [
+      "PWA",
+      "雲端同步",
+      "班級管理"
+    ],
     "updated": "2026-08-19"
   }
 ]
