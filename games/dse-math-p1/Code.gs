@@ -164,6 +164,9 @@ function handleWrite_(payload) {
     sheet.appendRow(row);
     var rowIndex = sheet.getLastRow();
     cache.put(cacheKey, '1', CACHE_TTL_SEC);
+    if (kind === 'paper1') {
+      try { rebuildAllReportsP1(); } catch (rebuildErr) {}
+    }
     return json_({ ok: true, duplicate: false, attemptId: attemptId, row: rowIndex });
   } catch (err) {
     var code = String(err).indexOf('HEADER_EXTEND') >= 0 ? 'HEADER_EXTEND_ERROR' : 'SERVER_ERROR';
@@ -413,7 +416,7 @@ function setupSheets() {
   ensureHeaders_(p1, p1Headers_(Q_MAX_P1));
   var p2 = ensureSheet_(SHEET_P2);
   ensureHeaders_(p2, p2Headers_());
-  createDashboardP1_(false);
+  rebuildAllReportsP1();
 }
 
 function createDashboardP1() {
@@ -447,6 +450,10 @@ function onOpen() {
     .addItem('開啟所選學生報告', 'buildPersonalFromRowP1')
     .addItem('設定每日自動更新', 'installDailyP1')
     .addToUi();
+}
+
+function onInstall() {
+  onOpen();
 }
 
 function rebuildAllReportsP1() {
@@ -659,7 +666,7 @@ function buildHeatmapP1() {
         if (r.qs[i] != null && isFinite(r.qs[i])) vals.push(r.qs[i]);
       });
       if (!vals.length || !full) row.push('');
-      else row.push(Math.round((vals.reduce(function (s, n) { return s + n; }, 0) / vals.length / full) * 100) / 100);
+      else row.push(Math.round((vals.reduce(function (s, n) { return s + n; }, 0) / vals.length / full) * 100));
     }
     return row;
   });
@@ -669,13 +676,13 @@ function buildHeatmapP1() {
     if (!ys.length) return;
     var range = sheet.getRange(hLen + 1, 2, ys.length, qMax);
     var rule = SpreadsheetApp.newConditionalFormatRule()
-      .setGradientMaxpointWithValue('#2f6b4f', SpreadsheetApp.InterpolationType.NUMBER, 1)
-      .setGradientMidpointWithValue('#c9a227', SpreadsheetApp.InterpolationType.NUMBER, 0.5)
+      .setGradientMaxpointWithValue('#2f6b4f', SpreadsheetApp.InterpolationType.NUMBER, 100)
+      .setGradientMidpointWithValue('#c9a227', SpreadsheetApp.InterpolationType.NUMBER, 50)
       .setGradientMinpointWithValue('#9b3a32', SpreadsheetApp.InterpolationType.NUMBER, 0)
       .setRanges([range])
       .build();
     sheet.setConditionalFormatRules([rule]);
-    sheet.getRange(hLen + 1, 2, ys.length, qMax).setNumberFormat('0%');
+    sheet.getRange(hLen + 1, 2, ys.length, qMax).setNumberFormat('0');
   });
   sh.getRange(body.length + 4, 1).setValue('格子為該題平均得分／滿分。綠 ≥80%，黃 ≥50%，紅偏低。卷一沒有選擇題正確答案。');
 }
@@ -719,10 +726,12 @@ function buildFocusP1() {
   });
   var list = Object.keys(acc).map(function (k) {
     var x = acc[k];
-    return { year: x.year, q: x.q, avg: +(x.sum / x.n).toFixed(2), n: x.n };
-  }).sort(function (a, b) { return a.avg - b.avg; }).slice(0, 20);
-  var body = list.map(function (x) { return [x.year, 'Q' + x.q, x.avg, x.n]; });
-  writeSheet_('教學重點', [['年份', '題', '平均得分', '作答人次']], body);
+    var full = p1Full_(x.year, x.q);
+    var avg = x.sum / x.n;
+    return { year: x.year, q: x.q, topic: p1Topic_(x.year, x.q), pct: full ? +((avg / full) * 100).toFixed(1) : 0, n: x.n, full: full };
+  }).sort(function (a, b) { return a.pct - b.pct; }).slice(0, 20);
+  var body = list.map(function (x) { return [x.year, 'Q' + x.q, x.topic, x.pct, x.n, x.full]; });
+  writeSheet_('教學重點', [['年份', '題', '課題', '得分率', '作答人次', '滿分']], body);
 }
 
 function buildRankingP1() {
@@ -818,19 +827,39 @@ function createDashboardP1_(overwrite) {
     if (!byYear[r.year]) byYear[r.year] = [];
     byYear[r.year].push(r);
   });
-  var yHeader = [['各年份試卷表現', '練習人次', '平均分', '甲一', '甲二', '乙']];
+  var yHeader = [['各年份試卷表現', '練習人次', '平均分', '平均準確率', '甲一', '甲二', '乙']];
   var yBody = Object.keys(byYear).map(Number).sort().map(function (y) {
     var list = byYear[y];
     var n = list.length;
     var m = function (fn) { return n ? +(list.reduce(function (s, x) { return s + fn(x); }, 0) / n).toFixed(1) : 0; };
-    return [y, n, m(function (x) { return x.percent; }), m(function (x) { return x.a1; }), m(function (x) { return x.a2; }), m(function (x) { return x.b; })];
+    return [y, n, m(function (x) { return x.percent; }), m(attemptAccuracyP1_), m(function (x) { return x.a1; }), m(function (x) { return x.a2; }), m(function (x) { return x.b; })];
   });
-  sh.getRange(14 + gRows.length + 2, 1, 1, 6).setValues(yHeader);
-  if (yBody.length) sh.getRange(15 + gRows.length + 2, 1, yBody.length, 6).setValues(yBody);
+  sh.getRange(14 + gRows.length + 2, 1, 1, 7).setValues(yHeader);
+  if (yBody.length) sh.getRange(15 + gRows.length + 2, 1, yBody.length, 7).setValues(yBody);
   sh.setFrozenRows(1);
   sh.getRange(1, 1).setFontWeight('bold').setFontSize(14);
 }
 
+
+function attemptAccuracyP1_(r) {
+  var meta = P1_META[r.year];
+  if (!meta) return r.percent;
+  var ok = 0, n = meta.full.length;
+  if (!n) return r.percent;
+  for (var q = 1; q <= n; q++) {
+    var s = r.qs[q];
+    if (s != null && s !== '' && Number(s) + 1e-9 >= meta.full[q - 1]) ok++;
+  }
+  return +((ok / n) * 100).toFixed(1);
+}
+
+function escHtml_(s) {
+  return String(s == null ? '' : s)
+    .split('&').join('&' + 'amp;')
+    .split('<').join('&' + 'lt;')
+    .split('>').join('&' + 'gt;')
+    .split('"').join('&' + 'quot;');
+}
 function p1Full_(year, q) {
   var m = P1_META[year];
   if (!m || !m.full || q < 1 || q > m.full.length) return 0;
@@ -845,7 +874,7 @@ function p1Topic_(year, q) {
 function showBulkClassDialogP1() {
   var info = listClassOptionsP1();
   var opts = (info.classes || []).map(function (c) {
-    return '<option value="' + c.label.replace(/"/g, '"') + '">' + c.label + '（' + c.n + ' 人）</option>';
+    return '<option value="' + escHtml_(c.label) + '">' + escHtml_(c.label) + '（' + c.n + ' 人）</option>';
   }).join('');
   var yopts = '<option value="">全部年份</option>' + (info.years || []).map(function (y) {
     return '<option value="' + y + '">' + y + '</option>';
