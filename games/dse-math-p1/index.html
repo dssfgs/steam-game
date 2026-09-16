@@ -112,7 +112,15 @@ function compute(paper,mode,scores,sections){
   var pct = paper.fullMarks? +((raw/paper.fullMarks)*100).toFixed(1):0;
   return {raw:raw,unanswered:unanswered,percentage:pct,grade:estimateGrade(pct,paper.cutoffs||{}),gap:nextGap(pct,paper.cutoffs||{},paper.fullMarks),sectionScores:sec,sectionFull:full,detail:detail};
 }
-function settings(){ return LS(K.set,{url:(CFG.sync&&CFG.sync.defaultWebAppUrl)||'',key:(CFG.sync&&CFG.sync.syncKey)||'hkdse-sync-2026',theme:'light'}); }
+function settings(){
+  var defUrl=(CFG.sync&&CFG.sync.defaultWebAppUrl)||'https://script.google.com/macros/s/AKfycbw7Ra257w55hTCQVL1kW2QI2Fl6ao2-MbUHJsRWle67_c6vAufHEKj7odoqd7OJhA4/exec';
+  var defKey=(CFG.sync&&CFG.sync.syncKey)||'hkdse-sync-2026';
+  var s=LS(K.set,null);
+  if(!s) s={url:defUrl,key:defKey,theme:'light'};
+  if(!s.url) s.url=defUrl;
+  if(!s.key) s.key=defKey;
+  return s;
+}
 function queue(){ return LS(K.queue,[]); }
 function pendingCount(){ return queue().filter(function(q){return q.status!=='synced';}).length; }
 function records(){ return LS(K.rec,[]); }
