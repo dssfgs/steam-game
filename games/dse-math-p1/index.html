@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="zh-HK" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#1E4A7A">
+<title>HKDSE 數學卷一成績記錄（老師版）</title>
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<style>
+:root{--bg:#f3f1ec;--card:#fffcf7;--fg:#1a1c1f;--muted:#5c6168;--line:#d9d4cb;--pri:#1e4a7a;--ok:#2f6b4f;--warn:#8a5a18;--bad:#9b3a32;--chip:#e4ebf4}
+[data-theme=dark]{--bg:#0e1116;--card:#171b22;--fg:#ece8e1;--muted:#a8aeb6;--line:#2c333d;--pri:#8fb0d6;--chip:#243044}
+*{box-sizing:border-box}
+body{margin:0;font:15px/1.55 "Noto Sans TC","PingFang HK","Microsoft JhengHei",sans-serif;background:var(--bg);color:var(--fg)}
+header{position:sticky;top:0;z-index:50;background:var(--card);border-bottom:1px solid var(--line);padding:8px 12px;display:flex;gap:8px;align-items:center}
+h1{font-size:16px;margin:0;flex:1}
+nav{display:flex;gap:4px;overflow-x:auto;padding:6px 12px;background:var(--card);border-bottom:1px solid var(--line);position:sticky;top:49px;z-index:49}
+nav button{white-space:nowrap;border:1px solid var(--line);background:transparent;color:var(--fg);padding:8px 12px;border-radius:999px;cursor:pointer;font-size:13px;min-height:40px}
+nav button[aria-current=page]{background:var(--pri);color:#fff;border-color:var(--pri)}
+main{padding:12px;max-width:1000px;margin:0 auto}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px;margin-bottom:12px}
+.card h2{font-size:15px;margin:0 0 10px}
+.btn{background:var(--pri);color:#fff;border:0;padding:9px 14px;border-radius:8px;cursor:pointer;font:inherit;min-height:40px}
+.btn.sec{background:transparent;color:var(--fg);border:1px solid var(--line)}
+.btn.danger{background:var(--bad);color:#fff}
+.btn.ghost{background:transparent;color:var(--fg);border:0}
+label{display:block;font-size:13px;color:var(--muted);margin:8px 0 3px}
+input,select,textarea{width:100%;padding:8px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--fg);font:inherit}
+.grid{display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(140px,1fr))}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th,td{border-bottom:1px solid var(--line);padding:7px 6px;text-align:left}
+.badge{display:inline-block;padding:2px 8px;border-radius:999px;font-size:12px;background:var(--chip);color:var(--pri)}
+.badge.ok{background:#dcfce7;color:#166534}.badge.warn{background:#fef3c7;color:#92400e}.badge.bad{background:#fee2e2;color:#991b1b}
+.muted{color:var(--muted);font-size:13px}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+dialog{border:0;border-radius:14px;padding:18px;max-width:440px;width:92%;background:var(--card);color:var(--fg)}
+dialog::backdrop{background:rgba(0,0,0,.5)}
+#toast{position:fixed;left:50%;transform:translateX(-50%);bottom:16px;z-index:99;display:flex;flex-direction:column;gap:8px;width:min(92%,440px)}
+.tst{background:#111827;color:#fff;padding:11px 14px;border-radius:10px;display:flex;gap:10px;align-items:center}
+.qrow{display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:space-between;border:1px solid var(--line);border-radius:10px;padding:10px;margin-bottom:8px;background:var(--bg)}
+.scorebtns{display:flex;gap:4px;align-items:center}
+.scorebtns input{width:64px;text-align:center;font-weight:700}
+.sticky{position:sticky;bottom:8px;z-index:20}
+pre.code{max-height:280px;overflow:auto;background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:10px;font-size:11px;white-space:pre}
+canvas{max-width:100%}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+@media print{header,nav,.noprint{display:none!important}}
+</style>
+</head>
+<body>
+<header>
+  <div style="flex:1;min-width:0">
+    <div class="muted" style="font-size:11px;letter-spacing:.12em">HKDSE MATHEMATICS COMPULSORY PART</div>
+    <h1>數學卷一成績記錄</h1>
+  </div>
+  <span id="syncBadge" class="badge">本機已存</span>
+  <button class="btn sec" id="themeBtn" title="切換主題">🌓</button>
+</header>
+<nav id="nav"></nav>
+<div id="live" class="sr" aria-live="polite"></div>
+<main id="app"></main>
+<div id="toast"></div>
+<dialog id="dlg"><div id="dlgBody"></div>
+<div class="row" style="justify-content:flex-end;margin-top:14px">
+<button class="btn sec" id="dlgNo">取消</button><button class="btn" id="dlgYes">確定</button></div></dialog>
+<script src="data.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<script>
+'use strict';
+var CFG = window.APP_CONFIG || {};
+var PAPERS = CFG.papers || [];
+var SCHEMA = 1;
+var K = { rec:'hkdse_p1_records', queue:'hkdse_p1_sync_queue', stu:'hkdse_p1_student',
+          weak:'hkdse_p1_weak', papers:'hkdse_p1_papers_custom', set:'hkdse_p1_settings', draft:'hkdse_p1_draft' };
+var FORM_OPTIONS  = ['Form 1','Form 2','Form 3','Form 4','Form 5','Form 6'];
+var CLASS_OPTIONS = ['A','B','C','D','E','BCD1','BCD2','BCD3'];
+var SECTIONS = ['A1','A2','B'];
+var SECTION_LABEL = {A1:'甲一',A2:'甲二',B:'乙部'};
+var GRADE_DESC = ['5**','5*','5','4','3','2','1','U'];
+var GRADE_ASC = ['1','2','3','4','5','5*','5**'];
+
+function LS(k,d){ try{var v=localStorage.getItem(k);return v?JSON.parse(v):d;}catch(e){return d;} }
+function SS(k,v){ try{ localStorage.setItem(k, JSON.stringify(v)); return {ok:true}; } catch(e){ return {ok:false,error:String(e)}; } }
+function uuid(){
+  if(window.crypto && crypto.randomUUID) return crypto.randomUUID();
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g,function(c){ var r=Math.random()*16|0,v=c==='x'?r:(r&0x3|0x8); return v.toString(16); });
+}
+function nowISO(){ return new Date().toISOString(); }
+function esc(s){ return String(s==null?'':s).replace(/[&<>\"]/g,function(c){return {'&':'&','<':'<','>':'>','\"':'"'}[c];}); }
+function papers(){ var custom=LS(K.papers,[]); var map={}; PAPERS.forEach(function(p){map[p.year]=p;}); custom.forEach(function(p){map[p.year]=p;}); return Object.keys(map).map(Number).sort(function(a,b){return b-a;}).map(function(y){return map[y];}); }
+function getPaper(year){ return papers().filter(function(p){return +p.year===+year;})[0]; }
+function clampScore(v,full){ if(!isFinite(v)||v<0) return 0; return Math.min(full, Math.round(v*2)/2); }
+function estimateGrade(pct,cut){ if(!cut) return 'U'; for(var i=0;i<GRADE_DESC.length;i++){ var g=GRADE_DESC[i]; if(g==='U') continue; var v=cut[g]; if(v!=null && pct+1e-9>=v) return g; } return 'U'; }
+function nextGap(pct,cut,total){ for(var i=0;i<GRADE_ASC.length;i++){ var g=GRADE_ASC[i],v=cut[g]; if(v!=null && pct<v) return {grade:g,gapPct:+(v-pct).toFixed(1),gapMarks:Math.ceil((v-pct)/100*total)}; } return null; }
+function resultOf(score,full){ if(score==null) return 'na'; if(full<=0) return 'ok'; var r=score/full; if(r>=0.999) return 'ok'; if(r>=0.5) return 'mid'; return 'bad'; }
+function compute(paper,mode,scores,sections){
+  var sec={A1:0,A2:0,B:0}, full={A1:0,A2:0,B:0}, raw=0, unanswered=0, detail=[];
+  (paper.questions||[]).forEach(function(q){ full[q.section]+=q.fullMarks; });
+  if(mode==='sections'){
+    sec.A1=clampScore(sections.A1||0, paper.sections.A1);
+    sec.A2=clampScore(sections.A2||0, paper.sections.A2);
+    sec.B=clampScore(sections.B||0, paper.sections.B);
+    raw=sec.A1+sec.A2+sec.B;
+  } else {
+    (paper.questions||[]).forEach(function(q){
+      var s = (q.q in scores) ? scores[q.q] : null;
+      var sc = s==null? null : clampScore(s, q.fullMarks);
+      if(sc==null) unanswered++; else { raw+=sc; sec[q.section]+=sc; }
+      detail.push({q:q.q,score:sc,full:q.fullMarks,res:resultOf(sc,q.fullMarks),topic:q.topic,section:q.section,hkAvg:q.hkAvg});
+    });
+  }
+  var pct = paper.fullMarks? +((raw/paper.fullMarks)*100).toFixed(1):0;
+  return {raw:raw,unanswered:unanswered,percentage:pct,grade:estimateGrade(pct,paper.cutoffs||{}),gap:nextGap(pct,paper.cutoffs||{},paper.fullMarks),sectionScores:sec,sectionFull:full,detail:detail};
+}
+function settings(){ return LS(K.set,{url:(CFG.sync&&CFG.sync.defaultWebAppUrl)||'',key:(CFG.sync&&CFG.sync.syncKey)||'hkdse-sync-2026',theme:'light'}); }
+function queue(){ return LS(K.queue,[]); }
+function pendingCount(){ return queue().filter(function(q){return q.status!=='synced';}).length; }
+function records(){ return LS(K.rec,[]); }
+function student(){ return LS(K.stu,null); }
+function draft(){ return LS(K.draft,{year:null,mode:'questions',scores:{},sections:{},notes:'',practicedOn:nowISO().slice(0,10)}); }
+function saveDraft(d){ SS(K.draft,d); }
+
+function normClassNo(v){
+  if(v==null||String(v).trim()==='') return {ok:false,msg:'學號必填'};
+  var s=String(v).trim(); if(!/^\d+$/.test(s)) return {ok:false,msg:'學號只接受 1–50 的整數'};
+  var n=parseInt(s.replace(/^0+/,'')||'0',10); if(!(n>=1&&n<=50)) return {ok:false,msg:'學號必須介乎 1 至 50'};
+  return {ok:true,value:n};
+}
+function validateStudent(s){
+  var e=[]; if(FORM_OPTIONS.indexOf(s.form)===-1) e.push('請選擇 Form');
+  if(CLASS_OPTIONS.indexOf(s.cls)===-1) e.push('請選擇 Class');
+  var n=normClassNo(s.classNo); if(!n.ok) e.push(n.msg);
+  return {valid:!e.length, errors:e, classNo:n.ok?n.value:null};
+}
+
+var SYNC={timer:null,running:false,backoff:[5000,15000,45000,120000,300000],max:5};
+function enqueue(id){ var q=queue(); if(q.filter(function(x){return x.attemptId===id;}).length) return; q.push({attemptId:id,status:'pending',attempts:0,lastError:'',lastAt:null}); SS(K.queue,q); renderSyncUI(); }
+function setRecStatus(id,st,extra){ var recs=records(); recs.forEach(function(r){ if(r.attemptId===id){ r.syncStatus=st; if(extra) for(var k in extra) r[k]=extra[k]; }}); SS(K.rec,recs); }
+function postRecord(rec){
+  var st=settings(); if(!st.url) return Promise.resolve({ok:false,code:'NO_URL',message:'尚未設定 Web App URL'});
+  var ctl=new AbortController(), to=setTimeout(function(){ctl.abort();},30000);
+  return fetch(st.url,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},
+    body:JSON.stringify({syncKey:st.key,record:rec,paper:'paper1'}),signal:ctl.signal,redirect:'follow'})
+    .then(function(r){return r.text();})
+    .then(function(t){ try{return JSON.parse(t);}catch(e){return {ok:false,code:'BAD_RESPONSE',message:'回應無法解析'};} })
+    .catch(function(e){ return {ok:false,code:(e.name==='AbortError'?'TIMEOUT':'NETWORK_ERROR'),message:String(e)}; })
+    .finally(function(){clearTimeout(to);});
+}
+function syncOnce(){
+  if(SYNC.running) return Promise.resolve();
+  var q=queue().filter(function(x){return x.status!=='synced' && x.attempts<SYNC.max;});
+  if(!q.length){ renderSyncUI(); return Promise.resolve(); }
+  SYNC.running=true; renderSyncUI('同步中…');
+  var item=q[0], rec=records().filter(function(r){return r.attemptId===item.attemptId;})[0];
+  if(!rec){ SS(K.queue, queue().filter(function(x){return x.attemptId!==item.attemptId;})); SYNC.running=false; return Promise.resolve(); }
+  return postRecord(rec).then(function(res){
+    var all=queue(), it=all.filter(function(x){return x.attemptId===item.attemptId;})[0];
+    if(it){
+      it.attempts++; it.lastAt=nowISO();
+      if(res && res.ok===true){ it.status='synced'; it.lastError=''; setRecStatus(item.attemptId,'synced',{syncedAt:nowISO()}); }
+      else { it.status=(it.attempts>=SYNC.max)?'failed':'pending'; it.lastError=(res&&((res.code||res.error||'')+': '+(res.message||'')))||'未知錯誤'; setRecStatus(item.attemptId,it.status,{lastSyncError:it.lastError}); }
+    }
+    SS(K.queue,all); SYNC.running=false; renderSyncUI();
+    var left=queue().filter(function(x){return x.status==='pending'&&x.attempts<SYNC.max;});
+    if(left.length){ var d=SYNC.backoff[Math.min(left[0].attempts,SYNC.backoff.length-1)]; clearTimeout(SYNC.timer); SYNC.timer=setTimeout(syncOnce,d); }
+  });
+}
+function resetRetries(){ var q=queue(); q.forEach(function(x){ if(x.status!=='synced'){x.status='pending';x.attempts=0;} }); SS(K.queue,q); }
+function renderSyncUI(txt){
+  var b=document.getElementById('syncBadge'), n=pendingCount(), failed=queue().filter(function(x){return x.status==='failed';}).length;
+  if(txt){ b.textContent=txt; b.className='badge'; }
+  else if(!navigator.onLine){ b.textContent='離線'; b.className='badge warn'; }
+  else if(failed){ b.textContent='同步失敗 '+failed; b.className='badge bad'; }
+  else if(n){ b.textContent='待同步 '+n; b.className='badge warn'; }
+  else { b.textContent='本機已存'; b.className='badge ok'; }
+}
+window.addEventListener('online', function(){ resetRetries(); syncOnce(); toast('已恢復網絡，正在自動同步'); });
+window.addEventListener('offline', renderSyncUI);
+
+function toast(msg){
+  var d=document.createElement('div'); d.className='tst'; d.innerHTML='<span style="flex:1">'+esc(msg)+'</span>';
+  var x=document.createElement('button'); x.textContent='✕'; x.style.cssText='background:transparent;border:1px solid #fff6;color:#fff;border-radius:6px'; x.onclick=function(){d.remove();};
+  d.appendChild(x); document.getElementById('toast').appendChild(d); document.getElementById('live').textContent=msg;
+  setTimeout(function(){d.remove();},4000);
+}
+function confirmDlg(html){
+  return new Promise(function(res){
+    var dlg=document.getElementById('dlg'); document.getElementById('dlgBody').innerHTML=html; dlg.showModal();
+    document.getElementById('dlgYes').onclick=function(){dlg.close();res(true);};
+    document.getElementById('dlgNo').onclick=function(){dlg.close();res(false);};
+  });
+}
+
+var PAGES=[['home','主頁'],['new','新增練習'],['records','練習紀錄'],['analysis','進度分析'],['weak','錯題重溫'],['papers','試卷資料'],['backup','匯入匯出'],['help','使用說明']];
+var cur='home';
+function go(p){ cur=p; document.querySelectorAll('#nav button').forEach(function(b){ b.setAttribute('aria-current', b.dataset.p===p?'page':'false'); });
+  var m=document.getElementById('app'); m.innerHTML='';
+  ({home:pgHome,new:pgNew,records:pgRecords,analysis:pgAnalysis,weak:pgWeak,papers:pgPapers,backup:pgBackup,help:pgHelp})[p](m);
+  window.scrollTo(0,0); renderSyncUI();
+}
+window.go=go;
+
+function pgHome(m){
+  var recs=records(), s=student(), last=recs[recs.length-1];
+  var avg=recs.length?(recs.reduce(function(a,r){return a+r.percentage;},0)/recs.length).toFixed(1):'—';
+  var st=settings();
+  m.innerHTML=
+   '<div class="card"><h2>學生資料</h2>'+(s?
+     '<p><b>'+esc(s.form+' '+s.cls)+'</b>　學號 '+s.classNo+(s.displayName?'　'+esc(s.displayName):'')+'</p>':
+     '<p class="muted">尚未設定。儲存成績前建議先填班別學號。</p>')+
+     '<button class="btn sec" onclick="editStudent()">'+(s?'修改':'設定')+'學生資料</button></div>'+
+   '<div class="card"><h2>雲端同步</h2><p class="muted">端點：'+(st.url?'已設定':'未設定（成績仍會儲存在本機）')+'</p>'+
+     '<p>待同步：<b>'+pendingCount()+'</b></p>'+
+     '<div class="row"><button class="btn sec" onclick="resetRetries();syncOnce()">立即同步</button>'+
+     '<button class="btn ghost" onclick="go(\'backup\')">同步設定</button></div></div>'+
+   '<div class="card"><h2>概況</h2><div class="grid">'+
+     '<div><div class="muted">總練習次數</div><b style="font-size:22px">'+recs.length+'</b></div>'+
+     '<div><div class="muted">平均百分比</div><b style="font-size:22px">'+(avg==='—'?'—':avg+'%')+'</b></div>'+
+     '<div><div class="muted">最近一次</div><b style="font-size:22px">'+(last? last.percentage+'% <span class="badge">'+esc(last.estimatedGrade)+'</span>':'—')+'</b></div>'+
+     '<div><div class="muted">未掌握弱項</div><b style="font-size:22px">'+LS(K.weak,[]).filter(function(w){return !w.mastered;}).length+'</b></div></div>'+
+     '<div class="row" style="margin-top:12px"><button class="btn" onclick="go(\'new\')">開始新練習</button>'+
+     '<button class="btn sec" onclick="go(\'weak\')">錯題重溫</button></div></div>'+
+   '<div class="card"><h2>重要聲明</h2><p class="muted">本工具不含真實試題。等級臨界為歷年必修部分粗略估算，並非正式評級。</p></div>';
+}
+
+function editStudent(){
+  var s=student()||{form:'Form 5',cls:'A',classNo:'',displayName:''};
+  confirmDlg('<h2 style="margin:0 0 8px;font-size:16px">學生資料</h2>'+
+    '<label>Form</label><select id="sf">'+FORM_OPTIONS.map(function(f){return '<option'+(s.form===f?' selected':'')+'>'+f+'</option>';}).join('')+'</select>'+
+    '<label>Class</label><select id="sc">'+CLASS_OPTIONS.map(function(f){return '<option'+(s.cls===f?' selected':'')+'>'+f+'</option>';}).join('')+'</select>'+
+    '<label>學號（1–50）</label><input id="sn" value="'+esc(s.classNo)+'">'+
+    '<label>顯示名稱（選填）</label><input id="sd" value="'+esc(s.displayName||'')+'">').then(function(y){
+    if(!y) return;
+    var obj={form:document.getElementById('sf').value, cls:document.getElementById('sc').value, classNo:document.getElementById('sn').value, displayName:document.getElementById('sd').value};
+    var v=validateStudent(obj); if(!v.valid){ toast(v.errors.join('；')); return editStudent(); }
+    obj.classNo=v.classNo; obj.classLabel=obj.form+' '+obj.cls; SS(K.stu,obj); toast('已儲存學生資料'); go(cur);
+  });
+}
+window.editStudent=editStudent;
+
+function pgNew(m){
+  var d=draft(); var list=papers();
+  m.innerHTML='<div class="card"><h2>選擇年份</h2><label>試卷</label><select id="yr"><option value="">— 請選擇 —</option>'+
+    list.map(function(p){return '<option value="'+p.year+'"'+(d.year===p.year?' selected':'')+'>'+p.year+' 卷一'+(p.custom?'（自訂）':'')+' · '+p.questions.length+' 題 / '+p.fullMarks+' 分</option>';}).join('')+
+    '</select><div class="row" style="margin-top:10px">'+
+    '<label class="badge" style="padding:8px 12px"><input type="radio" name="md" value="questions"'+(d.mode==='questions'?' checked':'')+'> 逐題輸入</label>'+
+    '<label class="badge" style="padding:8px 12px"><input type="radio" name="md" value="sections"'+(d.mode==='sections'?' checked':'')+'> 只填分部總分</label></div>'+
+    '<label>操卷日期</label><input type="date" id="pod" value="'+esc(d.practicedOn||'')+'">'+
+    '<p class="muted">草稿會自動儲存。</p></div><div id="sheet"></div>';
+  function bind(){
+    d.year=document.getElementById('yr').value? +document.getElementById('yr').value : null;
+    d.mode=(document.querySelector('input[name=md]:checked')||{}).value||'questions';
+    d.practicedOn=document.getElementById('pod').value;
+    if(d.year && getPaper(d.year) && Object.keys(d.scores||{}).length && getPaper(d.year).year!==d.year) { d.scores={}; d.sections={}; }
+    saveDraft(d); renderSheet();
+  }
+  document.getElementById('yr').onchange=function(){ d.scores={}; d.sections={}; bind(); };
+  document.querySelectorAll('input[name=md]').forEach(function(r){ r.onchange=bind; });
+  document.getElementById('pod').onchange=bind;
+  renderSheet();
+  function renderSheet(){
+    var paper=d.year? getPaper(d.year):null; var box=document.getElementById('sheet'); if(!paper){ box.innerHTML=''; return; }
+    d.scores=d.scores||{}; d.sections=d.sections||{};
+    var html='';
+    if(d.mode==='questions'){
+      html+='<div class="noprint row" style="margin-bottom:8px"><button class="btn sec" onclick="fillRest0()">空白當 0 分</button><button class="btn sec" onclick="fillAll()">全部滿分</button><button class="btn ghost" onclick="clearScores()">清空</button></div>';
+      SECTIONS.forEach(function(sec){
+        var items=paper.questions.filter(function(q){return q.section===sec;}); if(!items.length) return;
+        var sum=items.reduce(function(a,q){return a+q.fullMarks;},0);
+        html+='<div class="card"><h2>'+paper.year+'　'+SECTION_LABEL[sec]+' <span class="muted">'+sum+' 分</span></h2>';
+        items.forEach(function(q){
+          var sc=d.scores[q.q]; sc = (sc===undefined? null: sc);
+          html+='<div class="qrow"><div><b>Q'+q.q+'</b> <span class="muted">'+esc(q.topic)+'</span><div class="muted">滿分 '+q.fullMarks+(q.hkAvg!=null?'　全港平均 '+q.hkAvg:'')+'</div></div>'+
+            '<div class="scorebtns">'+
+            '<button class="btn sec" onclick="stepQ('+q.q+',-0.5,'+q.fullMarks+')">−</button>'+
+            '<input id="sq'+q.q+'" inputmode="decimal" value="'+(sc==null?'':sc)+'" placeholder="—" onchange="setQ('+q.q+','+q.fullMarks+',this.value)">'+
+            '<button class="btn sec" onclick="stepQ('+q.q+',0.5,'+q.fullMarks+')">+</button></div>'+
+            '<div class="row"><button class="btn ghost" onclick="setQ('+q.q+','+q.fullMarks+','+q.fullMarks+')">滿分</button>'+
+            '<button class="btn ghost" onclick="setQ('+q.q+','+q.fullMarks+','+(Math.round(q.fullMarks)+0)/2+')">一半</button>'+
+            '<button class="btn ghost" onclick="setQ('+q.q+','+q.fullMarks+',0)">零分</button>'+
+            '<button class="btn ghost" onclick="setQ('+q.q+','+q.fullMarks+',\'\')">未做</button></div></div>';
+        });
+        html+='</div>';
+      });
+    } else {
+      html+='<div class="card"><h2>分部總分</h2>';
+      SECTIONS.forEach(function(sec){
+        html+='<label>'+SECTION_LABEL[sec]+'（滿分 '+paper.sections[sec]+'）</label>'+
+          '<input type="number" step="0.5" min="0" max="'+paper.sections[sec]+'" value="'+(d.sections[sec]==null?'':d.sections[sec])+'" onchange="setSec(\''+sec+'\','+paper.sections[sec]+',this.value)">';
+      });
+      html+='</div>';
+    }
+    var c=compute(paper,d.mode,d.scores,d.sections);
+    html+='<div class="card"><h2>結果</h2><div class="grid">'+
+      '<div><div class="muted">得分</div><b style="font-size:22px">'+c.raw+' / '+paper.fullMarks+'</b></div>'+
+      '<div><div class="muted">百分比</div><b style="font-size:22px">'+c.percentage+'%</b></div>'+
+      '<div><div class="muted">估計等級</div><span class="badge ok" style="font-size:18px">'+c.grade+'</span></div>'+
+      '<div><div class="muted">甲一 / 甲二 / 乙</div><b>'+c.sectionScores.A1+' / '+c.sectionScores.A2+' / '+c.sectionScores.B+'</b></div></div>'+
+      (c.gap? '<p class="muted">距離 '+c.gap.grade+' 尚差約 '+c.gap.gapPct+'%（約 '+c.gap.gapMarks+' 分）</p>':'<p class="muted">已達最高估算等級</p>')+
+      '<p class="muted">臨界版本：'+esc(paper.cutoffVersion)+'</p></div>'+
+      '<div class="card"><label>備註</label><textarea id="notes" onchange="var d=draft();d.notes=this.value;saveDraft(d);">'+esc(d.notes||'')+'</textarea></div>'+
+      '<div class="card sticky noprint"><div class="row"><button class="btn sec" onclick="previewOnly()">只計算結果（不儲存）</button>'+
+      '<button class="btn" onclick="saveAttempt()">儲存成績</button></div>'+
+      '<p class="muted" id="prevMsg"></p></div>';
+    box.innerHTML=html;
+  }
+  window.renderSheet=renderSheet;
+}
+function setQ(q,full,v){ var d=draft(); if(v===''||v==null) d.scores[q]=null; else d.scores[q]=clampScore(Number(v),full); saveDraft(d); var el=document.getElementById('sq'+q); if(el) el.value=d.scores[q]==null?'':d.scores[q]; renderSheet(); }
+function stepQ(q,delta,full){ var d=draft(); var cur=d.scores[q]; if(cur==null) cur=0; setQ(q,full,cur+delta); }
+function setSec(sec,full,v){ var d=draft(); d.sections[sec]=clampScore(Number(v)||0,full); saveDraft(d); renderSheet(); }
+function fillRest0(){ var d=draft(),p=getPaper(d.year); if(!p) return; p.questions.forEach(function(q){ if(d.scores[q.q]==null) d.scores[q.q]=0; }); saveDraft(d); renderSheet(); toast('空白題已記 0 分'); }
+function fillAll(){ var d=draft(),p=getPaper(d.year); if(!p) return; p.questions.forEach(function(q){ d.scores[q.q]=q.fullMarks; }); d.sections={A1:p.sections.A1,A2:p.sections.A2,B:p.sections.B}; saveDraft(d); renderSheet(); }
+function clearScores(){ var d=draft(); d.scores={}; d.sections={}; saveDraft(d); renderSheet(); }
+function previewOnly(){ var d=draft(),p=getPaper(d.year); if(!p) return; var c=compute(p,d.mode,d.scores,d.sections); document.getElementById('prevMsg').textContent='預覽：'+c.raw+'/'+p.fullMarks+'（'+c.percentage+'%）等級 '+c.grade+(c.unanswered?'　未做 '+c.unanswered+' 題當 0 分':''); toast('已計算，未儲存'); }
+function saveAttempt(){
+  var s=student(); if(!s){ toast('請先設定學生資料'); return editStudent(); }
+  var vs=validateStudent(s); if(!vs.valid){ toast(vs.errors.join('；')); return editStudent(); }
+  var d=draft(), paper=getPaper(d.year); if(!paper){ toast('請選擇年份'); return; }
+  var c=compute(paper,d.mode,d.scores,d.sections);
+  var rec={
+    attemptId:uuid(), appVersion:CFG.appVersion||'p1-1.0', schemaVersion:SCHEMA,
+    student:{form:s.form,cls:s.cls,classNo:s.classNo,displayName:s.displayName||'',classLabel:s.form+' '+s.cls},
+    year:paper.year, paperId:paper.paperId, paperName:paper.paperName, cutoffVersion:paper.cutoffVersion, mode:d.mode,
+    scores:(paper.questions||[]).map(function(q){ return {q:q.q, score:(q.q in d.scores)? d.scores[q.q]: null}; }),
+    sectionScores:c.sectionScores, rawScore:c.raw, totalMarks:paper.fullMarks, percentage:c.percentage,
+    estimatedGrade:c.grade, unanswered:c.unanswered, notes:(d.notes||'').trim(),
+    practicedOn:d.practicedOn||nowISO().slice(0,10), submittedAt:nowISO(),
+    syncStatus: settings().url? 'pending':'legacy'
+  };
+  var recs=records(); recs.push(rec); var w=SS(K.rec,recs);
+  if(!w.ok){ toast('本機儲存失敗：'+w.error); return; }
+  updateWeak(rec, paper);
+  saveDraft({year:paper.year,mode:d.mode,scores:{},sections:{},notes:'',practicedOn:d.practicedOn});
+  if(rec.syncStatus==='pending') enqueue(rec.attemptId);
+  toast('已儲存 '+paper.year+' 卷一　'+c.raw+'/'+paper.fullMarks+'　'+c.grade);
+  syncOnce(); go('records');
+}
+function updateWeak(rec,paper){
+  if(rec.mode!=='questions') return;
+  var weak=LS(K.weak,[]); var map={}; weak.forEach(function(w){map[w.id]=w;});
+  var byQ={}; (paper.questions||[]).forEach(function(q){byQ[q.q]=q;});
+  (rec.scores||[]).forEach(function(s){
+    var q=byQ[s.q]; if(!q) return; var id=rec.year+'-Q'+s.q; var res=resultOf(s.score,q.fullMarks); var prev=map[id];
+    if(res==='ok'||res==='mid'){ if(prev){ prev.lastScore=s.score; prev.lastAt=rec.submittedAt; if(res==='ok') prev.mastered=true; } return; }
+    if(res==='na') return;
+    var item=prev||{id:id,year:rec.year,q:s.q,topic:q.topic,section:q.section,fullMarks:q.fullMarks,count:0,lastScore:s.score,mastered:false,reviewed:false,lastAt:rec.submittedAt};
+    item.count+=1; item.lastScore=s.score; item.lastAt=rec.submittedAt; item.mastered=false; map[id]=item;
+  });
+  SS(K.weak, Object.keys(map).map(function(k){return map[k];}));
+}
+window.setQ=setQ; window.stepQ=stepQ; window.setSec=setSec; window.fillRest0=fillRest0; window.fillAll=fillAll; window.clearScores=clearScores; window.previewOnly=previewOnly; window.saveAttempt=saveAttempt;
+
+function pgRecords(m){
+  var recs=records().slice().reverse();
+  if(!recs.length){ m.innerHTML='<div class="card"><p class="muted">尚無紀錄。請先在「新增練習」儲存一卷。</p></div>'; return; }
+  var years=Array.from(new Set(recs.map(function(r){return r.year;}))).sort(function(a,b){return b-a;});
+  m.innerHTML='<div class="card"><h2>練習紀錄（'+recs.length+'）</h2>'+
+    '<div class="row noprint"><select id="fy"><option value="">全部年份</option>'+years.map(function(y){return '<option>'+y+'</option>';}).join('')+'</select>'+
+    '<select id="fs"><option value="date-desc">日期（新→舊）</option><option value="date-asc">日期（舊→新）</option><option value="score-desc">分數（高→低）</option><option value="score-asc">分數（低→高）</option></select>'+
+    '<button class="btn sec" onclick="window.print()">列印</button></div><div id="rt"></div></div>';
+  function draw(){
+    var y=document.getElementById('fy').value, s=document.getElementById('fs').value;
+    var rows=recs.filter(function(r){return !y || String(r.year)===y;});
+    rows.sort(function(a,b){
+      if(s==='score-desc') return b.percentage-a.percentage;
+      if(s==='score-asc') return a.percentage-b.percentage;
+      if(s==='date-asc') return a.submittedAt.localeCompare(b.submittedAt);
+      return b.submittedAt.localeCompare(a.submittedAt);
+    });
+    document.getElementById('rt').innerHTML='<table><thead><tr><th>日期</th><th>年份</th><th>分數</th><th>等級</th><th>甲一/甲二/乙</th><th class="noprint"></th></tr></thead><tbody>'+
+      rows.map(function(r){
+        var sec=r.sectionScores||{};
+        return '<tr><td>'+esc((r.practicedOn||r.submittedAt||'').slice(0,10))+'</td><td>'+r.year+'</td><td>'+r.rawScore+'/'+r.totalMarks+'（'+r.percentage+'%）</td><td><span class="badge">'+esc(r.estimatedGrade)+'</span></td><td>'+(sec.A1||0)+'/'+(sec.A2||0)+'/'+(sec.B||0)+'</td>'+
+          '<td class="noprint"><button class="btn sec" onclick="redoYear('+r.year+')">重做</button> <button class="btn ghost" onclick="delRec(\''+r.attemptId+'\')">刪除</button></td></tr>';
+      }).join('')+'</tbody></table>';
+  }
+  document.getElementById('fy').onchange=draw; document.getElementById('fs').onchange=draw; draw();
+}
+function redoYear(y){ saveDraft({year:y,mode:'questions',scores:{},sections:{},notes:'',practicedOn:nowISO().slice(0,10)}); go('new'); }
+function delRec(id){ confirmDlg('<p>刪除此紀錄？</p>').then(function(y){ if(!y) return; SS(K.rec, records().filter(function(r){return r.attemptId!==id;})); SS(K.queue, queue().filter(function(q){return q.attemptId!==id;})); go('records'); }); }
+window.redoYear=redoYear; window.delRec=delRec;
+
+function pgAnalysis(m){
+  var recs=records();
+  if(!recs.length){ m.innerHTML='<div class="card"><p class="muted">尚無資料。</p></div>'; return; }
+  m.innerHTML='<div class="card"><h2>進度分析</h2><canvas id="c1" height="140"></canvas></div>'+
+    '<div class="card"><h2>分部得分</h2><canvas id="c2" height="140"></canvas></div>'+
+    '<div class="card"><h2>課題弱項（得分率最低）</h2><div id="topics"></div></div>';
+  var labels=recs.map(function(r,i){return r.year+'#'+(i+1);});
+  if(window.Chart){
+    new Chart(document.getElementById('c1'),{type:'line',data:{labels:labels,datasets:[{label:'百分比',data:recs.map(function(r){return r.percentage;}),borderColor:'#1e4a7a',tension:.25}]},options:{plugins:{legend:{display:false}},scales:{y:{min:0,max:100}}}});
+    new Chart(document.getElementById('c2'),{type:'bar',data:{labels:labels,datasets:[
+      {label:'甲一',data:recs.map(function(r){return (r.sectionScores||{}).A1||0;}),backgroundColor:'#1e4a7a'},
+      {label:'甲二',data:recs.map(function(r){return (r.sectionScores||{}).A2||0;}),backgroundColor:'#5c8fbf'},
+      {label:'乙部',data:recs.map(function(r){return (r.sectionScores||{}).B||0;}),backgroundColor:'#a9c4de'}
+    ]},options:{scales:{y:{beginAtZero:true,max:35}}}});
+  }
+  var acc={};
+  recs.forEach(function(a){
+    if(a.mode!=='questions') return;
+    var paper=getPaper(a.year); if(!paper) return;
+    var byQ={}; paper.questions.forEach(function(q){byQ[q.q]=q;});
+    (a.scores||[]).forEach(function(s){ if(s.score==null) return; var q=byQ[s.q]; if(!q) return; var t=q.topic||'其他'; if(!acc[t]) acc[t]={topic:t,score:0,full:0}; acc[t].score+=s.score; acc[t].full+=q.fullMarks; });
+  });
+  var topics=Object.keys(acc).map(function(k){ var x=acc[k]; return {topic:x.topic,pct:x.full?+((x.score/x.full)*100).toFixed(1):0}; }).sort(function(a,b){return a.pct-b.pct;}).slice(0,12);
+  document.getElementById('topics').innerHTML=topics.length? '<table><tr><th>課題</th><th>得分率</th></tr>'+topics.map(function(t){return '<tr><td>'+esc(t.topic)+'</td><td>'+t.pct+'%</td></tr>';}).join('')+'</table>':'<p class="muted">需有逐題紀錄才可統計課題。</p>';
+}
+
+function pgWeak(m){
+  var weak=LS(K.weak,[]);
+  var open=weak.filter(function(w){return !w.mastered;}).length;
+  m.innerHTML='<div class="card"><h2>錯題重溫（'+open+' 題未掌握）</h2>'+
+    '<div class="row noprint"><input id="wq" placeholder="搜尋年份、題號或課題"><button class="btn sec" onclick="markAllWeak(true)">全部已掌握</button><button class="btn ghost" onclick="markAllWeak(false)">全部取消</button></div><div id="wl"></div></div>';
+  function draw(){
+    var f=(document.getElementById('wq').value||'').toLowerCase();
+    var list=weak.filter(function(w){ return !f || (w.year+' q'+w.q+' '+w.topic).toLowerCase().indexOf(f)>=0; })
+      .sort(function(a,b){ return Number(a.mastered)-Number(b.mastered) || b.count-a.count; });
+    document.getElementById('wl').innerHTML=list.length? '<table><tr><th>題</th><th>課題</th><th>次數</th><th>最近</th><th></th></tr>'+list.map(function(w){
+      return '<tr><td>'+w.year+' Q'+w.q+' <span class="muted">'+SECTION_LABEL[w.section]+'</span></td><td>'+esc(w.topic)+'</td><td>'+w.count+'</td><td>'+(w.lastScore==null?'—':w.lastScore+'/'+w.fullMarks)+'</td><td><button class="btn '+(w.mastered?'sec':'')+'" onclick="toggleWeak(\''+w.id+'\')">'+(w.mastered?'已掌握':'標為已掌握')+'</button></td></tr>';
+    }).join('')+'</table>':'<p class="muted">沒有弱項。低於該題一半的得分會列入。</p>';
+  }
+  document.getElementById('wq').oninput=draw; draw();
+  window._drawWeak=draw;
+}
+function toggleWeak(id){ var weak=LS(K.weak,[]); weak.forEach(function(w){ if(w.id===id) w.mastered=!w.mastered; }); SS(K.weak,weak); go('weak'); }
+function markAllWeak(v){ var weak=LS(K.weak,[]); weak.forEach(function(w){ w.mastered=v; }); SS(K.weak,weak); go('weak'); }
+window.toggleWeak=toggleWeak; window.markAllWeak=markAllWeak;
+
+function pgPapers(m){
+  var list=papers();
+  m.innerHTML='<div class="card"><h2>試卷資料（'+list.length+' 年）</h2><p class="muted">內建 2012–2026 各題滿分與課題。不含試題原文。</p><table><tr><th>年份</th><th>題數</th><th>滿分</th><th>臨界</th></tr>'+
+    list.map(function(p){return '<tr><td>'+p.year+(p.custom?'（自訂）':'')+'</td><td>'+p.questions.length+'</td><td>'+p.fullMarks+'</td><td>'+esc(p.cutoffVersion||'')+'</td></tr>';}).join('')+'</table></div>';
+}
+
+function pgBackup(m){
+  var st=settings();
+  m.innerHTML='<div class="card"><h2>雲端同步設定</h2>'+
+    '<label>Google Apps Script Web App URL</label><input id="uUrl" value="'+esc(st.url)+'" placeholder="https://script.google.com/macros/s/…/exec">'+
+    '<label>同步密鑰（syncKey）</label><input id="uKey" value="'+esc(st.key)+'">'+
+    '<p class="muted">預設密鑰 hkdse-sync-2026。可與卷二老師版共用同一試算表，成績寫入工作表「卷一」。</p>'+
+    '<div class="row"><button class="btn" onclick="saveSync()">儲存設定</button><button class="btn sec" onclick="testConn()">測試連線</button>'+
+    '<button class="btn sec" onclick="resendLegacy()">補傳紀錄</button></div><div id="tMsg"></div></div>'+
+    '<div class="card"><h2>部署 Google Apps Script</h2>'+
+    '<ol><li>開 Google 試算表 → 擴充功能 → Apps Script，貼上 Code.gs。</li>'+
+    '<li>改 SYNC_KEY 與本頁密鑰相同。</li><li>執行 setupSheets（首次授權）。</li>'+
+    '<li>部署為網頁應用程式：執行身分「我」、存取權「任何人」。</li>'+
+    '<li>複製 /exec 網址貼回本頁。</li></ol>'+
+    '<div class="row"><button class="btn" onclick="copyGs()">複製 Code.gs</button>'+
+    '<a class="btn sec" href="Code.gs" download>下載 Code.gs</a></div>'+
+    '<pre class="code" id="gsPre">載入中…</pre></div>'+
+    '<div class="card"><h2>備份</h2><div class="row"><button class="btn sec" onclick="expJSON()">匯出 JSON</button>'+
+    '<button class="btn sec" onclick="document.getElementById(\'imp\').click()">匯入</button>'+
+    '<input type="file" id="imp" accept="application/json" style="display:none">'+
+    '<button class="btn danger" onclick="wipe()">全部清除</button></div></div>';
+  fetch('Code.gs').then(function(r){return r.text();}).then(function(t){ document.getElementById('gsPre').textContent=t; window._gs=t; }).catch(function(){ document.getElementById('gsPre').textContent='未能載入 Code.gs'; });
+  document.getElementById('imp').onchange=impJSON;
+}
+function saveSync(){ var st=settings(); st.url=document.getElementById('uUrl').value.trim(); st.key=document.getElementById('uKey').value.trim(); SS(K.set,st); toast('已儲存同步設定'); resetRetries(); syncOnce(); }
+function testConn(){
+  var st=settings(); if(!st.url) return toast('請先填入 URL');
+  document.getElementById('tMsg').innerHTML='<p class="muted">測試中…</p>';
+  fetch(st.url,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},
+    body:JSON.stringify({action:'ping',type:'ping',syncKey:st.key,paper:'paper1'}),redirect:'follow'})
+    .then(function(r){return r.text();}).then(function(t){ var j; try{j=JSON.parse(t);}catch(e){j=null;}
+      document.getElementById('tMsg').innerHTML=(j&&j.ok)? '<p class="badge ok">連線成功　密鑰：'+(j.authOk?'正確':'不符或未驗證')+'</p>':'<p class="badge bad">回應異常</p>'; })
+    .catch(function(e){ document.getElementById('tMsg').innerHTML='<p class="badge bad">連線失敗：'+esc(e)+'</p>'; });
+}
+function resendLegacy(){
+  var recs=records().filter(function(r){return r.syncStatus==='legacy'||r.syncStatus==='failed';});
+  if(!recs.length) return toast('沒有需要補傳的紀錄');
+  recs.forEach(function(r){ setRecStatus(r.attemptId,'pending'); enqueue(r.attemptId); }); resetRetries(); syncOnce(); toast('已排隊 '+recs.length+' 筆');
+}
+function copyGs(){ var t=window._gs||''; navigator.clipboard.writeText(t).then(function(){toast('已複製 Code.gs');}).catch(function(){ toast('請手動選取複製'); }); }
+function expJSON(){
+  var blob=new Blob(['\ufeff'+JSON.stringify({schemaVersion:SCHEMA,exportedAt:nowISO(),records:records(),weak:LS(K.weak,[]),student:student(),papers:LS(K.papers,[]),settings:settings()},null,2)],{type:'application/json'});
+  var a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='hkdse-p1-backup-'+Date.now()+'.json'; a.click();
+}
+function impJSON(e){
+  var f=e.target.files[0]; if(!f) return; var rd=new FileReader();
+  rd.onload=function(){ var d; try{d=JSON.parse(rd.result);}catch(err){return toast('檔案格式錯誤');}
+    confirmDlg('<p>檔案含 '+(d.records||[]).length+' 筆。確定＝合併，取消＝取代。</p>').then(function(merge){
+      var recs=merge? records().concat(d.records||[]) : (d.records||[]);
+      var seen={}; recs=recs.filter(function(r){ if(!r||!r.attemptId||seen[r.attemptId]) return false; seen[r.attemptId]=1; return true; });
+      SS(K.rec,recs); SS(K.weak, merge? LS(K.weak,[]).concat(d.weak||[]) : (d.weak||[]));
+      toast('匯入完成（'+recs.length+' 筆）'); go('records');
+    });
+  }; rd.readAsText(f);
+}
+function wipe(){
+  confirmDlg('<p>清除所有本機資料，無法復原。</p><label>請輸入 DELETE ALL</label><input id="wc">').then(function(y){
+    if(!y) return; if(document.getElementById('wc').value!=='DELETE ALL') return toast('確認字串不符');
+    [K.rec,K.queue,K.stu,K.weak,K.papers,K.draft].forEach(function(k){localStorage.removeItem(k);}); toast('已清除'); go('home');
+  });
+}
+window.saveSync=saveSync; window.testConn=testConn; window.resendLegacy=resendLegacy; window.copyGs=copyGs; window.expJSON=expJSON; window.wipe=wipe;
+
+function pgHelp(m){
+  m.innerHTML='<div class="card"><h2>使用說明</h2><ol>'+
+    '<li>先設定學生資料（Form、Class、學號）。</li>'+
+    '<li>新增練習選年份，逐題以 0.5 分加減，或只填分部總分。</li>'+
+    '<li>未做題以 0 分計入 105 分總分，但不會寫入錯題簿。低於該題一半列入弱項。</li>'+
+    '<li>「只計算結果」不儲存；「儲存成績」才建立紀錄並可上載 Google Sheet。</li>'+
+    '<li>卷一滿分 105：甲一 35、甲二 35、乙部 35。估計等級僅供操卷參考。</li></ol>'+
+    '<h2>同步</h2><ul><li>每筆有唯一 Attempt ID，重試不會重複列。</li>'+
+    '<li>工作表名稱為「卷一」，可與卷二共用同一 Apps Script。</li></ul>'+
+    '<p class="muted">本工具與考評局並無官方關係。2026 年臨界為歷史平均推算。</p></div>';
+}
+
+(function init(){
+  var st=settings();
+  document.documentElement.setAttribute('data-theme', st.theme||'light');
+  document.getElementById('themeBtn').onclick=function(){ var s=settings(); s.theme=(s.theme==='dark')?'light':'dark'; SS(K.set,s); document.documentElement.setAttribute('data-theme',s.theme); };
+  document.getElementById('nav').innerHTML=PAGES.map(function(p){ return '<button data-p="'+p[0]+'" onclick="go(\''+p[0]+'\')">'+p[1]+'</button>'; }).join('');
+  go('home'); resetRetries(); setTimeout(syncOnce,800);
+  if('serviceWorker' in navigator){ navigator.serviceWorker.register('sw.js').catch(function(){}); }
+})();
+</script>
+</body>
+</html>

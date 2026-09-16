@@ -1,5 +1,16 @@
 [
- 
+  {
+    "id": "dse-math-p1",
+    "folder": "dse-math-p1",
+    "title": "HKDSE 數學卷一成績記錄（老師版）",
+    "subject": ["數學"],
+    "year": "2026",
+    "author": "",
+    "desc": "老師版：2012–2026 卷一逐題／分部記分、等級估算、錯題重溫與進度圖表；記錄附班別學號，可同步至 Google Sheet「卷一」工作表。",
+    "thumb": "games/dse-math-p1/thumb.svg",
+    "tags": ["卷一", "成績追蹤", "雲端同步", "PWA"],
+    "updated": "2026-09-16"
+  },
   {
     "id": "eng-b1b2con",
     "folder": "eng-b1b2con",

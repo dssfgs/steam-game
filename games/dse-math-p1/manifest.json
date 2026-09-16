@@ -1,0 +1,12 @@
+{
+  "name": "HKDSE 數學卷一成績記錄（老師版）",
+  "short_name": "數學卷一",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#f3f1ec",
+  "theme_color": "#1E4A7A",
+  "lang": "zh-HK",
+  "icons": [
+    { "src": "favicon.svg", "sizes": "any", "type": "image/svg+xml" }
+  ]
+}
