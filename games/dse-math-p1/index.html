@@ -35,11 +35,15 @@ th,td{border-bottom:1px solid var(--line);padding:7px 6px;text-align:left}
 .row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
 dialog{border:0;border-radius:14px;padding:18px;max-width:440px;width:92%;background:var(--card);color:var(--fg)}
 dialog::backdrop{background:rgba(0,0,0,.5)}
-#toast{position:fixed;left:50%;transform:translateX(-50%);bottom:16px;z-index:99;display:flex;flex-direction:column;gap:8px;width:min(92%,440px)}
+#toast{position:fixed;left:50%;transform:translateX(-50%);bottom:96px;z-index:99;display:flex;flex-direction:column;gap:8px;width:min(92%,440px)}
 .tst{background:#111827;color:#fff;padding:11px 14px;border-radius:10px;display:flex;gap:10px;align-items:center}
 .qrow{display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:space-between;border:1px solid var(--line);border-radius:10px;padding:10px;margin-bottom:8px;background:var(--bg)}
 .scorebtns{display:flex;gap:4px;align-items:center}
-.scorebtns input{width:64px;text-align:center;font-weight:700}
+.scorebtns input{width:88px;text-align:center;font-weight:700;font-size:18px}
+.qscore{font-weight:700;font-size:18px;font-variant-numeric:tabular-nums;min-width:5.5rem}
+.markhud{position:fixed;left:0;right:0;bottom:0;z-index:40;background:var(--card);border-top:1px solid var(--line);padding:10px 12px calc(12px + env(safe-area-inset-bottom,0px));display:none}
+.markhud.show{display:block}
+body.has-hud{padding-bottom:96px}
 .sticky{position:sticky;bottom:8px;z-index:20}
 pre.code{max-height:280px;overflow:auto;background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:10px;font-size:11px;white-space:pre}
 canvas{max-width:100%}
@@ -59,6 +63,7 @@ canvas{max-width:100%}
 <nav id="nav"></nav>
 <div id="live" class="sr" aria-live="polite"></div>
 <main id="app"></main>
+<div id="markHud" class="markhud noprint"></div>
 <div id="toast"></div>
 <dialog id="dlg"><div id="dlgBody"></div>
 <div class="row" style="justify-content:flex-end;margin-top:14px">
@@ -202,6 +207,7 @@ function confirmDlg(html){
 var PAGES=[['home','主頁'],['new','輸入分數'],['result','成績報告'],['records','練習紀錄'],['class','班級報告'],['analysis','進度分析'],['weak','錯題重溫'],['papers','試卷資料'],['backup','匯入匯出'],['help','使用說明']];
 var cur='home';
 function go(p){ cur=p; document.querySelectorAll('#nav button').forEach(function(b){ b.setAttribute('aria-current', b.dataset.p===p?'page':'false'); });
+  hideMarkHud();
   var m=document.getElementById('app'); m.innerHTML='';
   ({home:pgHome,new:pgNew,result:pgResult,records:pgRecords,'class':pgClass,analysis:pgAnalysis,weak:pgWeak,papers:pgPapers,backup:pgBackup,help:pgHelp})[p](m);
   window.scrollTo(0,0); renderSyncUI();
@@ -278,21 +284,27 @@ function pgNew(m){
   document.getElementById('pod').onchange=bind;
   renderSheet();
   function renderSheet(){
-    var paper=d.year? getPaper(d.year):null; var box=document.getElementById('sheet'); if(!paper){ box.innerHTML=''; return; }
+    var paper=d.year? getPaper(d.year):null; var box=document.getElementById('sheet'); if(!paper){ box.innerHTML=''; hideMarkHud(); return; }
     d.scores=d.scores||{}; d.sections=d.sections||{};
-    var html='';
+    var c=compute(paper,d.mode,d.scores,d.sections);
+    var filled=d.mode==='questions'?(paper.questions.length-c.unanswered):SECTIONS.filter(function(s){return d.sections[s]!=null;}).length;
+    var totalQ=d.mode==='questions'?paper.questions.length:3;
+    var html='<div id="tallyBox">'+tallyHTML(paper,c,filled,totalQ)+'</div>';
     if(d.mode==='questions'){
       html+='<div class="noprint row" style="margin-bottom:8px"><button class="btn sec" onclick="fillRest0()">空白當 0 分</button><button class="btn sec" onclick="fillAll()">全部滿分</button><button class="btn ghost" onclick="clearScores()">清空</button></div>';
       SECTIONS.forEach(function(sec){
         var items=paper.questions.filter(function(q){return q.section===sec;}); if(!items.length) return;
         var sum=items.reduce(function(a,q){return a+q.fullMarks;},0);
-        html+='<div class="card"><h2>'+paper.year+'　'+SECTION_LABEL[sec]+' <span class="muted">'+sum+' 分</span></h2>';
+        var got=items.reduce(function(a,q){return a+(d.scores[q.q]==null?0:d.scores[q.q]);},0);
+        var n=items.filter(function(q){return d.scores[q.q]!=null;}).length;
+        html+='<div class="card"><h2>'+paper.year+' '+SECTION_LABEL[sec]+' <span class="muted" id="secSum-'+sec+'">已輸入 '+got+' / '+sum+'（'+n+'/'+items.length+' 題）</span></h2>';
         items.forEach(function(q){
           var sc=d.scores[q.q]; sc = (sc===undefined? null: sc);
-          html+='<div class="qrow"><div><b>Q'+q.q+'</b> <span class="muted">'+esc(q.topic)+'</span><div class="muted">滿分 '+q.fullMarks+(q.hkAvg!=null?'　全港平均 '+q.hkAvg:'')+'</div></div>'+
+          html+='<div class="qrow"><div><b>Q'+q.q+'</b> <span class="muted">'+esc(q.topic)+'</span><div class="muted">滿分 '+q.fullMarks+(q.hkAvg!=null?' 全港平均 '+q.hkAvg:'')+'</div>'+
+            '<div class="qscore" id="sv'+q.q+'">'+(sc==null?'未填':sc)+' / '+q.fullMarks+'</div></div>'+
             '<div class="scorebtns">'+
             '<button class="btn sec" onclick="stepQ('+q.q+',-0.5,'+q.fullMarks+')">−</button>'+
-            '<input id="sq'+q.q+'" inputmode="decimal" value="'+(sc==null?'':sc)+'" placeholder="—" onchange="setQ('+q.q+','+q.fullMarks+',this.value)">'+
+            '<input id="sq'+q.q+'" inputmode="decimal" value="'+(sc==null?'':sc)+'" placeholder="—" oninput="previewQ('+q.q+','+q.fullMarks+',this.value)" onchange="setQ('+q.q+','+q.fullMarks+',this.value)">'+
             '<button class="btn sec" onclick="stepQ('+q.q+',0.5,'+q.fullMarks+')">+</button></div>'+
             '<div class="row"><button class="btn ghost" onclick="setQ('+q.q+','+q.fullMarks+','+q.fullMarks+')">滿分</button>'+
             '<button class="btn ghost" onclick="setQ('+q.q+','+q.fullMarks+','+(Math.round(q.fullMarks)+0)/2+')">一半</button>'+
@@ -302,36 +314,112 @@ function pgNew(m){
         html+='</div>';
       });
     } else {
-      html+='<div class="card"><h2>分部總分</h2>';
+      html+='<div class="card"><h2>分部總分 <span class="muted">已輸入 '+c.raw+' / '+paper.fullMarks+'</span></h2>';
       SECTIONS.forEach(function(sec){
         html+='<label>'+SECTION_LABEL[sec]+'（滿分 '+paper.sections[sec]+'）</label>'+
-          '<input type="number" step="0.5" min="0" max="'+paper.sections[sec]+'" value="'+(d.sections[sec]==null?'':d.sections[sec])+'" onchange="setSec(\''+sec+'\','+paper.sections[sec]+',this.value)">';
+          '<input type="number" step="0.5" min="0" max="'+paper.sections[sec]+'" value="'+(d.sections[sec]==null?'':d.sections[sec])+'" onchange="setSec(\''+sec+'\','+paper.sections[sec]+',this.value)">'+
+          '<p class="qscore">'+(d.sections[sec]==null?'未填':d.sections[sec])+' / '+paper.sections[sec]+'</p>';
       });
       html+='</div>';
     }
-    var c=compute(paper,d.mode,d.scores,d.sections);
-    html+='<div class="card"><h2>結果</h2><div class="grid">'+
+    html+='<div class="card" id="resultBox"><h2>結果</h2><div class="grid">'+
       '<div><div class="muted">得分</div><b style="font-size:22px">'+c.raw+' / '+paper.fullMarks+'</b></div>'+
       '<div><div class="muted">百分比</div><b style="font-size:22px">'+c.percentage+'%</b></div>'+
       '<div><div class="muted">估計等級</div><span class="badge ok" style="font-size:18px">'+c.grade+'</span></div>'+
       '<div><div class="muted">甲一 / 甲二 / 乙</div><b>'+c.sectionScores.A1+' / '+c.sectionScores.A2+' / '+c.sectionScores.B+'</b></div></div>'+
       (c.gap? '<p class="muted">距離 '+c.gap.grade+' 尚差約 '+c.gap.gapPct+'%（約 '+c.gap.gapMarks+' 分）</p>':'<p class="muted">已達最高估算等級</p>')+
-      '<p class="muted">臨界版本：'+esc(paper.cutoffVersion)+'</p></div>'+
+      '<p class="muted">臨界版本：'+esc(paper.cutoffVersion)+'。每填一題即時加總，未填當 0 分。</p></div>'+
       '<div class="card"><label>備註</label><textarea id="notes" onchange="var d=draft();d.notes=this.value;saveDraft(d);">'+esc(d.notes||'')+'</textarea></div>'+
-      '<div class="card sticky noprint"><div class="row"><button class="btn sec" onclick="previewOnly()">只計算結果（不儲存）</button>'+
+      '<div class="card noprint"><div class="row">'+
       '<button class="btn" onclick="saveAttempt()">儲存成績</button></div>'+
-      '<p class="muted" id="prevMsg"></p></div>';
+      '<p class="muted">已輸入分數顯示在每題右側，以及畫面底部列。</p></div>';
     box.innerHTML=html;
+    refreshMarkHud();
   }
   window.renderSheet=renderSheet;
 }
-function setQ(q,full,v){ var d=draft(); if(v===''||v==null) d.scores[q]=null; else d.scores[q]=clampScore(Number(v),full); saveDraft(d); var el=document.getElementById('sq'+q); if(el) el.value=d.scores[q]==null?'':d.scores[q]; renderSheet(); }
+function tallyHTML(paper,c,filled,totalQ){
+  return '<div class="card"><h2>已輸入分數</h2><div class="grid">'+
+    '<div><div class="muted">總分</div><b style="font-size:22px">'+c.raw+' / '+paper.fullMarks+'</b></div>'+
+    '<div><div class="muted">已填題數</div><b style="font-size:22px">'+filled+' / '+totalQ+'</b></div>'+
+    '<div><div class="muted">甲一</div><b style="font-size:22px">'+c.sectionScores.A1+' / '+c.sectionFull.A1+'</b></div>'+
+    '<div><div class="muted">甲二</div><b style="font-size:22px">'+c.sectionScores.A2+' / '+c.sectionFull.A2+'</b></div>'+
+    '<div><div class="muted">乙部</div><b style="font-size:22px">'+c.sectionScores.B+' / '+c.sectionFull.B+'</b></div>'+
+    '<div><div class="muted">估計等級</div><span class="badge ok" style="font-size:18px">'+c.grade+'</span></div></div>'+
+    '<p class="muted">每填一題即時更新。未填題以 0 分計入總分。</p></div>';
+}
+function hideMarkHud(){
+  var hud=document.getElementById('markHud');
+  if(hud){ hud.className='markhud noprint'; hud.innerHTML=''; }
+  document.body.classList.remove('has-hud');
+}
+function refreshMarkHud(){
+  var d=draft(); var paper=d.year?getPaper(d.year):null;
+  var hud=document.getElementById('markHud');
+  if(!hud) return;
+  if(!paper || cur!=='new'){ hideMarkHud(); return; }
+  var c=compute(paper,d.mode,d.scores||{},d.sections||{});
+  var filled=d.mode==='questions'?(paper.questions.length-c.unanswered):SECTIONS.filter(function(s){return (d.sections||{})[s]!=null;}).length;
+  var totalQ=d.mode==='questions'?paper.questions.length:3;
+  hud.className='markhud noprint show';
+  document.body.classList.add('has-hud');
+  hud.innerHTML='<div class="row" style="justify-content:space-between;align-items:center;max-width:1000px;margin:0 auto">'+
+    '<div><div class="muted">已輸入分數</div><b style="font-size:22px">'+c.raw+' / '+paper.fullMarks+'</b>'+
+    '<div class="muted">已填 '+filled+'/'+totalQ+' 題 · 甲一 '+c.sectionScores.A1+' · 甲二 '+c.sectionScores.A2+' · 乙 '+c.sectionScores.B+' · '+c.grade+'</div></div>'+
+    '<button class="btn" onclick="saveAttempt()">儲存</button></div>';
+  var live=document.getElementById('tallyBox');
+  if(live) live.innerHTML=tallyHTML(paper,c,filled,totalQ);
+  var rb=document.getElementById('resultBox');
+  if(rb){
+    rb.innerHTML='<h2>結果</h2><div class="grid">'+
+      '<div><div class="muted">得分</div><b style="font-size:22px">'+c.raw+' / '+paper.fullMarks+'</b></div>'+
+      '<div><div class="muted">百分比</div><b style="font-size:22px">'+c.percentage+'%</b></div>'+
+      '<div><div class="muted">估計等級</div><span class="badge ok" style="font-size:18px">'+c.grade+'</span></div>'+
+      '<div><div class="muted">甲一 / 甲二 / 乙</div><b>'+c.sectionScores.A1+' / '+c.sectionScores.A2+' / '+c.sectionScores.B+'</b></div></div>'+
+      (c.gap? '<p class="muted">距離 '+c.gap.grade+' 尚差約 '+c.gap.gapPct+'%（約 '+c.gap.gapMarks+' 分）</p>':'<p class="muted">已達最高估算等級</p>')+
+      '<p class="muted">臨界版本：'+esc(paper.cutoffVersion)+'。每填一題即時加總，未填當 0 分。</p>';
+  }
+  SECTIONS.forEach(function(sec){
+    var el=document.getElementById('secSum-'+sec);
+    if(!el) return;
+    var items=paper.questions.filter(function(q){return q.section===sec;});
+    var full=items.reduce(function(a,q){return a+q.fullMarks;},0);
+    var got=items.reduce(function(a,q){return a+((d.scores||{})[q.q]==null?0:(d.scores||{})[q.q]);},0);
+    var n=items.filter(function(q){return (d.scores||{})[q.q]!=null;}).length;
+    el.textContent='已輸入 '+got+' / '+full+'（'+n+'/'+items.length+' 題）';
+  });
+}
+function previewQ(q,full,v){
+  var d=draft();
+  if(v===''||v==null) d.scores[q]=null;
+  else if(String(v).slice(-1)==='.') { refreshMarkHud(); return; }
+  else {
+    var n=Number(v);
+    if(!isFinite(n)) return;
+    d.scores[q]=clampScore(n,full);
+  }
+  saveDraft(d);
+  var shown=document.getElementById('sv'+q);
+  if(shown) shown.textContent=(d.scores[q]==null?'未填':d.scores[q])+' / '+full;
+  refreshMarkHud();
+}
+function setQ(q,full,v){
+  var d=draft();
+  if(v===''||v==null) d.scores[q]=null;
+  else d.scores[q]=clampScore(Number(v),full);
+  saveDraft(d);
+  var el=document.getElementById('sq'+q);
+  if(el) el.value=d.scores[q]==null?'':d.scores[q];
+  var shown=document.getElementById('sv'+q);
+  if(shown) shown.textContent=(d.scores[q]==null?'未填':d.scores[q])+' / '+full;
+  refreshMarkHud();
+}
 function stepQ(q,delta,full){ var d=draft(); var cur=d.scores[q]; if(cur==null) cur=0; setQ(q,full,cur+delta); }
-function setSec(sec,full,v){ var d=draft(); d.sections[sec]=clampScore(Number(v)||0,full); saveDraft(d); renderSheet(); }
-function fillRest0(){ var d=draft(),p=getPaper(d.year); if(!p) return; p.questions.forEach(function(q){ if(d.scores[q.q]==null) d.scores[q.q]=0; }); saveDraft(d); renderSheet(); toast('空白題已記 0 分'); }
-function fillAll(){ var d=draft(),p=getPaper(d.year); if(!p) return; p.questions.forEach(function(q){ d.scores[q.q]=q.fullMarks; }); d.sections={A1:p.sections.A1,A2:p.sections.A2,B:p.sections.B}; saveDraft(d); renderSheet(); }
-function clearScores(){ var d=draft(); d.scores={}; d.sections={}; saveDraft(d); renderSheet(); }
-function previewOnly(){ var d=draft(),p=getPaper(d.year); if(!p) return; var c=compute(p,d.mode,d.scores,d.sections); document.getElementById('prevMsg').textContent='預覽：'+c.raw+'/'+p.fullMarks+'（'+c.percentage+'%）等級 '+c.grade+(c.unanswered?'　未做 '+c.unanswered+' 題當 0 分':''); toast('已計算，未儲存'); }
+function setSec(sec,full,v){ var d=draft(); d.sections[sec]=clampScore(Number(v)||0,full); saveDraft(d); if(window.renderSheet) window.renderSheet(); else refreshMarkHud(); }
+function fillRest0(){ var d=draft(),p=getPaper(d.year); if(!p) return; p.questions.forEach(function(q){ if(d.scores[q.q]==null) d.scores[q.q]=0; }); saveDraft(d); if(window.renderSheet) window.renderSheet(); toast('空白題已記 0 分'); }
+function fillAll(){ var d=draft(),p=getPaper(d.year); if(!p) return; p.questions.forEach(function(q){ d.scores[q.q]=q.fullMarks; }); d.sections={A1:p.sections.A1,A2:p.sections.A2,B:p.sections.B}; saveDraft(d); if(window.renderSheet) window.renderSheet(); }
+function clearScores(){ var d=draft(); d.scores={}; d.sections={}; saveDraft(d); if(window.renderSheet) window.renderSheet(); }
+function previewOnly(){ var d=draft(),p=getPaper(d.year); if(!p) return; var c=compute(p,d.mode,d.scores,d.sections); toast('目前總分 '+c.raw+'/'+p.fullMarks+'（'+c.percentage+'%）等級 '+c.grade); }
 function saveAttempt(){
   var s=student(); if(!s){ toast('請先設定學生資料'); return editStudent(); }
   var vs=validateStudent(s); if(!vs.valid){ toast(vs.errors.join('；')); return editStudent(); }
