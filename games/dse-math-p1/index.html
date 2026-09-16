@@ -204,7 +204,7 @@ function confirmDlg(html){
   });
 }
 
-var PAGES=[['home','主頁'],['new','輸入分數'],['result','成績報告'],['records','練習紀錄'],['class','班級報告'],['analysis','進度分析'],['weak','錯題重溫'],['papers','試卷資料'],['backup','匯入匯出'],['help','使用說明']];
+var PAGES=[['home','主頁'],['new','輸入分數'],['result','成績報告'],['records','練習紀錄'],['class','班級報告'],['analysis','教師分析'],['weak','錯題重溫'],['papers','試卷資料'],['backup','匯入匯出'],['help','使用說明']];
 var cur='home';
 function go(p){ cur=p; document.querySelectorAll('#nav button').forEach(function(b){ b.setAttribute('aria-current', b.dataset.p===p?'page':'false'); });
   hideMarkHud();
@@ -581,28 +581,187 @@ window.redoYear=redoYear; window.delRec=delRec;
 
 function pgAnalysis(m){
   var recs=records();
-  if(!recs.length){ m.innerHTML='<div class="card"><p class="muted">尚無資料。</p></div>'; return; }
-  m.innerHTML='<div class="card"><h2>進度分析</h2><canvas id="c1" height="140"></canvas></div>'+
-    '<div class="card"><h2>分部得分</h2><canvas id="c2" height="140"></canvas></div>'+
-    '<div class="card"><h2>課題弱項（得分率最低）</h2><div id="topics"></div></div>';
-  var labels=recs.map(function(r,i){return r.year+'#'+(i+1);});
-  if(window.Chart){
-    new Chart(document.getElementById('c1'),{type:'line',data:{labels:labels,datasets:[{label:'百分比',data:recs.map(function(r){return r.percentage;}),borderColor:'#1e4a7a',tension:.25}]},options:{plugins:{legend:{display:false}},scales:{y:{min:0,max:100}}}});
-    new Chart(document.getElementById('c2'),{type:'bar',data:{labels:labels,datasets:[
-      {label:'甲一',data:recs.map(function(r){return (r.sectionScores||{}).A1||0;}),backgroundColor:'#1e4a7a'},
-      {label:'甲二',data:recs.map(function(r){return (r.sectionScores||{}).A2||0;}),backgroundColor:'#5c8fbf'},
-      {label:'乙部',data:recs.map(function(r){return (r.sectionScores||{}).B||0;}),backgroundColor:'#a9c4de'}
-    ]},options:{scales:{y:{beginAtZero:true,max:35}}}});
+  if(!recs.length){
+    m.innerHTML='<div class="card"><h2>教師分析</h2><p class="muted">尚無紀錄。學生先輸入分數並儲存後，這裡會出現班級總覽、熱圖與個人報告。</p>'+
+      '<button class="btn" id="demoBtn">載入示範班</button></div>';
+    document.getElementById('demoBtn').onclick=function(){ loadDemoClass(); go('analysis'); };
+    return;
   }
-  var acc={};
-  recs.forEach(function(a){
-    if(a.mode!=='questions') return;
-    var paper=getPaper(a.year); if(!paper) return;
-    var byQ={}; paper.questions.forEach(function(q){byQ[q.q]=q;});
-    (a.scores||[]).forEach(function(s){ if(s.score==null) return; var q=byQ[s.q]; if(!q) return; var t=q.topic||'其他'; if(!acc[t]) acc[t]={topic:t,score:0,full:0}; acc[t].score+=s.score; acc[t].full+=q.fullMarks; });
+  function key(a){ var s=a.student; return s? s.form+'|'+s.cls+'|'+s.classNo : 'anon:'+a.attemptId; }
+  function clab(a){ return (a.student && (a.student.classLabel || (a.student.form+' '+a.student.cls))) || '未分班'; }
+  function mean(xs){ return xs.length? +(xs.reduce(function(s,n){return s+n;},0)/xs.length).toFixed(1):0; }
+  function groupsOf(list){
+    var map={};
+    list.forEach(function(a){ var k=key(a); (map[k]=map[k]||[]).push(a); });
+    return Object.keys(map).map(function(k){
+      var arr=map[k].slice().sort(function(a,b){ return String(a.practicedOn||a.submittedAt).localeCompare(String(b.practicedOn||b.submittedAt)); });
+      var pcts=arr.map(function(x){return x.percentage;});
+      var last=arr[arr.length-1];
+      return {key:k, student:last.student, classLabel:clab(last), n:arr.length, avg:mean(pcts), best:Math.max.apply(null,pcts), latest:pcts[pcts.length-1], first:pcts[0], delta:+(pcts[pcts.length-1]-pcts[0]).toFixed(1), grade:last.estimatedGrade, a1:mean(arr.map(function(x){return x.sectionScores.A1;})), a2:mean(arr.map(function(x){return x.sectionScores.A2;})), b:mean(arr.map(function(x){return x.sectionScores.B;})), attempts:arr};
+    }).sort(function(a,b){ return a.classLabel.localeCompare(b.classLabel,'zh-Hant') || ((a.student&&a.student.classNo)||0)-((b.student&&b.student.classNo)||0); });
+  }
+  function tally(a){
+    var paper=getPaper(a.year); var ok=0,bad=0,na=0;
+    if(a.mode==='questions'&&paper){
+      var byQ={}; paper.questions.forEach(function(q){byQ[q.q]=q;});
+      (a.scores||[]).forEach(function(s){ var q=byQ[s.q]; if(!q) return; if(s.score==null) na++; else if(s.score+1e-9>=q.fullMarks) ok++; else bad++; });
+    } else na=a.unanswered||0;
+    return {ok:ok,bad:bad,na:na,acc:a.percentage};
+  }
+  function weakOf(g, onlyOpen){
+    var map={}, paperBy={};
+    g.attempts.slice().sort(function(a,b){return String(a.practicedOn||a.submittedAt).localeCompare(String(b.practicedOn||b.submittedAt));}).forEach(function(a){
+      if(a.mode!=='questions') return; var p=getPaper(a.year); if(!p) return;
+      var byQ={}; p.questions.forEach(function(q){byQ[q.q]=q;});
+      (a.scores||[]).forEach(function(s){
+        var q=byQ[s.q]; if(!q) return; var id=a.year+'-Q'+s.q;
+        if(!map[id]) map[id]={year:a.year,q:s.q,topic:q.topic,full:q.fullMarks,wrong:0,na:0,tried:0,status:'仍未掌握',lastAt:(a.practicedOn||'').slice(0,10),lastWrong:''};
+        var w=map[id]; w.tried++; w.lastAt=(a.practicedOn||'').slice(0,10);
+        var r=resultOf(s.score,q.fullMarks);
+        if(r==='na') w.na++;
+        else if(r==='bad'){ w.wrong++; w.status='仍未掌握'; w.lastWrong=w.lastAt; }
+        else w.status='已改善';
+      });
+    });
+    var list=Object.keys(map).map(function(k){return map[k];}).filter(function(w){return w.wrong>0||w.na>0;});
+    if(onlyOpen) list=list.filter(function(w){return w.status==='仍未掌握';});
+    return list.sort(function(a,b){ return Number(a.status==='已改善')-Number(b.status==='已改善')||b.wrong-a.wrong; });
+  }
+  var groups=groupsOf(recs);
+  var gCount={}; recs.forEach(function(r){ gCount[r.estimatedGrade]=(gCount[r.estimatedGrade]||0)+1; });
+  var now=Date.now(), week=recs.filter(function(r){return now-Date.parse(r.submittedAt)<=7*86400000;}).length;
+  var today=recs.filter(function(r){return (r.submittedAt||'').slice(0,10)===new Date().toISOString().slice(0,10);}).length;
+  var pcts=recs.map(function(r){return r.percentage;});
+  var pass=recs.filter(function(r){return r.percentage>=50;}).length;
+  var classes={}; groups.forEach(function(g){ classes[g.classLabel]=(classes[g.classLabel]||0)+1; });
+  var classList=Object.keys(classes).sort();
+  var years=Array.from(new Set(recs.map(function(r){return r.year;}))).sort(function(a,b){return b-a;});
+  m.innerHTML='<div class="card"><h2>教師分析</h2><p class="muted">班級與個人同一套數據。可切換總覽、名單、班別、熱圖、需關注、進步、教學重點、排行榜、個人。</p>'+
+    '<div class="row noprint"><button class="btn sec" id="btnDashPrint">列印總覽</button><button class="btn" id="btnBulk">一鍵產生全班報告</button></div>'+
+    '<div class="row noprint" id="anav" style="margin-top:10px"></div></div><div id="apanel"></div>'+
+    '<dialog id="bulkDlg"><h2 style="margin:0 0 8px;font-size:16px;color:var(--pri)">一鍵產生全班報告</h2>'+
+    '<p class="muted">每位學生會建立一個獨立頁面。再次執行相同班別及年份時，原頁面會被重建。</p>'+
+    '<label>班別</label><select id="bClass"><option value="">請選擇班別</option>'+classList.map(function(c){return '<option value="'+esc(c)+'">'+esc(c)+'（'+classes[c]+' 人）</option>';}).join('')+'</select>'+
+    '<label>年份</label><select id="bYear"><option value="">全部年份</option>'+years.map(function(y){return '<option>'+y+'</option>';}).join('')+'</select>'+
+    '<label class="row" style="margin:10px 0"><input type="checkbox" id="bOpen"><span>錯題部分只列「仍未掌握／未作答」，不列已改善題目</span></label>'+
+    '<button class="btn" id="bGo" style="width:100%;margin-top:8px">產生全班報告</button>'+
+    '<button class="btn sec" id="bReload" style="width:100%;margin-top:8px">重新載入班別</button>'+
+    '<p class="badge ok" id="bNote" style="margin-top:10px">已載入 '+classList.length+' 個班別。</p></dialog>';
+  var modes=[['dash','總覽儀表板'],['roster','學生名單'],['cls','班別比較'],['heat','題目答對率熱圖'],['watch','需關注學生'],['prog','進步追蹤'],['focus','教學重點'],['rank','年度排行榜'],['me','個人分析']];
+  var cur='dash';
+  function nav(){
+    document.getElementById('anav').innerHTML=modes.map(function(x){return '<button class="btn '+(x[0]===cur?'':'sec')+'" data-m="'+x[0]+'">'+x[1]+'</button>';}).join('');
+    document.querySelectorAll('#anav button').forEach(function(b){ b.onclick=function(){ cur=b.dataset.m; nav(); draw(); }; });
+  }
+  function printPerson(g, onlyOpen, yearLabel){
+    var att=g.attempts.slice().reverse();
+    var we=weakOf(g, onlyOpen);
+    var html='<h1>學生個人報告</h1><p><b>班別</b> '+esc(g.classLabel)+' ｜ <b>學號</b> '+(g.student&&g.student.classNo||'—')+' ｜ <b>姓名</b> '+esc(g.student&&g.student.displayName||'—')+' ｜ <b>年份</b> '+esc(yearLabel||'全部年份')+'</p>'+
+      '<p>練習次數 <b>'+g.n+'</b>　平均分 <b>'+g.avg+'</b>　最佳 <b>'+g.best+'</b>　最新分 <b>'+g.latest+'</b></p>'+
+      '<table><tr><th>日期</th><th>年份</th><th>百分比</th><th>等級</th><th>答對</th><th>答錯</th><th>未答</th><th>準確率</th></tr>'+
+      att.map(function(a){ var t=tally(a); return '<tr><td>'+esc((a.practicedOn||a.submittedAt||'').slice(0,10))+'</td><td>'+a.year+'</td><td>'+a.percentage+'</td><td>'+esc(a.estimatedGrade)+'</td><td>'+t.ok+'</td><td>'+t.bad+'</td><td>'+t.na+'</td><td>'+t.acc+'</td></tr>'; }).join('')+'</table>'+
+      '<h2>全部錯題</h2><table><tr><th>題</th><th>答錯次數</th><th>未答</th><th>作答</th><th>錯率</th><th>滿分</th><th>最近結果</th><th>最後答錯</th></tr>'+
+      (we.length? we.map(function(w){ return '<tr><td>'+w.year+' Q'+w.q+' '+esc(w.topic)+'</td><td>'+w.wrong+'</td><td>'+w.na+'</td><td>'+w.tried+'</td><td>'+(w.tried?Math.round(w.wrong/w.tried*100):0)+'</td><td>'+w.full+'</td><td>'+esc(w.status)+'</td><td>'+esc(w.lastWrong||w.lastAt)+'</td></tr>'; }).join('') : '<tr><td colspan="8">無弱項</td></tr>')+'</table>';
+    return html;
+  }
+  function draw(){
+    var box=document.getElementById('apanel');
+    if(cur==='dash'){
+      box.innerHTML='<div class="card"><h2>教師總覽儀表板</h2><table><tr><th>指標</th><th>數值</th><th>說明</th></tr>'+
+        [['作答學生人數',groups.length,'不重複學生'],['總練習次數',recs.length,'所有提交紀錄'],['本週提交',week,'過去 7 天'],['今日提交',today,''],['平均百分比',mean(pcts),'全體平均'],['最高分',Math.max.apply(null,pcts),''],['最低分',Math.min.apply(null,pcts),''],['及格率', (recs.length?((pass/recs.length)*100).toFixed(1):0)+'%','≥ 50%']].map(function(x){return '<tr><td>'+x[0]+'</td><td>'+x[1]+'</td><td class="muted">'+x[2]+'</td></tr>';}).join('')+
+        '</table><h2>等級分布</h2><table><tr><th>等級</th><th>人次</th><th>佔比</th></tr>'+
+        ['5**','5*','5','4','3','2','1','U'].filter(function(g){return gCount[g];}).map(function(g){return '<tr><td>'+g+'</td><td>'+gCount[g]+'</td><td>'+((gCount[g]/recs.length)*100).toFixed(1)+'%</td></tr>';}).join('')+'</table></div>';
+    } else if(cur==='roster'){
+      box.innerHTML='<div class="card"><h2>學生名單（每人一行）</h2><table><tr><th>班別</th><th>學號</th><th>姓名</th><th>次數</th><th>平均</th><th>最佳</th><th>最新</th><th>等級</th><th>進步</th><th></th></tr>'+
+        groups.map(function(g){return '<tr><td>'+esc(g.classLabel)+'</td><td>'+(g.student&&g.student.classNo||'—')+'</td><td>'+esc(g.student&&g.student.displayName||'')+'</td><td>'+g.n+'</td><td>'+g.avg+'</td><td>'+g.best+'</td><td>'+g.latest+'</td><td>'+esc(g.grade)+'</td><td>'+(g.delta>=0?'+':'')+g.delta+'</td><td><button class="btn ghost" data-k="'+esc(g.key)+'">個人報告</button></td></tr>';}).join('')+'</table></div>';
+      box.querySelectorAll('button[data-k]').forEach(function(b){ b.onclick=function(){ cur='me'; window._me=b.dataset.k; nav(); draw(); }; });
+    } else if(cur==='cls'){
+      var by={}; recs.forEach(function(r){ var c=clab(r); (by[c]=by[c]||[]).push(r); });
+      box.innerHTML='<div class="card"><h2>班別比較</h2><table><tr><th>班別</th><th>人數</th><th>次數</th><th>平均%</th><th>及格率</th></tr>'+
+        Object.keys(by).sort().map(function(c){ var list=by[c]; var ks={}; list.forEach(function(x){ks[key(x)]=1;}); var p=list.filter(function(x){return x.percentage>=50;}).length; return '<tr><td>'+esc(c)+'</td><td>'+Object.keys(ks).length+'</td><td>'+list.length+'</td><td>'+mean(list.map(function(x){return x.percentage;}))+'</td><td>'+((p/list.length)*100).toFixed(1)+'%</td></tr>'; }).join('')+'</table></div>';
+    } else if(cur==='heat'){
+      var yearsH={}, qs={}, cells={};
+      recs.forEach(function(a){ if(a.mode!=='questions') return; var p=getPaper(a.year); if(!p) return; yearsH[a.year]=1; var byQ={}; p.questions.forEach(function(q){byQ[q.q]=q;}); (a.scores||[]).forEach(function(s){ var q=byQ[s.q]; if(!q||s.score==null) return; qs[s.q]=q.topic; var k=a.year+'-'+s.q; if(!cells[k]) cells[k]={s:0,f:0,n:0}; cells[k].s+=s.score; cells[k].f+=q.fullMarks; cells[k].n++; }); });
+      var ys=Object.keys(yearsH).map(Number).sort(); var qn=Object.keys(qs).map(Number).sort(function(a,b){return a-b;});
+      var html='<div class="card"><h2>題目答對率熱圖</h2><p class="muted">格子＝得分／滿分。綠 ≥80%，黃 ≥50%，紅低於 50%。</p><div style="overflow:auto"><table><tr><th>年份</th>'+qn.map(function(q){return '<th>Q'+q+'</th>';}).join('')+'</tr>';
+      ys.forEach(function(y){ html+='<tr><td>'+y+'</td>'; qn.forEach(function(q){ var c=cells[y+'-'+q]; var pct=c&&c.f?Math.round(c.s/c.f*100):null; var bg=pct==null?'': pct>=80?'#e4f0e8':pct>=50?'#f4ead6':'#f4e2df'; html+='<td style="background:'+bg+'">'+(pct==null?'—':pct+'%')+'</td>'; }); html+='</tr>'; });
+      html+='<tr><td class="muted">課題</td>'+qn.map(function(q){return '<td class="muted">'+esc(qs[q]||'')+'</td>';}).join('')+'</tr></table></div></div>';
+      box.innerHTML=html;
+    } else if(cur==='watch'){
+      var w=groups.filter(function(g){ return g.avg<50 || g.latest<50 || (g.n>=2&&g.delta<=-8); });
+      box.innerHTML='<div class="card"><h2>需關注學生</h2>'+(w.length? '<table><tr><th>班別</th><th>學號</th><th>姓名</th><th>平均</th><th>最新</th><th>進步</th><th></th></tr>'+w.map(function(g){return '<tr><td>'+esc(g.classLabel)+'</td><td>'+(g.student&&g.student.classNo||'')+'</td><td>'+esc(g.student&&g.student.displayName||'')+'</td><td>'+g.avg+'</td><td>'+g.latest+'</td><td>'+g.delta+'</td><td><button class="btn ghost" data-k="'+esc(g.key)+'">個人報告</button></td></tr>';}).join('')+'</table>':'<p class="muted">沒有需關注學生。</p>')+'</div>';
+      box.querySelectorAll('button[data-k]').forEach(function(b){ b.onclick=function(){ cur='me'; window._me=b.dataset.k; nav(); draw(); }; });
+    } else if(cur==='prog'){
+      box.innerHTML='<div class="card"><h2>進步追蹤</h2><table><tr><th>班別</th><th>學號</th><th>姓名</th><th>第一次</th><th>最近</th><th>差值</th></tr>'+
+        groups.map(function(g){return '<tr><td>'+esc(g.classLabel)+'</td><td>'+(g.student&&g.student.classNo||'')+'</td><td>'+esc(g.student&&g.student.displayName||'')+'</td><td>'+g.first+'</td><td>'+g.latest+'</td><td>'+(g.delta>=0?'+':'')+g.delta+'</td></tr>';}).join('')+'</table></div>';
+    } else if(cur==='focus'){
+      var acc={};
+      recs.forEach(function(a){ if(a.mode!=='questions') return; var p=getPaper(a.year); if(!p) return; var byQ={}; p.questions.forEach(function(q){byQ[q.q]=q;}); (a.scores||[]).forEach(function(s){ var q=byQ[s.q]; if(!q||s.score==null) return; var id=a.year+'-Q'+s.q; if(!acc[id]) acc[id]={year:a.year,q:s.q,topic:q.topic,s:0,f:0,n:0}; acc[id].s+=s.score; acc[id].f+=q.fullMarks; acc[id].n++; }); });
+      var items=Object.keys(acc).map(function(k){ var x=acc[k]; return {year:x.year,q:x.q,topic:x.topic,pct:x.f?+((x.s/x.f)*100).toFixed(1):0,n:x.n}; }).sort(function(a,b){return a.pct-b.pct;}).slice(0,12);
+      box.innerHTML='<div class="card"><h2>教學重點</h2><table><tr><th>年份</th><th>題</th><th>課題</th><th>得分率</th><th>人次</th></tr>'+items.map(function(t){return '<tr><td>'+t.year+'</td><td>Q'+t.q+'</td><td>'+esc(t.topic)+'</td><td>'+t.pct+'%</td><td>'+t.n+'</td></tr>';}).join('')+'</table></div>';
+    } else if(cur==='rank'){
+      var by={}; recs.forEach(function(r){ (by[r.year]=by[r.year]||[]).push(r); });
+      var html='<div class="card"><h2>年度排行榜</h2>';
+      Object.keys(by).map(Number).sort(function(a,b){return b-a;}).forEach(function(y){
+        var g=groupsOf(by[y]).sort(function(a,b){return b.best-a.best;});
+        html+='<h2>'+y+'</h2><table><tr><th>名次</th><th>班別</th><th>學號</th><th>姓名</th><th>最佳%</th><th>等級</th></tr>'+g.map(function(x,i){return '<tr><td>'+(i+1)+'</td><td>'+esc(x.classLabel)+'</td><td>'+(x.student&&x.student.classNo||'')+'</td><td>'+esc(x.student&&x.student.displayName||'')+'</td><td>'+x.best+'</td><td>'+esc(x.grade)+'</td></tr>';}).join('')+'</table>';
+      });
+      box.innerHTML=html+'</div>';
+    } else {
+      var me=groups.filter(function(g){return g.key===window._me;})[0]||groups[0];
+      var att=me.attempts.slice().reverse();
+      var we=weakOf(me,false);
+      box.innerHTML='<div class="card"><h2>學生個人報告</h2><label>學生</label><select id="meSel">'+groups.map(function(g){return '<option value="'+esc(g.key)+'"'+(g.key===me.key?' selected':'')+'>'+esc(g.classLabel)+' 學號 '+(g.student&&g.student.classNo||'')+' '+(g.student&&g.student.displayName||'')+'</option>';}).join('')+'</select>'+
+        '<p><b>'+esc(me.classLabel)+'</b> 學號 '+(me.student&&me.student.classNo||'—')+(me.student&&me.student.displayName?' '+esc(me.student.displayName):'')+'</p>'+
+        '<div class="grid"><div><div class="muted">練習次數</div><b>'+me.n+'</b></div><div><div class="muted">平均分</div><b>'+me.avg+'</b></div><div><div class="muted">最佳</div><b>'+me.best+'</b></div><div><div class="muted">最新分</div><b>'+me.latest+'</b></div></div>'+
+        '<h2>練習紀錄</h2><table><tr><th>日期</th><th>年份</th><th>百分比</th><th>等級</th><th>答對</th><th>答錯</th><th>未答</th><th>準確率</th></tr>'+
+        att.map(function(a){ var t=tally(a); return '<tr><td>'+esc((a.practicedOn||a.submittedAt||'').slice(0,10))+'</td><td>'+a.year+'</td><td>'+a.percentage+'</td><td>'+esc(a.estimatedGrade)+'</td><td>'+t.ok+'</td><td>'+t.bad+'</td><td>'+t.na+'</td><td>'+t.acc+'</td></tr>'; }).join('')+'</table>'+
+        '<h2>全部錯題</h2>'+(we.length?'<table><tr><th>題</th><th>答錯次數</th><th>未答</th><th>作答</th><th>錯率</th><th>滿分</th><th>最近結果</th><th>最後答錯</th></tr>'+we.map(function(w){return '<tr><td>'+w.year+' Q'+w.q+' '+esc(w.topic)+'</td><td>'+w.wrong+'</td><td>'+w.na+'</td><td>'+w.tried+'</td><td>'+(w.tried?Math.round(w.wrong/w.tried*100):0)+'</td><td>'+w.full+'</td><td>'+esc(w.status)+'</td><td>'+esc(w.lastWrong||w.lastAt)+'</td></tr>';}).join('')+'</table>':'<p class="muted">沒有弱項。</p>')+
+        '<div class="row noprint" style="margin-top:12px"><button class="btn" id="mePrint">列印個人報告</button></div></div>';
+      document.getElementById('meSel').onchange=function(){ window._me=this.value; draw(); };
+      document.getElementById('mePrint').onclick=function(){ var w=window.open('','_blank'); if(!w) return toast('請允許彈出式視窗'); w.document.write('<html lang="zh-HK"><head><meta charset="utf-8"><title>學生個人報告</title><style>body{font-family:sans-serif;padding:24px}table{border-collapse:collapse;width:100%}td,th{border:1px solid #ccc;padding:6px}</style></head><body>'+printPerson(me,false,'全部年份')+'</body></html>'); w.document.close(); w.print(); };
+    }
+  }
+  nav(); draw();
+  document.getElementById('btnDashPrint').onclick=function(){ window.print(); };
+  document.getElementById('btnBulk').onclick=function(){ document.getElementById('bulkDlg').showModal(); };
+  document.getElementById('bReload').onclick=function(){ document.getElementById('bNote').textContent='已載入 '+classList.length+' 個班別。'; };
+  document.getElementById('bGo').onclick=function(){
+    var cl=document.getElementById('bClass').value; if(!cl) return toast('請選擇班別');
+    var yr=document.getElementById('bYear').value; var only=document.getElementById('bOpen').checked;
+    var subset=recs.filter(function(r){ if(clab(r)!==cl) return false; if(yr && String(r.year)!==yr) return false; return true; });
+    var gs=groupsOf(subset);
+    var w=window.open('','_blank'); if(!w) return toast('請允許彈出式視窗');
+    w.document.write('<html lang="zh-HK"><head><meta charset="utf-8"><title>全班學生報告</title><style>body{font-family:sans-serif;padding:24px}table{border-collapse:collapse;width:100%}td,th{border:1px solid #ccc;padding:6px}.page{page-break-after:always}</style></head><body>'+gs.map(function(g){return '<div class="page">'+printPerson(g,only,yr||'全部年份')+'</div>';}).join('')+'</body></html>');
+    w.document.close(); w.print(); document.getElementById('bulkDlg').close();
+  };
+}
+
+function loadDemoClass(){
+  var papers=PAPERS.filter(function(p){return p.year===2012||p.year===2013;});
+  var stu=[{no:1,name:'Chan',cls:'A',sk:0.88},{no:5,name:'Wong',cls:'A',sk:0.72},{no:8,name:'Li',cls:'A',sk:0.55},{no:12,name:'Cheung',cls:'A',sk:0.8},{no:17,name:'nig',cls:'A',sk:0.5},{no:21,name:'Ho',cls:'A',sk:0.35},{no:25,name:'Tam',cls:'A',sk:0.62},{no:30,name:'Yu',cls:'A',sk:0.95},{no:3,name:'Ng',cls:'B',sk:0.7},{no:7,name:'Mak',cls:'B',sk:0.45}];
+  function unit(s){ var h=2166136261; for(var i=0;i<s.length;i++) h=((h^s.charCodeAt(i))*16777619)>>>0; return h/4294967296; }
+  var recs=[];
+  stu.forEach(function(st){
+    papers.forEach(function(paper,yi){
+      var skill=Math.max(0.12, Math.min(1, st.sk + (st.no===17&&yi===1?-0.08:(st.no===25&&yi===1?0.12:(unit(st.name+paper.year)-0.5)*0.08))));
+      var scores=paper.questions.map(function(q){
+        var r=unit(st.no+'-'+paper.year+'-'+q.q);
+        if(r<0.07 && skill<0.55) return {q:q.q,score:null};
+        var ratio=Math.max(0,Math.min(1, skill+(unit(st.no+'-'+paper.year+'-n'+q.q)-0.5)*0.32));
+        return {q:q.q,score:Math.min(q.fullMarks, Math.round(ratio*q.fullMarks*2)/2)};
+      });
+      var by={}; scores.forEach(function(s){ by[s.q]=s.score; });
+      var computed=compute(paper,'questions', by, {});
+      var day=yi===0?'2026-08-13':'2026-09-09';
+      recs.push({attemptId:'demo-'+st.cls+'-'+st.no+'-'+paper.year, schemaVersion:1, appVersion:'p1-demo',
+        student:{form:'Form 6',cls:st.cls,classNo:st.no,displayName:st.name,classLabel:'Form 6 '+st.cls},
+        year:paper.year, paperId:paper.paperId, paperName:paper.paperName, cutoffVersion:paper.cutoffVersion, mode:'questions',
+        scores:scores, sectionScores:computed.sectionScores, rawScore:computed.raw, totalMarks:paper.fullMarks, percentage:computed.percentage,
+        estimatedGrade:computed.grade, unanswered:computed.unanswered, notes:'示範數據', practicedOn:day, submittedAt:day+'T08:00:00.000Z', syncStatus:'legacy'});
+    });
   });
-  var topics=Object.keys(acc).map(function(k){ var x=acc[k]; return {topic:x.topic,pct:x.full?+((x.score/x.full)*100).toFixed(1):0}; }).sort(function(a,b){return a.pct-b.pct;}).slice(0,12);
-  document.getElementById('topics').innerHTML=topics.length? '<table><tr><th>課題</th><th>得分率</th></tr>'+topics.map(function(t){return '<tr><td>'+esc(t.topic)+'</td><td>'+t.pct+'%</td></tr>';}).join('')+'</table>':'<p class="muted">需有逐題紀錄才可統計課題。</p>';
+  SS(K.rec, recs); toast('已載入示範班 '+recs.length+' 筆');
 }
 
 function pgWeak(m){
@@ -696,7 +855,7 @@ window.saveSync=saveSync; window.testConn=testConn; window.resendLegacy=resendLe
 function pgHelp(m){
   m.innerHTML='<div class="card"><h2>使用說明</h2><ol>'+
     '<li>學生在「輸入分數」填 Form、Class、學號，再選年份輸入各題得分。</li>'+
-    '<li>按「儲存並產生成績報告」後立刻出現完整報告（分部、逐題、弱項、估算等級），可列印。老師在「班級報告」一次看全班。</li>'+
+    '<li>按「儲存並產生成績報告」後立刻出現完整報告。老師在「教師分析」看總覽、熱圖、需關注、個人／全班報告；「班級報告」一次看全班。</li>'+
     '<li>未做題以 0 分計入 105 分總分，但不會寫入錯題簿。低於該題一半列入弱項。</li>'+
     '<li>「只計算結果」不儲存；「儲存成績」才建立紀錄並可上載 Google Sheet。</li>'+
     '<li>卷一滿分 105：甲一 35、甲二 35、乙部 35。估計等級僅供操卷參考。</li></ol>'+
