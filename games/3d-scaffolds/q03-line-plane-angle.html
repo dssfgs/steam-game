@@ -201,7 +201,7 @@ function redraw(){
   svg.innerHTML=html;
   svg.querySelectorAll('.hit').forEach(el=>el.addEventListener('click',()=>tap(el.dataset.pt)));
   renderPanel();
-  $('#ovTop').textContent=modePrefix(st)+(st.answered?'Complete':`Step ${Math.min(st.step+1,4)} · line–plane angle`);
+  $('#ovTop').textContent=st.uiMode==='exam'?'Exam · figure only':modePrefix(st)+(st.answered?'Complete':`Step ${Math.min(st.step+1,4)} · line–plane angle`);
 }
 function advance(){while(st.step<STEPS.length && STEPS[st.step].check()) st.step++;}
 function tap(n){

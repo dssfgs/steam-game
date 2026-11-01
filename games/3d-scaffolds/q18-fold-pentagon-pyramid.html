@@ -201,7 +201,7 @@ function redraw(){
   svg.innerHTML=html;
   svg.querySelectorAll('.hit').forEach(el=>el.addEventListener('click',()=>tap(el.dataset.pt)));
   renderPanel();
-  $('#ovTop').textContent=modePrefix(st)+(st.vol?'Complete':(st.mode==='flat'?'Net ABCDB′':'Folded pyramid ABCD'));
+  $('#ovTop').textContent=st.uiMode==='exam'?'Exam · figure only':modePrefix(st)+(st.vol?'Complete':(st.mode==='flat'?'Net ABCDB′':'Folded pyramid ABCD'));
 }
 function tap(n){
   if(handleToolTap(st,n,redraw)) return;

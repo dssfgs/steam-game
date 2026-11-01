@@ -179,7 +179,7 @@ function redraw(){
   svg.innerHTML=html;
   svg.querySelectorAll('.hit').forEach(el=>el.addEventListener('click',()=>tap(el.dataset.pt)));
   renderPanel();
-  $('#ovTop').textContent=modePrefix(st)+(st.claim!==null?'Complete':(st.a3?'RS inclination claim':(st.a2?'Height of P':'RS & area')));
+  $('#ovTop').textContent=st.uiMode==='exam'?'Exam · figure only':modePrefix(st)+(st.claim!==null?'Complete':(st.a3?'RS inclination claim':(st.a2?'Height of P':'RS & area')));
 }
 function tap(n){
   if(handleToolTap(st,n,redraw)) return;

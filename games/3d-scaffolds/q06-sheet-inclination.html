@@ -193,7 +193,7 @@ function redraw(){
   renderPanel();
   const labels=['Part (a) · AC','(b)(i) CF','(b)(ii) area ABF','(b)(iii) inclination','(b)(iv) claim'];
   let idx=0; if(st.a) idx=1; if(st.b1) idx=2; if(st.b2) idx=3; if(st.b3) idx=4;
-  $('#ovTop').textContent=modePrefix(st)+(labels[idx]);
+  $('#ovTop').textContent=st.uiMode==='exam'?'Exam · figure only':modePrefix(st)+(labels[idx]);
 }
 function tap(n){
   if(handleToolTap(st,n,redraw)) return;

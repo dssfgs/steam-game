@@ -223,7 +223,7 @@ function redraw(){
   svg.innerHTML=html;
   svg.querySelectorAll('.hit').forEach(el=>el.addEventListener('click',()=>tap(el.dataset.pt)));
   renderPanel();
-  $('#ovTop').textContent=modePrefix(st)+(st.answered?'Complete':`Step ${Math.min(st.step+1,4)} · plane angle scaffold`);
+  $('#ovTop').textContent=st.uiMode==='exam'?'Exam · figure only':modePrefix(st)+(st.answered?'Complete':`Step ${Math.min(st.step+1,4)} · plane angle scaffold`);
 }
 function advance(){while(st.step<STEPS.length && STEPS[st.step].check()){st.step++; if(st.step===1) toast('Common line CD — good.','good'); if(st.step===2) toast('Foot constructed.','good');} if(st.hints>=3) st.unlocked=true;}
 function tap(n){

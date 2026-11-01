@@ -195,7 +195,7 @@ function redraw(){
   svg.innerHTML=html;
   svg.querySelectorAll('.hit').forEach(el=>el.addEventListener('click',()=>tap(el.dataset.pt)));
   renderPanel();
-  $('#ovTop').textContent=modePrefix(st)+(st.claim!==null?'Complete':(st.b1?'(b)(ii) dihedral claim':(st.a?'(b)(i) ∠CAD':'Part (a) · CD')));
+  $('#ovTop').textContent=st.uiMode==='exam'?'Exam · figure only':modePrefix(st)+(st.claim!==null?'Complete':(st.b1?'(b)(ii) dihedral claim':(st.a?'(b)(i) ∠CAD':'Part (a) · CD')));
 }
 function tap(n){
   if(handleToolTap(st,n,redraw)) return;

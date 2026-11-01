@@ -183,7 +183,7 @@ function redraw(){
   svg.innerHTML=html;
   svg.querySelectorAll('.hit').forEach(el=>el.addEventListener('click',()=>tap(el.dataset.pt)));
   renderPanel();
-  $('#ovTop').textContent=modePrefix(st)+(st.claim!==null?'Complete':(st.a1?'Trapezium PQNM claim':'Find ∠VBA'));
+  $('#ovTop').textContent=st.uiMode==='exam'?'Exam · figure only':modePrefix(st)+(st.claim!==null?'Complete':(st.a1?'Trapezium PQNM claim':'Find ∠VBA'));
 }
 function tap(n){
   if(handleToolTap(st,n,redraw)) return;

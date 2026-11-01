@@ -185,7 +185,7 @@ function redraw(){
   svg.innerHTML=html;
   svg.querySelectorAll('.hit').forEach(el=>el.addEventListener('click',()=>tap(el.dataset.pt)));
   renderPanel();
-  $('#ovTop').textContent=modePrefix(st)+(st.claim!==null?'Complete':(st.a2?'Claim PX > 8':(st.a1?'Distance R→PQS':'QS & ∠RQS')));
+  $('#ovTop').textContent=st.uiMode==='exam'?'Exam · figure only':modePrefix(st)+(st.claim!==null?'Complete':(st.a2?'Claim PX > 8':(st.a1?'Distance R→PQS':'QS & ∠RQS')));
 }
 function tap(n){
   if(handleToolTap(st,n,redraw)) return;

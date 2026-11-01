@@ -186,7 +186,7 @@ function redraw(){
   svg.innerHTML=html;
   svg.querySelectorAll('.hit').forEach(el=>el.addEventListener('click',()=>tap(el.dataset.pt)));
   renderPanel();
-  $('#ovTop').textContent=modePrefix(st)+(st.answered?'Complete':`Step ${Math.min(st.step+1,4)} · sin∠PFQ`);
+  $('#ovTop').textContent=st.uiMode==='exam'?'Exam · figure only':modePrefix(st)+(st.answered?'Complete':`Step ${Math.min(st.step+1,4)} · sin∠PFQ`);
 }
 function tap(n){
   if(handleToolTap(st,n,redraw)) return;

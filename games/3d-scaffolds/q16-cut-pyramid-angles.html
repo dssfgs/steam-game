@@ -183,7 +183,7 @@ function redraw(){
   svg.innerHTML=html;
   svg.querySelectorAll('.hit').forEach(el=>el.addEventListener('click',()=>tap(el.dataset.pt)));
   renderPanel();
-  $('#ovTop').textContent=modePrefix(st)+(st.cmp?'Complete':(st.a2?'Compare α & β':(st.a1?'Find α':'Find AP')));
+  $('#ovTop').textContent=st.uiMode==='exam'?'Exam · figure only':modePrefix(st)+(st.cmp?'Complete':(st.a2?'Compare α & β':(st.a1?'Find α':'Find AP')));
 }
 function tap(n){
   if(handleToolTap(st,n,redraw)) return;
