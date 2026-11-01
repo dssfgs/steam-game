@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>3D by section · Type A–E scaffolds</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/aaaakshat/cm-web-fonts@latest/font/Serif/cmun-serif.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/aaaakshat/cm-web-fonts@latest/font/Sans/cmun-sans.css">
+<style>
+
+:root{
+  --bg:#1C1C1C;--bg2:#141414;--card:#232323;--line:#3a3a3a;--ink:#ECECEC;--ink2:#9a9a9a;
+  --blue:#58C4DD;--green:#83C167;--yellow:#FFFF00;--red:#FC6255;--gold:#F0AC5F;--teal:#5CD0B3;
+  --serif:"Computer Modern Serif","Latin Modern Roman","CMU Serif","Cambria Math",Georgia,serif;
+  --sans:"Computer Modern Sans","CMU Sans Serif","Helvetica Neue",Arial,system-ui,sans-serif;
+  --ease:cubic-bezier(.65,0,.35,1);
+}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%}
+body{background:var(--bg);color:var(--ink);font:15px/1.5 var(--sans)}
+button{font:inherit;color:inherit}
+a{color:var(--blue)}
+.app{display:grid;grid-template-columns:minmax(0,1fr) 420px;height:100vh;height:100dvh}
+.stage{position:relative;background:var(--bg);border-right:1px solid var(--line);overflow:hidden;touch-action:none;user-select:none;-webkit-user-select:none;outline:none}
+.stage:focus-visible{box-shadow:inset 0 0 0 2px var(--blue)}
+#svg{width:100%;height:100%;display:block;cursor:grab}
+#svg.drag{cursor:grabbing}
+.ov{position:absolute;left:14px;right:14px;display:flex;gap:8px;pointer-events:none}
+.ov.top{top:14px}
+.ov.bot{bottom:14px;justify-content:space-between;align-items:flex-end}
+.tag{pointer-events:auto;background:rgba(20,20,20,.82);border:1px solid var(--line);border-radius:6px;padding:6px 11px;font-size:13px;max-width:100%;color:var(--ink)}
+.tag.tool{border-color:var(--yellow);color:var(--yellow)}
+.tag .muted{color:var(--ink2)}
+.tag.btnish{cursor:pointer}
+.tag.btnish:hover{border-color:var(--blue);color:var(--blue)}
+.toast{position:absolute;left:50%;bottom:64px;transform:translate(-50%,8px);width:max-content;max-width:min(92%,540px);background:#000;border:1px solid var(--line);color:var(--ink);padding:9px 14px;border-radius:6px;font-size:14px;opacity:0;transition:opacity .35s var(--ease),transform .35s var(--ease);pointer-events:none;z-index:3}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+.toast.bad{border-color:var(--red);color:var(--red)}
+.toast.good{border-color:var(--green);color:var(--green)}
+.panel{overflow-y:auto;padding:16px 16px 30px;background:var(--bg2)}
+.head{display:flex;justify-content:space-between;align-items:baseline;gap:8px;margin-bottom:12px}
+.brand{font-family:var(--serif);font-size:20px;letter-spacing:.01em}
+.brand i{color:var(--blue);font-style:italic}
+.back{font-size:13px;color:var(--ink2);text-decoration:none}
+.back:hover{color:var(--blue)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:13px;margin-bottom:10px}
+.eyebrow{display:flex;justify-content:space-between;font-size:12px;letter-spacing:.06em;color:var(--ink2);margin-bottom:6px;text-transform:uppercase}
+.qtext{margin:0 0 8px;font-size:14.5px}
+.ask{margin:0;font-family:var(--serif);font-size:17px;line-height:1.55}
+.mth{font-family:var(--serif);font-style:italic}
+.step{display:flex;align-items:flex-start;gap:10px;padding:6px 0;opacity:.4;transition:opacity .4s}
+.step.on,.step.ok{opacity:1}
+.step .n{width:24px;height:24px;border:1px solid var(--ink2);border-radius:50%;display:grid;place-items:center;font-size:13px;flex:none;font-family:var(--serif);margin-top:1px}
+.step.on .n{border-color:var(--yellow);color:var(--yellow)}
+.step.ok .n{border-color:var(--green);color:var(--bg);background:var(--green)}
+.step .t{flex:1;font-size:14px}
+.sec{font-size:12px;letter-spacing:.06em;color:var(--ink2);margin:0 0 8px;text-transform:uppercase}
+.tools{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.btn{border:1px solid var(--line);background:#1a1a1a;border-radius:6px;padding:8px 10px;cursor:pointer;font-size:14px;text-align:left;transition:border-color .2s,color .2s,background .2s}
+.btn:hover:not(:disabled){border-color:var(--ink2)}
+.btn:disabled{opacity:.35;cursor:not-allowed}
+.btn.on{border-color:var(--yellow);color:var(--yellow)}
+.btn.dark{border-color:var(--blue);color:var(--blue)}
+.btn.warn{border-color:var(--red);color:var(--red)}
+.btn.good{border-color:var(--green);color:var(--green)}
+.btn .sym{font-family:var(--serif);margin-right:6px;color:var(--yellow)}
+.btn small{display:block;font-size:12px;color:var(--ink2)}
+.howto{margin:10px 0 0;font-size:13px;padding:8px;border:1px dashed var(--yellow);border-radius:6px;color:var(--ink)}
+.msg{padding:9px 11px;border:1px solid var(--line);border-left:3px solid var(--ink2);border-radius:6px;background:var(--card);margin-bottom:10px;font-size:14px}
+.msg.good{border-left-color:var(--green)}
+.msg.bad{border-left-color:var(--red)}
+.hints{margin:0;padding-left:18px;font-size:14px}
+.hints li{margin:4px 0}
+.actions{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{min-width:36px;height:36px;border:1px solid var(--line);border-radius:50%;background:#1a1a1a;font-family:var(--serif);font-style:italic;font-size:18px;cursor:pointer}
+.chip.a{border-style:dashed;color:var(--ink2)}
+.chip.c{color:var(--yellow);border-color:rgba(255,255,0,.5)}
+.chip.sel{background:var(--yellow);color:#111;border-color:var(--yellow)}
+.chip.tsel{background:rgba(255,255,0,.25);color:var(--yellow)}
+.chip:disabled{opacity:.5;cursor:default}
+.mc{display:grid;gap:6px}
+.mc .btn{text-align:left}
+.mc .btn.picked-good{border-color:var(--green);color:var(--green);background:rgba(131,193,103,.08)}
+.mc .btn.picked-bad{border-color:var(--red);color:var(--red)}
+.explain{border-left:3px solid var(--red)}
+.explain h3{margin:0 0 6px;font-family:var(--serif);font-weight:normal;font-size:20px;color:var(--red)}
+.explain p{margin:6px 0;font-size:14px}
+.eq{font-family:var(--serif);font-size:17px;text-align:center;margin:10px 0;color:var(--ink)}
+.eq .y{color:var(--yellow)}.eq .r{color:var(--red)}.eq .b{color:var(--blue)}.eq .g{color:var(--green)}
+.cons{list-style:none;padding:0;margin:10px 0 0;font-size:13px}
+.cons li{padding:4px 0;border-top:1px solid var(--line)}
+.cons b{font-family:var(--serif);font-style:italic;color:var(--yellow);font-size:16px;font-weight:normal}
+.e{stroke:var(--ink);stroke-width:2.6;stroke-linecap:round;fill:none}
+.eh{stroke:#8a8a8a;stroke-width:1.6;stroke-dasharray:7 6;fill:none}
+.gd{stroke:#b0b0b0;stroke-width:1.4;stroke-dasharray:2 5;stroke-linecap:round;fill:none}
+.cs{stroke:var(--yellow);stroke-width:2;stroke-dasharray:7 5;opacity:.95;fill:none}
+.cl{stroke:var(--yellow);stroke-width:4.5;stroke-linecap:round;opacity:.9;fill:none}
+.arm{stroke:var(--red);stroke-width:4;stroke-linecap:round;fill:none}
+.arc{fill:none;stroke:var(--red);stroke-width:3}
+.hl{fill:rgba(88,196,221,.18);stroke:var(--blue);stroke-width:1.5}
+.hl2{fill:rgba(131,193,103,.16);stroke:var(--green);stroke-width:1.5}
+.ra{fill:none;stroke:var(--yellow);stroke-width:1.6}
+.lab{font-family:var(--serif);font-style:italic;font-size:20px;fill:var(--ink);paint-order:stroke;stroke:var(--bg);stroke-width:5px;stroke-linejoin:round}
+.lab.a{fill:#c8c8c8}
+.lab.c{fill:var(--yellow)}
+.lab.t{fill:var(--red);font-size:22px}
+.dim{font-family:var(--sans);font-size:12px;fill:var(--ink2);paint-order:stroke;stroke:var(--bg);stroke-width:4px}
+.hit{fill:transparent;cursor:pointer}
+.face{stroke:none;opacity:.22}
+@media (max-width:860px){.app{grid-template-columns:1fr;height:auto}.stage{position:sticky;top:0;z-index:5;height:46vh;height:46svh;border-right:0;border-bottom:1px solid var(--line)}.panel{overflow:visible}.explain{scroll-margin-top:calc(46svh + 10px)}}
+@media (prefers-reduced-motion:reduce){.toast{transition:none}}
+
+
+.index{max-width:920px;margin:0 auto;padding:28px 18px 60px}
+.index h1{font-family:var(--serif);font-weight:normal;font-size:34px;margin:0 0 6px}
+.index h1 i{color:var(--blue);font-style:italic}
+.index .sub{color:var(--ink2);margin:0 0 22px;font-size:15px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px}
+.tile{display:block;text-decoration:none;color:inherit;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px 16px;transition:border-color .2s,transform .2s}
+.tile:hover{border-color:var(--blue);transform:translateY(-1px)}
+.tile.soon{opacity:.55;cursor:default}
+.tile.soon:hover{border-color:var(--line);transform:none}
+.tile .k{font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink2);margin-bottom:4px}
+.tile .t{font-family:var(--serif);font-size:20px;margin:0 0 6px}
+.tile .d{font-size:13px;color:var(--ink2);margin:0;line-height:1.45}
+.tile .badge{display:inline-block;margin-top:10px;font-size:12px;padding:3px 8px;border-radius:999px;border:1px solid var(--green);color:var(--green)}
+.tile.soon .badge{border-color:var(--ink2);color:var(--ink2)}
+.sec-h{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink2);margin:26px 0 10px}
+
+body{height:auto;min-height:100%}
+</style>
+</head>
+<body>
+<div class="index">
+  <h1>3D by section · <i>Type A–E</i></h1>
+  <p class="sub">Explore freely · Guided help optional. Shared <code>scaffold-core.js</code>. Interactive DSE 3D scaffolds — projection, dihedrals, solids, folding &amp; coordinates.</p>
+
+  <div class="sec-h">Type A · Core right-triangle &amp; projection · Q1–Q6</div>
+  <div class="grid">
+    <a class="tile" href="q01-tetrahedron-volume.html"><div class="k">Q1 · DSE-2012 PII Q40</div><p class="t">Tetrahedron volume</p><p class="d">Height → edge → volume via centroid altitude.</p><span class="badge">Ready</span></a>
+    <a class="tile" href="q02-pole-plane-angle.html"><div class="k">Q2 · DSE-2014 PII Q40</div><p class="t">Pole &amp; plane angle</p><p class="d">tan θ for plane ACD vs ground via CD.</p><span class="badge">Ready</span></a>
+    <a class="tile" href="q03-line-plane-angle.html"><div class="k">Q3 · DSE-2017 PII Q39</div><p class="t">Line–plane angle</p><p class="d">BD ⊥ plane ACD; sin θ = BD/AB.</p><span class="badge">Ready</span></a>
+    <a class="tile" href="q04-cuboid-line-plane.html"><div class="k">Q4 · DSE-2018 PII Q41</div><p class="t">Cuboid line–plane</p><p class="d">Foot from X to ABGF; cos θ = 15/17.</p><span class="badge">Ready</span></a>
+    <a class="tile" href="q05-card-inclination.html"><div class="k">Q5 · DSE 2022-18</div><p class="t">Card inclination</p><p class="d">Cosine rule then PM inclination claim.</p><span class="badge">Ready</span></a>
+    <a class="tile" href="q06-sheet-inclination.html"><div class="k">Q6 · DSE 2017-19</div><p class="t">Sheet inclination</p><p class="d">Feet D,E,F; areas and inclination.</p><span class="badge">Ready</span></a>
+  </div>
+
+  <div class="sec-h">Type B · Plane / dihedral angles · Q7–Q12</div>
+  <div class="grid">
+    <a class="tile" href="q07-cube-dihedral.html"><div class="k">Q7 · DSE-2022 PII Q40</div><p class="t">Cube dihedral</p><p class="d">α (AFG/AFH) vs β (AFH/FGH) vs 60°.</p><span class="badge">Ready</span></a>
+    <a class="tile" href="q08-pyramid-dihedral.html"><div class="k">Q8 · DSE-2023 PII Q40</div><p class="t">Pyramid dihedral</p><p class="d">θ between ABV &amp; BCV; cos θ = −25/39.</p><span class="badge">Ready</span></a>
+    <a class="tile" href="q09-pyramid-WXYZ.html"><div class="k">Q9 · DSE 2023-17</div><p class="t">Pyramid WXYZ</p><p class="d">∠XWY then base–XYZ dihedral claim.</p><span class="badge">Ready</span></a>
+    <a class="tile" href="q10-fold-parallelogram.html"><div class="k">Q10 · DSE 2018-17</div><p class="t">Fold parallelogram</p><p class="d">AD, ∠ABC, then dihedral after fold.</p><span class="badge">Ready</span></a>
+    <a class="tile" href="q11-tetrahedron-BPC.html"><div class="k">Q11 · DSE 2019-18</div><p class="t">Tetrahedron ∠BPC</p><p class="d">Is ∠BPC the ABD–ACD dihedral?</p><span class="badge">Ready</span></a>
+    <a class="tile" href="q12-fold-trapezium-pyramid.html"><div class="k">Q12 · DSE 2021-18</div><p class="t">Fold trapezium → pyramid</p><p class="d">CD, ∠CAD, ACD vs base &gt; 30°?</p><span class="badge">Ready</span></a>
+  </div>
+
+  <div class="sec-h">Type C · Tetrahedra, pyramids &amp; solid modelling · Q13–Q18</div>
+  <div class="grid">
+    <a class="tile" href="q13-tetrahedron-cosPRS.html"><div class="k">Q13 · DSE-2024 PII Q40</div><p class="t">Tetrahedron cos∠PRS</p><p class="d">Q below S; cos∠PRS = √2/4.</p><span class="badge">Ready</span></a>
+    <a class="tile" href="q14-tetrahedron-angleRPS.html"><div class="k">Q14 · DSE-2019 PII Q40</div><p class="t">Tetrahedron ∠RPS</p><p class="d">Q below P; ∠RPS ≈ 68°.</p><span class="badge">Ready</span></a>
+    <a class="tile" href="q15-tetrahedron-line-face.html"><div class="k">Q15 · DSE 2016-19</div><p class="t">Tetrahedron line–face</p><p class="d">∠ABD, CD; is AB–BCD = ∠ABC?</p><span class="badge">Ready</span></a>
+    <a class="tile" href="q16-cut-pyramid-angles.html"><div class="k">Q16 · DSE 2012-18</div><p class="t">Cut pyramid angles</p><p class="d">AP; α vs β after cutting VPBCQ.</p><span class="badge">Ready</span></a>
+    <a class="tile" href="q17-cut-pyramid-trapezium.html"><div class="k">Q17 · DSE 2014-17</div><p class="t">Cut pyramid trapezium</p><p class="d">∠VBA; area PQNM &lt; 70?</p><span class="badge">Ready</span></a>
+    <a class="tile" href="q18-fold-pentagon-pyramid.html"><div class="k">Q18 · DSE 2015-19</div><p class="t">Fold pentagon → pyramid</p><p class="d">AC, area trend, folded volume.</p><span class="badge">Ready</span></a>
+  </div>
+
+  <div class="sec-h">Type D · Folding, cards &amp; distance · Q19–Q21</div>
+  <div class="grid">
+    <a class="tile" href="q19-fold-triangle-card.html"><div class="k">Q19 · DSE 2013-18</div><p class="t">Fold triangle card</p><p class="d">∠BCM, CM; folded AC; claim ∠ANM.</p><span class="badge">Ready</span></a>
+    <a class="tile" href="q20-fold-quad-distance.html"><div class="k">Q20 · DSE 2024-18</div><p class="t">Fold quad distance</p><p class="d">QS; R→PQS; claim PX &gt; 8.</p><span class="badge">Ready</span></a>
+    <a class="tile" href="q21-card-ground-inclination.html"><div class="k">Q21 · DSE 2020-19</div><p class="t">Card ground inclination</p><p class="d">RS, area; height; RS ≤ 20°?</p><span class="badge">Ready</span></a>
+  </div>
+
+  <div class="sec-h">Type E · Coordinates / vectors · Q22–Q23</div>
+  <div class="grid">
+    <a class="tile" href="q22-block-sinPFQ.html"><div class="k">Q22 · DSE-2016 PII Q39</div><p class="t">Block sin∠PFQ</p><p class="d">Cuboid coords; sin∠PFQ = 33/65.</p><span class="badge">Ready</span></a>
+    <a class="tile" href="q23-prism-area-BDP.html"><div class="k">Q23 · DSE-2020 PII Q38</div><p class="t">Prism area △BDP</p><p class="d">Heron: √[(k²−1)(196−k²)].</p><span class="badge">Ready</span></a>
+  </div>
+
+  <p class="sub" style="margin-top:28px">Reference style: <a href="reference-plane-angle-trainer.html">Plane Angle Trainer</a> · Fonts via Computer Modern CDN only.</p>
+</div>
+<!-- Shared: scaffold-core.js (Explore tools + Guided mode) -->
+</body>
+</html>

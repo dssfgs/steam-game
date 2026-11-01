@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Q6 · Sheet inclination · Type A scaffold</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/aaaakshat/cm-web-fonts@latest/font/Serif/cmun-serif.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/aaaakshat/cm-web-fonts@latest/font/Sans/cmun-sans.css">
+<style>
+
+:root{
+  --bg:#1C1C1C;--bg2:#141414;--card:#232323;--line:#3a3a3a;--ink:#ECECEC;--ink2:#9a9a9a;
+  --blue:#58C4DD;--green:#83C167;--yellow:#FFFF00;--red:#FC6255;--gold:#F0AC5F;--teal:#5CD0B3;
+  --serif:"Computer Modern Serif","Latin Modern Roman","CMU Serif","Cambria Math",Georgia,serif;
+  --sans:"Computer Modern Sans","CMU Sans Serif","Helvetica Neue",Arial,system-ui,sans-serif;
+  --ease:cubic-bezier(.65,0,.35,1);
+}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%}
+body{background:var(--bg);color:var(--ink);font:15px/1.5 var(--sans)}
+button{font:inherit;color:inherit}
+a{color:var(--blue)}
+.app{display:grid;grid-template-columns:minmax(0,1fr) 420px;height:100vh;height:100dvh}
+.stage{position:relative;background:var(--bg);border-right:1px solid var(--line);overflow:hidden;touch-action:none;user-select:none;-webkit-user-select:none;outline:none}
+.stage:focus-visible{box-shadow:inset 0 0 0 2px var(--blue)}
+#svg{width:100%;height:100%;display:block;cursor:grab}
+#svg.drag{cursor:grabbing}
+.ov{position:absolute;left:14px;right:14px;display:flex;gap:8px;pointer-events:none}
+.ov.top{top:14px}
+.ov.bot{bottom:14px;justify-content:space-between;align-items:flex-end}
+.tag{pointer-events:auto;background:rgba(20,20,20,.82);border:1px solid var(--line);border-radius:6px;padding:6px 11px;font-size:13px;max-width:100%;color:var(--ink)}
+.tag.tool{border-color:var(--yellow);color:var(--yellow)}
+.tag .muted{color:var(--ink2)}
+.tag.btnish{cursor:pointer}
+.tag.btnish:hover{border-color:var(--blue);color:var(--blue)}
+.toast{position:absolute;left:50%;bottom:64px;transform:translate(-50%,8px);width:max-content;max-width:min(92%,540px);background:#000;border:1px solid var(--line);color:var(--ink);padding:9px 14px;border-radius:6px;font-size:14px;opacity:0;transition:opacity .35s var(--ease),transform .35s var(--ease);pointer-events:none;z-index:3}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+.toast.bad{border-color:var(--red);color:var(--red)}
+.toast.good{border-color:var(--green);color:var(--green)}
+.panel{overflow-y:auto;padding:16px 16px 30px;background:var(--bg2)}
+.head{display:flex;justify-content:space-between;align-items:baseline;gap:8px;margin-bottom:12px}
+.brand{font-family:var(--serif);font-size:20px;letter-spacing:.01em}
+.brand i{color:var(--blue);font-style:italic}
+.back{font-size:13px;color:var(--ink2);text-decoration:none}
+.back:hover{color:var(--blue)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:13px;margin-bottom:10px}
+.eyebrow{display:flex;justify-content:space-between;font-size:12px;letter-spacing:.06em;color:var(--ink2);margin-bottom:6px;text-transform:uppercase}
+.qtext{margin:0 0 8px;font-size:14.5px}
+.ask{margin:0;font-family:var(--serif);font-size:17px;line-height:1.55}
+.mth{font-family:var(--serif);font-style:italic}
+.step{display:flex;align-items:flex-start;gap:10px;padding:6px 0;opacity:.4;transition:opacity .4s}
+.step.on,.step.ok{opacity:1}
+.step .n{width:24px;height:24px;border:1px solid var(--ink2);border-radius:50%;display:grid;place-items:center;font-size:13px;flex:none;font-family:var(--serif);margin-top:1px}
+.step.on .n{border-color:var(--yellow);color:var(--yellow)}
+.step.ok .n{border-color:var(--green);color:var(--bg);background:var(--green)}
+.step .t{flex:1;font-size:14px}
+.sec{font-size:12px;letter-spacing:.06em;color:var(--ink2);margin:0 0 8px;text-transform:uppercase}
+.tools{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.btn{border:1px solid var(--line);background:#1a1a1a;border-radius:6px;padding:8px 10px;cursor:pointer;font-size:14px;text-align:left;transition:border-color .2s,color .2s,background .2s}
+.btn:hover:not(:disabled){border-color:var(--ink2)}
+.btn:disabled{opacity:.35;cursor:not-allowed}
+.btn.on{border-color:var(--yellow);color:var(--yellow)}
+.btn.dark{border-color:var(--blue);color:var(--blue)}
+.btn.warn{border-color:var(--red);color:var(--red)}
+.btn.good{border-color:var(--green);color:var(--green)}
+.btn .sym{font-family:var(--serif);margin-right:6px;color:var(--yellow)}
+.btn small{display:block;font-size:12px;color:var(--ink2)}
+.howto{margin:10px 0 0;font-size:13px;padding:8px;border:1px dashed var(--yellow);border-radius:6px;color:var(--ink)}
+.msg{padding:9px 11px;border:1px solid var(--line);border-left:3px solid var(--ink2);border-radius:6px;background:var(--card);margin-bottom:10px;font-size:14px}
+.msg.good{border-left-color:var(--green)}
+.msg.bad{border-left-color:var(--red)}
+.hints{margin:0;padding-left:18px;font-size:14px}
+.hints li{margin:4px 0}
+.actions{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{min-width:36px;height:36px;border:1px solid var(--line);border-radius:50%;background:#1a1a1a;font-family:var(--serif);font-style:italic;font-size:18px;cursor:pointer}
+.chip.a{border-style:dashed;color:var(--ink2)}
+.chip.c{color:var(--yellow);border-color:rgba(255,255,0,.5)}
+.chip.sel{background:var(--yellow);color:#111;border-color:var(--yellow)}
+.chip.tsel{background:rgba(255,255,0,.25);color:var(--yellow)}
+.chip:disabled{opacity:.5;cursor:default}
+.mc{display:grid;gap:6px}
+.mc .btn{text-align:left}
+.mc .btn.picked-good{border-color:var(--green);color:var(--green);background:rgba(131,193,103,.08)}
+.mc .btn.picked-bad{border-color:var(--red);color:var(--red)}
+.explain{border-left:3px solid var(--red)}
+.explain h3{margin:0 0 6px;font-family:var(--serif);font-weight:normal;font-size:20px;color:var(--red)}
+.explain p{margin:6px 0;font-size:14px}
+.eq{font-family:var(--serif);font-size:17px;text-align:center;margin:10px 0;color:var(--ink)}
+.eq .y{color:var(--yellow)}.eq .r{color:var(--red)}.eq .b{color:var(--blue)}.eq .g{color:var(--green)}
+.cons{list-style:none;padding:0;margin:10px 0 0;font-size:13px}
+.cons li{padding:4px 0;border-top:1px solid var(--line)}
+.cons b{font-family:var(--serif);font-style:italic;color:var(--yellow);font-size:16px;font-weight:normal}
+.e{stroke:var(--ink);stroke-width:2.6;stroke-linecap:round;fill:none}
+.eh{stroke:#8a8a8a;stroke-width:1.6;stroke-dasharray:7 6;fill:none}
+.gd{stroke:#b0b0b0;stroke-width:1.4;stroke-dasharray:2 5;stroke-linecap:round;fill:none}
+.cs{stroke:var(--yellow);stroke-width:2;stroke-dasharray:7 5;opacity:.95;fill:none}
+.cl{stroke:var(--yellow);stroke-width:4.5;stroke-linecap:round;opacity:.9;fill:none}
+.arm{stroke:var(--red);stroke-width:4;stroke-linecap:round;fill:none}
+.arc{fill:none;stroke:var(--red);stroke-width:3}
+.hl{fill:rgba(88,196,221,.18);stroke:var(--blue);stroke-width:1.5}
+.hl2{fill:rgba(131,193,103,.16);stroke:var(--green);stroke-width:1.5}
+.ra{fill:none;stroke:var(--yellow);stroke-width:1.6}
+.lab{font-family:var(--serif);font-style:italic;font-size:20px;fill:var(--ink);paint-order:stroke;stroke:var(--bg);stroke-width:5px;stroke-linejoin:round}
+.lab.a{fill:#c8c8c8}
+.lab.c{fill:var(--yellow)}
+.lab.t{fill:var(--red);font-size:22px}
+.dim{font-family:var(--sans);font-size:12px;fill:var(--ink2);paint-order:stroke;stroke:var(--bg);stroke-width:4px}
+.hit{fill:transparent;cursor:pointer}
+.face{stroke:none;opacity:.22}
+@media (max-width:860px){.app{grid-template-columns:1fr;height:auto}.stage{position:sticky;top:0;z-index:5;height:46vh;height:46svh;border-right:0;border-bottom:1px solid var(--line)}.panel{overflow:visible}.explain{scroll-margin-top:calc(46svh + 10px)}}
+@media (prefers-reduced-motion:reduce){.toast{transition:none}}
+
+
+.mode-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px}
+.mode{border:1px solid var(--line);background:transparent;border-radius:6px;padding:8px 10px;font-size:12px;cursor:pointer;text-align:left;color:var(--ink2);transition:border-color .25s,color .25s,background .25s}
+.mode b{display:block;font-family:var(--serif);font-weight:normal;font-size:15px;color:var(--ink);margin-bottom:2px}
+.mode:hover{border-color:var(--ink2)}
+.mode.on,.mode[aria-pressed="true"]{border-color:var(--blue);color:var(--blue);background:rgba(88,196,221,.07)}
+.mode.on b,.mode[aria-pressed="true"] b{color:var(--blue)}
+.prompt{margin:0;font-size:13px;color:var(--ink2);line-height:1.45}
+.mode-card{border-color:rgba(88,196,221,.35)}
+
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="stage" id="stage" tabindex="0" aria-label="3D diagram. Drag to rotate.">
+    <svg id="svg" role="img"></svg>
+    <div class="ov top"><div class="tag" id="ovTop">Part (a)</div></div>
+    <div class="toast" id="toast" aria-live="polite"></div>
+    <div class="ov bot"><div class="tag"><span class="muted">Drag to rotate</span></div><button class="tag btnish" id="resetView">Reset view</button></div>
+  </div>
+  <div class="panel" id="panel"></div>
+</div>
+<script src="scaffold-core.js?v=2"></script>
+<script>
+/* core: scaffold-core.js */
+(()=>{
+const AC0=45.6507127822, AB0=32.1182691052, CF0=11.4126781955, AF0=57.0633909777;
+const DE0=44.9442719100, DF0=56.1803398875;
+const A=[0,0,10], D=[0,0,0], E=[44.9442719100,0,0], C=[44.9442719100,0,2], F=[56.1803398875,0,0], B=[26.4724589665,15.1918440810,0];
+const AREA_ABF=458.194337, AREA_BDF=426.741482, INCL=21.3530;
+
+const st={
+  pts:{A:A.slice(),B:B.slice(),C:C.slice(),D:D.slice(),E:E.slice(),F:F.slice()},
+  kind:{A:'v',B:'v',C:'v',D:'a',E:'a',F:'a'},
+  edges:[['A','B'],['B','C'],['C','A'],['A','D'],['C','E'],['C','F'],['D','E'],['E','F'],['B','F'],['B','D']],
+  yaw:-0.65,pitch:0.5, part:0, hints:0, cons:[], tool:null, tsel:[], uiMode:'explore', joins:[], measured:null,
+  showSol:false, msg:null,
+  a:null, b1:null, b2:null, b3:null, b4:null
+};
+const HINTS=[
+  'Part (a): sine rule AC / sin 108° = BC / sin 30°.',
+  'Heights along AC: A at 10, C at 2, F at 0. So CF/AC = 2/(10−2) = 1/4.',
+  '△ABF shares height structure; use coordinates or ½·AB·AF·sin∠BAF — or vector cross product.',
+  'Inclination of sheet = angle between plane ABC and ground. Intersection is BF. Drop ⊥ from A (or D) to BF.',
+  '△BDF lies on the ground: area = ½·DF·(perp distance from B to DF). Compare with 460.'
+];
+function cen(){return [(A[0]+B[0]+C[0]+F[0])/4,(A[1]+B[1]+C[1])/4,3];}
+function redraw(){
+  const svg=$('#svg'), W=svg.clientWidth||600, H=svg.clientHeight||500;
+  const C0=(typeof cen==='function')?cen():ptsCentroid(st.pts);
+  const scale=autoScale(st.pts, st.yaw, st.pitch, C0, W, H, 0.72);
+  const proj=p=>project(p,st.yaw,st.pitch,C0,scale,W,H);
+  const P={}; for(const k in st.pts) P[k]=proj(st.pts[k]);
+  let html='';
+  const g=[[-8,-12,0],[DF0+10,-12,0],[DF0+10,by+8,0],[-8,by+8,0]].map(proj);
+  html+=`<path d="${polyPath(g)}" fill="rgba(88,196,221,.05)" stroke="#444" stroke-width="1" stroke-dasharray="4 5"/>`;
+  html+=`<path class="hl" d="${polyPath([P.A,P.B,P.C])}" fill="rgba(240,172,95,.22)"/>`;
+  if(st.b2||st.showSol) html+=`<path class="hl2" d="${polyPath([P.A,P.B,P.F])}" fill="rgba(131,193,103,.12)"/>`;
+  // edges
+  const dash=new Set(['A|D','C|E','C|F','D|E','E|F','B|F','B|D']);
+  st.edges.forEach(([a,b])=>{
+    const k=[a,b].sort().join('|');
+    const cls=dash.has(k)?'gd':'e';
+    html+=`<path class="${cls}" d="${linePath(P[a],P[b])}"/>`;
+  });
+  // right angle marks at D,E vertical
+  [[A,D,E],[C,E,F]].forEach(([p,f,along])=>{
+    const ra=rightAngleMark(p,f,along,1.2).map(proj);
+    html+=`<path class="ra" d="M${ra[0][0]},${ra[0][1]} L${ra[1][0]},${ra[1][1]} L${ra[2][0]},${ra[2][1]}"/>`;
+  });
+  Object.keys(st.pts).forEach(k=>{const p=P[k],col=st.kind[k]==='c'?'var(--yellow)':(st.kind[k]==='a'?'#c8c8c8':'var(--ink)');
+    html+=`<circle cx="${p[0]}" cy="${p[1]}" r="5" fill="${col}" stroke="var(--bg)" stroke-width="2"/>`;
+    html+=`<circle class="hit" data-pt="${k}" cx="${p[0]}" cy="${p[1]}" r="14"/>`;
+    html+=`<text class="lab ${st.kind[k]==='c'?'c':(st.kind[k]==='a'?'a':'')}" x="${p[0]+8}" y="${p[1]-8}">${k}</text>`;});
+  html+=consOverlayHtml(st, P, (typeof proj==='function')?proj:(p=>project(p,st.yaw,st.pitch,[0,0,0],40,600,500)));
+
+  svg.innerHTML=html;
+  svg.querySelectorAll('.hit').forEach(el=>el.addEventListener('click',()=>tap(el.dataset.pt)));
+  renderPanel();
+  const labels=['Part (a) · AC','(b)(i) CF','(b)(ii) area ABF','(b)(iii) inclination','(b)(iv) claim'];
+  let idx=0; if(st.a) idx=1; if(st.b1) idx=2; if(st.b2) idx=3; if(st.b3) idx=4;
+  $('#ovTop').textContent=(st.uiMode==='scaffold'?'Guided · ':'Explore · ')+(labels[idx]);
+}
+function tap(n){
+  if(handleToolTap(st,n,redraw)) return;
+}
+function checkNum(val, target, tol){const x=parseFloat(val); return !Number.isNaN(x) && Math.abs(x-target)<=tol;}
+function renderPanel(){
+  let html=`<div class="head"><div class="brand">Q6 · <i>Sheet inclination</i></div><a class="back" href="index.html">← Index</a></div>
+  <div class="card"><div class="eyebrow"><span>Type A · DSE 2017-19</span><span>Long</span></div>
+  <p class="qtext">Thin sheet △ABC: BC = 24 cm, ∠BAC = 30°, ∠ACB = 42°. Held with only B on the ground; D,E vertically below A,C; AC produced meets ground at F. AD = 10 cm, CE = 2 cm.</p></div>`;
+  html+=modeToggleHtml(st);
+  html+=exploreToolsHtml(st);
+  if(st.msg) html+=`<div class="msg ${st.msg.k}">${st.msg.t}</div>`;
+
+  html+=`<div class="card"><div class="sec">Part (a)</div>
+  <p class="qtext">Find AC (cm).</p>
+  <div class="actions"><input id="inAC" placeholder="e.g. 45.7" style="flex:1;background:#1a1a1a;border:1px solid var(--line);color:var(--ink);border-radius:6px;padding:8px;font:inherit"/>
+  <button class="btn dark" id="chkAC">Check</button></div>
+  ${st.a?`<p class="eq">AC ≈ <span class="y">${AC0.toFixed(1)}</span> cm &nbsp;(= 48 sin 72°)</p>`:''}</div>`;
+
+  html+=`<div class="card"><div class="sec">Part (b)(i)</div>
+  <p class="qtext">Find CF.</p>
+  <div class="actions"><input id="inCF" placeholder="cm" style="flex:1;background:#1a1a1a;border:1px solid var(--line);color:var(--ink);border-radius:6px;padding:8px;font:inherit"/>
+  <button class="btn dark" id="chkCF" ${st.a?'':'disabled'}>Check</button></div>
+  ${st.b1?`<p class="eq">CF = AC/4 ≈ <span class="y">${CF0.toFixed(1)}</span> cm</p>`:''}</div>`;
+
+  html+=`<div class="card"><div class="sec">Part (b)(ii)</div>
+  <p class="qtext">Find area of △ABF (cm²).</p>
+  <div class="actions"><input id="inABF" placeholder="cm²" style="flex:1;background:#1a1a1a;border:1px solid var(--line);color:var(--ink);border-radius:6px;padding:8px;font:inherit"/>
+  <button class="btn dark" id="chkABF" ${st.b1?'':'disabled'}>Check</button></div>
+  ${st.b2?`<p class="eq">area ≈ <span class="y">${AREA_ABF.toFixed(0)}</span> cm²</p>`:''}</div>`;
+
+  html+=`<div class="card"><div class="sec">Part (b)(iii)</div>
+  <p class="qtext">Find the inclination of sheet ABC to the ground (nearest degree).</p>
+  <div class="actions"><input id="inIncl" placeholder="degrees" style="flex:1;background:#1a1a1a;border:1px solid var(--line);color:var(--ink);border-radius:6px;padding:8px;font:inherit"/>
+  <button class="btn dark" id="chkIncl" ${st.b2?'':'disabled'}>Check</button></div>
+  ${st.b3?`<p class="eq">inclination ≈ <span class="y">${INCL.toFixed(0)}°</span></p>`:''}</div>`;
+
+  html+=`<div class="card"><div class="sec">Part (b)(iv) · Claim</div>
+  <p class="qtext">Craftsman: area of △BDF &gt; 460 cm². Agree?</p>
+  <div class="mc">
+    <button class="btn ${st.b4==='yes'?(AREA_BDF>460?'picked-good':'picked-bad'):''}" id="yes4" ${st.b3?'':'disabled'}>Agree (&gt; 460)</button>
+    <button class="btn ${st.b4==='no'?(AREA_BDF>460?'picked-bad':'picked-good'):''}" id="no4" ${st.b3?'':'disabled'}>Disagree</button>
+  </div>
+  ${st.b4?`<p class="eq">area △BDF ≈ <span class="y">${AREA_BDF.toFixed(0)}</span> cm²</p>`:''}</div>`;
+
+  
+  if(st.uiMode==='scaffold') html+=`<div class="card"><div class="sec">Hints · guided</div>
+  <div class="actions"><button class="btn dark" id="hintBtn">Next hint (${st.hints}/${HINTS.length})</button></div>
+  <ol class="hints">${HINTS.slice(0,st.hints).map(h=>`<li>${h}</li>`).join('')}</ol></div>`;
+
+  html+=`<div class="card"><div class="sec">Solution outline</div>
+  <button class="btn warn" id="solBtn">${st.showSol?'Hide':'Show'} solution outline</button>
+  ${st.showSol?`<div class="explain" style="margin-top:10px"><h3>Solution</h3>
+  <p><b>(a)</b> ∠ABC = 108°. Sine rule:</p>
+  <p class="eq">AC = 24 · sin108° / sin30° = 48 sin72° ≈ <span class="y">${AC0.toFixed(1)}</span> cm</p>
+  <p><b>(b)(i)</b> Heights on AC: 10 → 2 → 0. CF/AC = 2/8 = 1/4 ⇒ CF ≈ <span class="y">${CF0.toFixed(1)}</span> cm.</p>
+  <p><b>(b)(ii)</b> With feet D,E and F collinear, place coordinates and compute</p>
+  <p class="eq">area(△ABF) ≈ <span class="y">${AREA_ABF.toFixed(0)}</span> cm²</p>
+  <p><b>(b)(iii)</b> Intersection of sheet with ground is BF. Angle between planes ABC and ground ≈ <span class="y">${INCL.toFixed(0)}°</span>.</p>
+  <p><b>(b)(iv)</b> area(△BDF) ≈ <span class="y">${AREA_BDF.toFixed(0)}</span> cm²
+  &lt; 460 — disagree.</p>
+  </div>`:''}</div>`;
+  $('#panel').innerHTML=html;
+  wireDualMode(st, redraw);
+  const ca=$('#chkAC'); if(ca) ca.onclick=()=>{
+    const v=$('#inAC').value;
+    if(checkNum(v,AC0,0.8)||checkNum(v,45.7,0.4)||checkNum(v,45.65,0.5)){st.a=true;toast('AC correct','good');st.msg={k:'good',t:'AC ≈ '+AC0.toFixed(1)+' cm'};}
+    else toast('Sine rule: AC/sin108° = 24/sin30°.','bad'); redraw();
+  };
+  const cf=$('#chkCF'); if(cf) cf.onclick=()=>{
+    const v=$('#inCF').value;
+    if(checkNum(v,CF0,0.5)||checkNum(v,AC0/4,0.5)){st.b1=true;toast('CF correct','good');}
+    else toast('Similar heights: CF/AC = 2/8.','bad'); redraw();
+  };
+  const cabf=$('#chkABF'); if(cabf) cabf.onclick=()=>{
+    const v=$('#inABF').value;
+    if(checkNum(v,AREA_ABF,25)){st.b2=true;toast('Area OK','good');}
+    else toast('Use coordinates with D,E,F collinear and AD,CE vertical.','bad'); redraw();
+  };
+  const ci=$('#chkIncl'); if(ci) ci.onclick=()=>{
+    const v=$('#inIncl').value;
+    if(checkNum(v,INCL,2.5)){st.b3=true;toast('Inclination OK','good');}
+    else toast('Angle between plane ABC and ground (via BF).','bad'); redraw();
+  };
+  const y4=$('#yes4'); if(y4) y4.onclick=()=>{
+    st.b4='yes';
+    if(AREA_BDF>460){toast('Correct — area exceeds 460.','good');st.msg={k:'good',t:'area ≈ '+AREA_BDF.toFixed(0)+' > 460'};}
+    else {toast('Actually area is less than 460.','bad');st.msg={k:'bad',t:'area ≈ '+AREA_BDF.toFixed(0)+' < 460'};}
+    redraw();
+  };
+  const n4=$('#no4'); if(n4) n4.onclick=()=>{
+    st.b4='no';
+    if(AREA_BDF<=460){toast('Correct — do not agree.','good');st.msg={k:'good',t:'area ≈ '+AREA_BDF.toFixed(0)+' ≤ 460'};}
+    else {toast('Area actually exceeds 460.','bad');st.msg={k:'bad',t:'area ≈ '+AREA_BDF.toFixed(0)+' > 460'};}
+    redraw();
+  };
+  const hb=$('#hintBtn'); if(hb) hb.onclick=()=>{if(st.hints<HINTS.length){st.hints++;redraw();}};
+  const sb=$('#solBtn'); if(sb) sb.onclick=()=>{st.showSol=!st.showSol;redraw();};
+}
+makeDrag($('#stage'),$('#svg'),()=>({yaw:st.yaw,pitch:st.pitch}),(y,p)=>{st.yaw=y;st.pitch=p;},redraw);
+$('#resetView').onclick=()=>{st.yaw=-0.65;st.pitch=0.5;redraw();};
+window.addEventListener('resize',redraw); redraw();
+})();
+
+</script>
+</body>
+</html>

@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Q5 · Card inclination · Type A scaffold</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/aaaakshat/cm-web-fonts@latest/font/Serif/cmun-serif.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/aaaakshat/cm-web-fonts@latest/font/Sans/cmun-sans.css">
+<style>
+
+:root{
+  --bg:#1C1C1C;--bg2:#141414;--card:#232323;--line:#3a3a3a;--ink:#ECECEC;--ink2:#9a9a9a;
+  --blue:#58C4DD;--green:#83C167;--yellow:#FFFF00;--red:#FC6255;--gold:#F0AC5F;--teal:#5CD0B3;
+  --serif:"Computer Modern Serif","Latin Modern Roman","CMU Serif","Cambria Math",Georgia,serif;
+  --sans:"Computer Modern Sans","CMU Sans Serif","Helvetica Neue",Arial,system-ui,sans-serif;
+  --ease:cubic-bezier(.65,0,.35,1);
+}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%}
+body{background:var(--bg);color:var(--ink);font:15px/1.5 var(--sans)}
+button{font:inherit;color:inherit}
+a{color:var(--blue)}
+.app{display:grid;grid-template-columns:minmax(0,1fr) 420px;height:100vh;height:100dvh}
+.stage{position:relative;background:var(--bg);border-right:1px solid var(--line);overflow:hidden;touch-action:none;user-select:none;-webkit-user-select:none;outline:none}
+.stage:focus-visible{box-shadow:inset 0 0 0 2px var(--blue)}
+#svg{width:100%;height:100%;display:block;cursor:grab}
+#svg.drag{cursor:grabbing}
+.ov{position:absolute;left:14px;right:14px;display:flex;gap:8px;pointer-events:none}
+.ov.top{top:14px}
+.ov.bot{bottom:14px;justify-content:space-between;align-items:flex-end}
+.tag{pointer-events:auto;background:rgba(20,20,20,.82);border:1px solid var(--line);border-radius:6px;padding:6px 11px;font-size:13px;max-width:100%;color:var(--ink)}
+.tag.tool{border-color:var(--yellow);color:var(--yellow)}
+.tag .muted{color:var(--ink2)}
+.tag.btnish{cursor:pointer}
+.tag.btnish:hover{border-color:var(--blue);color:var(--blue)}
+.toast{position:absolute;left:50%;bottom:64px;transform:translate(-50%,8px);width:max-content;max-width:min(92%,540px);background:#000;border:1px solid var(--line);color:var(--ink);padding:9px 14px;border-radius:6px;font-size:14px;opacity:0;transition:opacity .35s var(--ease),transform .35s var(--ease);pointer-events:none;z-index:3}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+.toast.bad{border-color:var(--red);color:var(--red)}
+.toast.good{border-color:var(--green);color:var(--green)}
+.panel{overflow-y:auto;padding:16px 16px 30px;background:var(--bg2)}
+.head{display:flex;justify-content:space-between;align-items:baseline;gap:8px;margin-bottom:12px}
+.brand{font-family:var(--serif);font-size:20px;letter-spacing:.01em}
+.brand i{color:var(--blue);font-style:italic}
+.back{font-size:13px;color:var(--ink2);text-decoration:none}
+.back:hover{color:var(--blue)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:13px;margin-bottom:10px}
+.eyebrow{display:flex;justify-content:space-between;font-size:12px;letter-spacing:.06em;color:var(--ink2);margin-bottom:6px;text-transform:uppercase}
+.qtext{margin:0 0 8px;font-size:14.5px}
+.ask{margin:0;font-family:var(--serif);font-size:17px;line-height:1.55}
+.mth{font-family:var(--serif);font-style:italic}
+.step{display:flex;align-items:flex-start;gap:10px;padding:6px 0;opacity:.4;transition:opacity .4s}
+.step.on,.step.ok{opacity:1}
+.step .n{width:24px;height:24px;border:1px solid var(--ink2);border-radius:50%;display:grid;place-items:center;font-size:13px;flex:none;font-family:var(--serif);margin-top:1px}
+.step.on .n{border-color:var(--yellow);color:var(--yellow)}
+.step.ok .n{border-color:var(--green);color:var(--bg);background:var(--green)}
+.step .t{flex:1;font-size:14px}
+.sec{font-size:12px;letter-spacing:.06em;color:var(--ink2);margin:0 0 8px;text-transform:uppercase}
+.tools{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.btn{border:1px solid var(--line);background:#1a1a1a;border-radius:6px;padding:8px 10px;cursor:pointer;font-size:14px;text-align:left;transition:border-color .2s,color .2s,background .2s}
+.btn:hover:not(:disabled){border-color:var(--ink2)}
+.btn:disabled{opacity:.35;cursor:not-allowed}
+.btn.on{border-color:var(--yellow);color:var(--yellow)}
+.btn.dark{border-color:var(--blue);color:var(--blue)}
+.btn.warn{border-color:var(--red);color:var(--red)}
+.btn.good{border-color:var(--green);color:var(--green)}
+.btn .sym{font-family:var(--serif);margin-right:6px;color:var(--yellow)}
+.btn small{display:block;font-size:12px;color:var(--ink2)}
+.howto{margin:10px 0 0;font-size:13px;padding:8px;border:1px dashed var(--yellow);border-radius:6px;color:var(--ink)}
+.msg{padding:9px 11px;border:1px solid var(--line);border-left:3px solid var(--ink2);border-radius:6px;background:var(--card);margin-bottom:10px;font-size:14px}
+.msg.good{border-left-color:var(--green)}
+.msg.bad{border-left-color:var(--red)}
+.hints{margin:0;padding-left:18px;font-size:14px}
+.hints li{margin:4px 0}
+.actions{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{min-width:36px;height:36px;border:1px solid var(--line);border-radius:50%;background:#1a1a1a;font-family:var(--serif);font-style:italic;font-size:18px;cursor:pointer}
+.chip.a{border-style:dashed;color:var(--ink2)}
+.chip.c{color:var(--yellow);border-color:rgba(255,255,0,.5)}
+.chip.sel{background:var(--yellow);color:#111;border-color:var(--yellow)}
+.chip.tsel{background:rgba(255,255,0,.25);color:var(--yellow)}
+.chip:disabled{opacity:.5;cursor:default}
+.mc{display:grid;gap:6px}
+.mc .btn{text-align:left}
+.mc .btn.picked-good{border-color:var(--green);color:var(--green);background:rgba(131,193,103,.08)}
+.mc .btn.picked-bad{border-color:var(--red);color:var(--red)}
+.explain{border-left:3px solid var(--red)}
+.explain h3{margin:0 0 6px;font-family:var(--serif);font-weight:normal;font-size:20px;color:var(--red)}
+.explain p{margin:6px 0;font-size:14px}
+.eq{font-family:var(--serif);font-size:17px;text-align:center;margin:10px 0;color:var(--ink)}
+.eq .y{color:var(--yellow)}.eq .r{color:var(--red)}.eq .b{color:var(--blue)}.eq .g{color:var(--green)}
+.cons{list-style:none;padding:0;margin:10px 0 0;font-size:13px}
+.cons li{padding:4px 0;border-top:1px solid var(--line)}
+.cons b{font-family:var(--serif);font-style:italic;color:var(--yellow);font-size:16px;font-weight:normal}
+.e{stroke:var(--ink);stroke-width:2.6;stroke-linecap:round;fill:none}
+.eh{stroke:#8a8a8a;stroke-width:1.6;stroke-dasharray:7 6;fill:none}
+.gd{stroke:#b0b0b0;stroke-width:1.4;stroke-dasharray:2 5;stroke-linecap:round;fill:none}
+.cs{stroke:var(--yellow);stroke-width:2;stroke-dasharray:7 5;opacity:.95;fill:none}
+.cl{stroke:var(--yellow);stroke-width:4.5;stroke-linecap:round;opacity:.9;fill:none}
+.arm{stroke:var(--red);stroke-width:4;stroke-linecap:round;fill:none}
+.arc{fill:none;stroke:var(--red);stroke-width:3}
+.hl{fill:rgba(88,196,221,.18);stroke:var(--blue);stroke-width:1.5}
+.hl2{fill:rgba(131,193,103,.16);stroke:var(--green);stroke-width:1.5}
+.ra{fill:none;stroke:var(--yellow);stroke-width:1.6}
+.lab{font-family:var(--serif);font-style:italic;font-size:20px;fill:var(--ink);paint-order:stroke;stroke:var(--bg);stroke-width:5px;stroke-linejoin:round}
+.lab.a{fill:#c8c8c8}
+.lab.c{fill:var(--yellow)}
+.lab.t{fill:var(--red);font-size:22px}
+.dim{font-family:var(--sans);font-size:12px;fill:var(--ink2);paint-order:stroke;stroke:var(--bg);stroke-width:4px}
+.hit{fill:transparent;cursor:pointer}
+.face{stroke:none;opacity:.22}
+@media (max-width:860px){.app{grid-template-columns:1fr;height:auto}.stage{position:sticky;top:0;z-index:5;height:46vh;height:46svh;border-right:0;border-bottom:1px solid var(--line)}.panel{overflow:visible}.explain{scroll-margin-top:calc(46svh + 10px)}}
+@media (prefers-reduced-motion:reduce){.toast{transition:none}}
+
+
+.mode-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px}
+.mode{border:1px solid var(--line);background:transparent;border-radius:6px;padding:8px 10px;font-size:12px;cursor:pointer;text-align:left;color:var(--ink2);transition:border-color .25s,color .25s,background .25s}
+.mode b{display:block;font-family:var(--serif);font-weight:normal;font-size:15px;color:var(--ink);margin-bottom:2px}
+.mode:hover{border-color:var(--ink2)}
+.mode.on,.mode[aria-pressed="true"]{border-color:var(--blue);color:var(--blue);background:rgba(88,196,221,.07)}
+.mode.on b,.mode[aria-pressed="true"] b{color:var(--blue)}
+.prompt{margin:0;font-size:13px;color:var(--ink2);line-height:1.45}
+.mode-card{border-color:rgba(88,196,221,.35)}
+
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="stage" id="stage" tabindex="0" aria-label="3D diagram. Drag to rotate.">
+    <svg id="svg" role="img"></svg>
+    <div class="ov top"><div class="tag" id="ovTop">Part (a)</div></div>
+    <div class="toast" id="toast" aria-live="polite"></div>
+    <div class="ov bot"><div class="tag"><span class="muted">Drag to rotate</span></div><button class="tag btnish" id="resetView">Reset view</button></div>
+  </div>
+  <div class="panel" id="panel"></div>
+</div>
+<script src="scaffold-core.js?v=2"></script>
+<script>
+/* core: scaffold-core.js */
+(()=>{
+/* Q5 triangular card PQR, PQ on ground. PQ=30, PR=25, ∠QPR=95°.
+   (a)(i) QR≈40.69 (a)(ii) ∠PQR≈37.7°
+   (b) PR inclination 70°, M midpoint QR, PM inclination ≈39.0° < 40° ⇒ claim false.
+*/
+const P=[0,0,0], Q=[30,0,0];
+const R=[-2.1788935687,8.2682243766,23.4923155196];
+const Mpt=[13.9105532157,4.1341121883,11.7461577598];
+const Rxy=[-2.1788935687,8.2682243766,0]; // foot of R roughly - actually foot is (Rx, Ry cos phi, 0) wait R foot is (R[0],R[1],0)
+const Rf=[R[0],R[1],0];
+const Mf=[Mpt[0],Mpt[1],0];
+const QR_LEN=40.690707, PQR_ANG=37.7381, PM_INCL=38.9873;
+
+const st={
+  pts:{P:P.slice(),Q:Q.slice(),R:R.slice()},
+  kind:{P:'v',Q:'v',R:'v'},
+  edges:[['P','Q'],['Q','R'],['R','P']],
+  yaw:-0.4,pitch:0.55, part:0, hints:0, cons:[], tool:null, tsel:[], uiMode:'explore', joins:[], measured:null,
+  unlocked:false, showSol:false, msg:null,
+  a1:null, a2:null, claim:null, showM:false, showFeet:false
+};
+const PARTS=[
+  {id:'a1', title:'(a)(i) Length of QR', hint:'Cosine rule in △PQR.'},
+  {id:'a2', title:'(a)(ii) ∠PQR', hint:'Cosine rule again (or sine rule).'},
+  {id:'b', title:'(b) Craftsman claim about PM', hint:'Find inclination of PM; compare with 40°.'}
+];
+const HINTS=[
+  'QR² = PQ² + PR² − 2·PQ·PR·cos 95° = 900 + 625 − 1500 cos95°.',
+  'cos∠PQR = (PQ² + QR² − PR²)/(2·PQ·QR).',
+  'Let R′ be the foot from R to the ground. sin 70° = RR′/PR ⇒ RR′ = 25 sin70°. M midpoint ⇒ height of M is RR′/2.',
+  'Inclination of PM: sin φ = (height of M)/PM. Compute φ and compare with 40°.'
+];
+
+function cen(){return [15, R[1]/2, R[2]/3];}
+function redraw(){
+  const svg=$('#svg'), W=svg.clientWidth||600, H=svg.clientHeight||500;
+  const C0=(typeof cen==='function')?cen():ptsCentroid(st.pts);
+  const scale=autoScale(st.pts, st.yaw, st.pitch, C0, W, H, 0.72);
+  const proj=p=>project(p,st.yaw,st.pitch,C0,scale,W,H);
+  const PP={}; for(const k in st.pts) PP[k]=proj(st.pts[k]);
+  let html='';
+  const g=[[-8,-6,0],[38,-6,0],[38,14,0],[-8,14,0]].map(proj);
+  html+=`<path d="${polyPath(g)}" fill="rgba(88,196,221,.05)" stroke="#444" stroke-width="1" stroke-dasharray="4 5"/>`;
+  html+=`<path class="hl" d="${polyPath([PP.P,PP.Q,PP.R])}" fill="rgba(240,172,95,.2)"/>`;
+  st.edges.forEach(([a,b])=>{html+=`<path class="e" d="${linePath(PP[a],PP[b])}"/>`;});
+  if(st.showFeet || st.part>=2){
+    if(!('R\'' in st.pts)){ /* skip */ }
+    const prf=proj(Rf), pmf=proj(Mf);
+    html+=`<path class="gd" d="${linePath(PP.R,prf)}"/>`;
+    html+=`<path class="eh" d="${linePath(PP.P,prf)}"/>`;
+    if(st.showM && PP.M){
+      html+=`<path class="gd" d="${linePath(PP.M,pmf)}"/>`;
+      html+=`<path class="cl" d="${linePath(PP.P,PP.M)}"/>`;
+      html+=`<path class="arm" d="${linePath(PP.P,pmf)}"/>`;
+    }
+  }
+  st.cons.forEach(c=>{(c.segs||[]).forEach(([u,v])=>{if(PP[u]&&PP[v]) html+=`<path class="cs" d="${linePath(PP[u],PP[v])}"/>`;});});
+  // dims on card
+  const mPQ=proj(V.mid(P,Q)); html+=`<text class="dim" x="${mPQ[0]}" y="${mPQ[1]+16}">30</text>`;
+  const mPR=proj(V.mid(P,R)); html+=`<text class="dim" x="${mPR[0]-18}" y="${mPR[1]}">25</text>`;
+  Object.keys(st.pts).forEach(k=>{const p=PP[k],col=st.kind[k]==='c'?'var(--yellow)':'var(--ink)';
+    html+=`<circle cx="${p[0]}" cy="${p[1]}" r="5" fill="${col}" stroke="var(--bg)" stroke-width="2"/>`;
+    html+=`<circle class="hit" data-pt="${k}" cx="${p[0]}" cy="${p[1]}" r="16"/>`;
+    html+=`<text class="lab ${st.kind[k]==='c'?'c':''}" x="${p[0]+10}" y="${p[1]-10}">${k}</text>`;});
+  html+=consOverlayHtml(st, PP, (typeof proj==='function')?proj:(p=>project(p,st.yaw,st.pitch,[0,0,0],40,600,500)));
+
+  svg.innerHTML=html;
+  svg.querySelectorAll('.hit').forEach(el=>el.addEventListener('click',()=>tap(el.dataset.pt)));
+  renderPanel();
+  $('#ovTop').textContent=(st.uiMode==='scaffold'?'Guided · ':'Explore · ')+(PARTS[Math.min(st.part,2)].title);
+}
+function tap(n){
+  if(handleToolTap(st,n,redraw)) return;
+}
+function checkNum(val, target, tol){
+  const x=parseFloat(val); if(Number.isNaN(x)) return false; return Math.abs(x-target)<=tol;
+}
+function renderPanel(){
+  let html=`<div class="head"><div class="brand">Q5 · <i>Card inclination</i></div><a class="back" href="index.html">← Index</a></div>
+  <div class="card"><div class="eyebrow"><span>Type A · DSE 2022-18</span><span>Long</span></div>
+  <p class="qtext">Triangular card <span class="mth">PQR</span> with <span class="mth">PQ</span> on the ground. PQ = 30 cm, PR = 25 cm, ∠QPR = 95°.</p></div>`;
+  html+=modeToggleHtml(st);
+  html+=exploreToolsHtml(st);
+  if(st.msg) html+=`<div class="msg ${st.msg.k}">${st.msg.t}</div>`;
+
+  // Part a i
+  html+=`<div class="card"><div class="sec">Part (a)(i)</div>
+  <p class="qtext">Find the length of <span class="mth">QR</span> (cm, 3 s.f. or exact setup).</p>
+  <div class="actions"><input id="inQR" type="text" placeholder="e.g. 40.7" style="flex:1;min-width:120px;background:#1a1a1a;border:1px solid var(--line);color:var(--ink);border-radius:6px;padding:8px;font:inherit"/>
+  <button class="btn dark" id="chkQR">Check</button></div>
+  ${st.a1?`<p class="eq">QR ≈ <span class="y">${QR_LEN.toFixed(1)}</span> cm</p>`:''}</div>`;
+
+  // Part a ii
+  html+=`<div class="card"><div class="sec">Part (a)(ii)</div>
+  <p class="qtext">Find ∠PQR (nearest 0.1° or degree).</p>
+  <div class="actions"><input id="inPQR" type="text" placeholder="e.g. 37.7" style="flex:1;min-width:120px;background:#1a1a1a;border:1px solid var(--line);color:var(--ink);border-radius:6px;padding:8px;font:inherit"/>
+  <button class="btn dark" id="chkPQR" ${st.a1?'':'disabled'}>Check</button></div>
+  ${st.a2?`<p class="eq">∠PQR ≈ <span class="y">${PQR_ANG.toFixed(1)}°</span></p>`:''}</div>`;
+
+  // Part b
+  html+=`<div class="card"><div class="sec">Part (b) · Claim</div>
+  <p class="qtext">M is midpoint of QR. Angle between PR and ground is 70°. Claim: angle between PM and ground <b>exceeds 40°</b>.</p>
+  <div class="actions"><button class="btn" id="mkM" ${st.a2?'':'disabled'}>Construct midpoint M of QR</button></div>
+  <p class="qtext" style="margin-top:8px">Is the claim correct?</p>
+  <div class="mc">
+    <button class="btn ${st.claim==='yes'?'picked-bad':''}" id="claimYes" ${st.showM||st.a2?'':'disabled'}>Yes — exceeds 40°</button>
+    <button class="btn ${st.claim==='no'?'picked-good':''}" id="claimNo" ${st.showM||st.a2?'':'disabled'}>No — does not exceed 40°</button>
+  </div></div>`;
+
+  
+  if(st.uiMode==='scaffold') html+=`<div class="card"><div class="sec">Hints · guided</div>
+  <div class="actions"><button class="btn dark" id="hintBtn">Next hint (${st.hints}/${HINTS.length})</button></div>
+  <ol class="hints">${HINTS.slice(0,st.hints).map(h=>`<li>${h}</li>`).join('')}</ol></div>`;
+
+  html+=`<div class="card"><div class="sec">Solution outline</div>
+  <button class="btn warn" id="solBtn">${st.showSol?'Hide':'Show'} solution outline</button>
+  ${st.showSol?`<div class="explain" style="margin-top:10px"><h3>Solution</h3>
+  <p><b>(a)(i)</b> Cosine rule:</p>
+  <p class="eq">QR² = 30²+25²−2·30·25·cos95° ⇒ QR ≈ <span class="y">40.7</span> cm</p>
+  <p><b>(a)(ii)</b></p>
+  <p class="eq">cos∠PQR = (30²+QR²−25²)/(2·30·QR) ⇒ ∠PQR ≈ <span class="y">37.7°</span></p>
+  <p><b>(b)</b> RR′ = 25 sin70°. M midpoint of QR ⇒ height of M = ½ RR′.</p>
+  <p>With coordinates (PQ on x-axis, card tilted so PR has inclination 70°), PM ≈ 18.67 and</p>
+  <p class="eq">sin φ = h_M / PM ⇒ φ ≈ <span class="y">39.0°</span> &lt; 40°</p>
+  <p>Hence the claim is <span class="r">incorrect</span>.</p>
+  </div>`:''}</div>`;
+  $('#panel').innerHTML=html;
+  wireDualMode(st, redraw);
+  const cq=$('#chkQR'); if(cq) cq.onclick=()=>{
+    const v=$('#inQR').value;
+    if(checkNum(v, QR_LEN, 0.6) || checkNum(v, 40.7, 0.3)){st.a1=true;st.part=Math.max(st.part,1);toast('QR correct','good');st.msg={k:'good',t:'QR ≈ 40.7 cm'};}
+    else toast('Use the cosine rule carefully.','bad');
+    redraw();
+  };
+  const cp=$('#chkPQR'); if(cp) cp.onclick=()=>{
+    const v=$('#inPQR').value;
+    if(checkNum(v, PQR_ANG, 0.8)){st.a2=true;st.part=Math.max(st.part,2);toast('∠PQR correct','good');}
+    else toast('Check cosine rule for ∠PQR.','bad');
+    redraw();
+  };
+  const mm=$('#mkM'); if(mm) mm.onclick=()=>{
+    if(!('M' in st.pts)){st.pts.M=Mpt.slice();st.kind.M='c';st.cons.push({name:'M',type:'mid',args:['Q','R'],desc:'midpoint of QR',segs:[]});}
+    st.showM=true; st.showFeet=true; st.part=2; toast('M constructed','good'); redraw();
+  };
+  const cy=$('#claimYes'); if(cy) cy.onclick=()=>{st.claim='yes';toast('Recheck φ = arcsin(h_M/PM).','bad');st.msg={k:'bad',t:'φ ≈ 39.0° which does NOT exceed 40°.'};redraw();};
+  const cn=$('#claimNo'); if(cn) cn.onclick=()=>{st.claim='no';toast('Correct — claim is false.','good');st.msg={k:'good',t:`Inclination of PM ≈ ${PM_INCL.toFixed(1)}° < 40°. Claim incorrect.`};redraw();};
+  const hb=$('#hintBtn'); if(hb) hb.onclick=()=>{if(st.hints<HINTS.length){st.hints++;redraw();}};
+  const sb=$('#solBtn'); if(sb) sb.onclick=()=>{st.showSol=!st.showSol; if(st.showSol){st.showM=true;st.showFeet=true; if(!('M' in st.pts)){st.pts.M=Mpt.slice();st.kind.M='c';}}; redraw();};
+}
+makeDrag($('#stage'),$('#svg'),()=>({yaw:st.yaw,pitch:st.pitch}),(y,p)=>{st.yaw=y;st.pitch=p;},redraw);
+$('#resetView').onclick=()=>{st.yaw=-0.4;st.pitch=0.55;redraw();};
+window.addEventListener('resize',redraw); redraw();
+})();
+
+</script>
+</body>
+</html>

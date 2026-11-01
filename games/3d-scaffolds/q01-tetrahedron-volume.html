@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Q1 · Regular tetrahedron volume · Type A scaffold</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/aaaakshat/cm-web-fonts@latest/font/Serif/cmun-serif.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/aaaakshat/cm-web-fonts@latest/font/Sans/cmun-sans.css">
+<style>
+
+:root{
+  --bg:#1C1C1C;--bg2:#141414;--card:#232323;--line:#3a3a3a;--ink:#ECECEC;--ink2:#9a9a9a;
+  --blue:#58C4DD;--green:#83C167;--yellow:#FFFF00;--red:#FC6255;--gold:#F0AC5F;--teal:#5CD0B3;
+  --serif:"Computer Modern Serif","Latin Modern Roman","CMU Serif","Cambria Math",Georgia,serif;
+  --sans:"Computer Modern Sans","CMU Sans Serif","Helvetica Neue",Arial,system-ui,sans-serif;
+  --ease:cubic-bezier(.65,0,.35,1);
+}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%}
+body{background:var(--bg);color:var(--ink);font:15px/1.5 var(--sans)}
+button{font:inherit;color:inherit}
+a{color:var(--blue)}
+.app{display:grid;grid-template-columns:minmax(0,1fr) 420px;height:100vh;height:100dvh}
+.stage{position:relative;background:var(--bg);border-right:1px solid var(--line);overflow:hidden;touch-action:none;user-select:none;-webkit-user-select:none;outline:none}
+.stage:focus-visible{box-shadow:inset 0 0 0 2px var(--blue)}
+#svg{width:100%;height:100%;display:block;cursor:grab}
+#svg.drag{cursor:grabbing}
+.ov{position:absolute;left:14px;right:14px;display:flex;gap:8px;pointer-events:none}
+.ov.top{top:14px}
+.ov.bot{bottom:14px;justify-content:space-between;align-items:flex-end}
+.tag{pointer-events:auto;background:rgba(20,20,20,.82);border:1px solid var(--line);border-radius:6px;padding:6px 11px;font-size:13px;max-width:100%;color:var(--ink)}
+.tag.tool{border-color:var(--yellow);color:var(--yellow)}
+.tag .muted{color:var(--ink2)}
+.tag.btnish{cursor:pointer}
+.tag.btnish:hover{border-color:var(--blue);color:var(--blue)}
+.toast{position:absolute;left:50%;bottom:64px;transform:translate(-50%,8px);width:max-content;max-width:min(92%,540px);background:#000;border:1px solid var(--line);color:var(--ink);padding:9px 14px;border-radius:6px;font-size:14px;opacity:0;transition:opacity .35s var(--ease),transform .35s var(--ease);pointer-events:none;z-index:3}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+.toast.bad{border-color:var(--red);color:var(--red)}
+.toast.good{border-color:var(--green);color:var(--green)}
+.panel{overflow-y:auto;padding:16px 16px 30px;background:var(--bg2)}
+.head{display:flex;justify-content:space-between;align-items:baseline;gap:8px;margin-bottom:12px}
+.brand{font-family:var(--serif);font-size:20px;letter-spacing:.01em}
+.brand i{color:var(--blue);font-style:italic}
+.back{font-size:13px;color:var(--ink2);text-decoration:none}
+.back:hover{color:var(--blue)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:13px;margin-bottom:10px}
+.eyebrow{display:flex;justify-content:space-between;font-size:12px;letter-spacing:.06em;color:var(--ink2);margin-bottom:6px;text-transform:uppercase}
+.qtext{margin:0 0 8px;font-size:14.5px}
+.ask{margin:0;font-family:var(--serif);font-size:17px;line-height:1.55}
+.mth{font-family:var(--serif);font-style:italic}
+.step{display:flex;align-items:flex-start;gap:10px;padding:6px 0;opacity:.4;transition:opacity .4s}
+.step.on,.step.ok{opacity:1}
+.step .n{width:24px;height:24px;border:1px solid var(--ink2);border-radius:50%;display:grid;place-items:center;font-size:13px;flex:none;font-family:var(--serif);margin-top:1px}
+.step.on .n{border-color:var(--yellow);color:var(--yellow)}
+.step.ok .n{border-color:var(--green);color:var(--bg);background:var(--green)}
+.step .t{flex:1;font-size:14px}
+.sec{font-size:12px;letter-spacing:.06em;color:var(--ink2);margin:0 0 8px;text-transform:uppercase}
+.tools{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.btn{border:1px solid var(--line);background:#1a1a1a;border-radius:6px;padding:8px 10px;cursor:pointer;font-size:14px;text-align:left;transition:border-color .2s,color .2s,background .2s}
+.btn:hover:not(:disabled){border-color:var(--ink2)}
+.btn:disabled{opacity:.35;cursor:not-allowed}
+.btn.on{border-color:var(--yellow);color:var(--yellow)}
+.btn.dark{border-color:var(--blue);color:var(--blue)}
+.btn.warn{border-color:var(--red);color:var(--red)}
+.btn.good{border-color:var(--green);color:var(--green)}
+.btn .sym{font-family:var(--serif);margin-right:6px;color:var(--yellow)}
+.btn small{display:block;font-size:12px;color:var(--ink2)}
+.howto{margin:10px 0 0;font-size:13px;padding:8px;border:1px dashed var(--yellow);border-radius:6px;color:var(--ink)}
+.msg{padding:9px 11px;border:1px solid var(--line);border-left:3px solid var(--ink2);border-radius:6px;background:var(--card);margin-bottom:10px;font-size:14px}
+.msg.good{border-left-color:var(--green)}
+.msg.bad{border-left-color:var(--red)}
+.hints{margin:0;padding-left:18px;font-size:14px}
+.hints li{margin:4px 0}
+.actions{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{min-width:36px;height:36px;border:1px solid var(--line);border-radius:50%;background:#1a1a1a;font-family:var(--serif);font-style:italic;font-size:18px;cursor:pointer}
+.chip.a{border-style:dashed;color:var(--ink2)}
+.chip.c{color:var(--yellow);border-color:rgba(255,255,0,.5)}
+.chip.sel{background:var(--yellow);color:#111;border-color:var(--yellow)}
+.chip.tsel{background:rgba(255,255,0,.25);color:var(--yellow)}
+.chip:disabled{opacity:.5;cursor:default}
+.mc{display:grid;gap:6px}
+.mc .btn{text-align:left}
+.mc .btn.picked-good{border-color:var(--green);color:var(--green);background:rgba(131,193,103,.08)}
+.mc .btn.picked-bad{border-color:var(--red);color:var(--red)}
+.explain{border-left:3px solid var(--red)}
+.explain h3{margin:0 0 6px;font-family:var(--serif);font-weight:normal;font-size:20px;color:var(--red)}
+.explain p{margin:6px 0;font-size:14px}
+.eq{font-family:var(--serif);font-size:17px;text-align:center;margin:10px 0;color:var(--ink)}
+.eq .y{color:var(--yellow)}.eq .r{color:var(--red)}.eq .b{color:var(--blue)}.eq .g{color:var(--green)}
+.cons{list-style:none;padding:0;margin:10px 0 0;font-size:13px}
+.cons li{padding:4px 0;border-top:1px solid var(--line)}
+.cons b{font-family:var(--serif);font-style:italic;color:var(--yellow);font-size:16px;font-weight:normal}
+.e{stroke:var(--ink);stroke-width:2.6;stroke-linecap:round;fill:none}
+.eh{stroke:#8a8a8a;stroke-width:1.6;stroke-dasharray:7 6;fill:none}
+.gd{stroke:#b0b0b0;stroke-width:1.4;stroke-dasharray:2 5;stroke-linecap:round;fill:none}
+.cs{stroke:var(--yellow);stroke-width:2;stroke-dasharray:7 5;opacity:.95;fill:none}
+.cl{stroke:var(--yellow);stroke-width:4.5;stroke-linecap:round;opacity:.9;fill:none}
+.arm{stroke:var(--red);stroke-width:4;stroke-linecap:round;fill:none}
+.arc{fill:none;stroke:var(--red);stroke-width:3}
+.hl{fill:rgba(88,196,221,.18);stroke:var(--blue);stroke-width:1.5}
+.hl2{fill:rgba(131,193,103,.16);stroke:var(--green);stroke-width:1.5}
+.ra{fill:none;stroke:var(--yellow);stroke-width:1.6}
+.lab{font-family:var(--serif);font-style:italic;font-size:20px;fill:var(--ink);paint-order:stroke;stroke:var(--bg);stroke-width:5px;stroke-linejoin:round}
+.lab.a{fill:#c8c8c8}
+.lab.c{fill:var(--yellow)}
+.lab.t{fill:var(--red);font-size:22px}
+.dim{font-family:var(--sans);font-size:12px;fill:var(--ink2);paint-order:stroke;stroke:var(--bg);stroke-width:4px}
+.hit{fill:transparent;cursor:pointer}
+.face{stroke:none;opacity:.22}
+@media (max-width:860px){.app{grid-template-columns:1fr;height:auto}.stage{position:sticky;top:0;z-index:5;height:46vh;height:46svh;border-right:0;border-bottom:1px solid var(--line)}.panel{overflow:visible}.explain{scroll-margin-top:calc(46svh + 10px)}}
+@media (prefers-reduced-motion:reduce){.toast{transition:none}}
+
+
+.mode-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px}
+.mode{border:1px solid var(--line);background:transparent;border-radius:6px;padding:8px 10px;font-size:12px;cursor:pointer;text-align:left;color:var(--ink2);transition:border-color .25s,color .25s,background .25s}
+.mode b{display:block;font-family:var(--serif);font-weight:normal;font-size:15px;color:var(--ink);margin-bottom:2px}
+.mode:hover{border-color:var(--ink2)}
+.mode.on,.mode[aria-pressed="true"]{border-color:var(--blue);color:var(--blue);background:rgba(88,196,221,.07)}
+.mode.on b,.mode[aria-pressed="true"] b{color:var(--blue)}
+.prompt{margin:0;font-size:13px;color:var(--ink2);line-height:1.45}
+.mode-card{border-color:rgba(88,196,221,.35)}
+
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="stage" id="stage" tabindex="0" aria-label="3D diagram. Drag to rotate.">
+    <svg id="svg" role="img"></svg>
+    <div class="ov top"><div class="tag" id="ovTop">Step 1</div></div>
+    <div class="toast" id="toast" aria-live="polite"></div>
+    <div class="ov bot"><div class="tag"><span class="muted">Drag to rotate</span></div><button class="tag btnish" id="resetView">Reset view</button></div>
+  </div>
+  <div class="panel" id="panel"></div>
+</div>
+<script src="scaffold-core.js?v=2"></script>
+<script>
+/* core: scaffold-core.js */
+(()=>{
+const h=2, a=h*3/Math.sqrt(6);
+const r=a/Math.sqrt(3);
+const at=d=>[r*Math.cos(d*Math.PI/180),r*Math.sin(d*Math.PI/180),0];
+const A=at(90),B=at(210),C=at(330),D=[0,0,h];
+const O=[(A[0]+B[0]+C[0])/3,(A[1]+B[1]+C[1])/3,0];
+
+const st={
+  pts:{A:A.slice(),B:B.slice(),C:C.slice(),D:D.slice()},
+  kind:{A:'v',B:'v',C:'v',D:'v'},
+  edges:[['A','B'],['B','C'],['C','A'],['A','D'],['B','D'],['C','D']],
+  faces:[['A','B','C'],['A','B','D'],['B','C','D'],['C','A','D']],
+  faceCols:['rgba(88,196,221,.14)','rgba(131,193,103,.10)','rgba(240,172,95,.08)','rgba(252,98,85,.08)'],
+  yaw:-0.55,pitch:0.42, step:0, hints:0, cons:[], tool:null, tsel:[], uiMode:'explore', joins:[], measured:null,
+  unlocked:false, answered:false, picked:null, showSol:false, showHeight:false, msg:null
+};
+const STEPS=[
+  {t:'Locate the centroid of base △ABC (foot of the height).', check:()=>('O' in st.pts)||('G' in st.pts)||('K' in st.pts)},
+  {t:'Confirm the perpendicular from apex D to the base (height DO = 2).', check:()=>st.showHeight||st.cons.some(c=>c.type==='footp'||(c.type==='foot'&&c.args[0]==='D'))},
+  {t:'Relate edge a to height: h = (√6 / 3) a ⇒ a = √6.', check:()=>st.unlocked||st.hints>=3},
+  {t:'Compute V = a³√2/12 and choose the option.', check:()=>st.answered}
+];
+const HINTS=[
+  'In a regular tetrahedron the altitude meets the base at the centroid of an equilateral face.',
+  'Use “Centroid of △” (A,B,C) or “Foot on a plane” (D → A,B,C).',
+  'h = √6/3 · a ⇒ a = 3h/√6 = √6 when h = 2.',
+  'V = a³√2/12 = (√6)³√2/12 = √3. Or ⅓ × (√3/4 a²) × h.'
+];
+function cen(){const ks=Object.keys(st.pts).filter(k=>st.kind[k]==='v');return V.mul(ks.reduce((s,k)=>V.add(s,st.pts[k]),[0,0,0]),1/ks.length);}
+function footName(){return ['O','G','K','M','N'].find(k=>k in st.pts);}
+function advance(){
+  while(st.step<STEPS.length && STEPS[st.step].check()){st.step++;}
+  if(st.step>=1 && footName()){st.showHeight=true;}
+  if(st.hints>=3) st.unlocked=true;
+}
+function redraw(){
+  const svg=$('#svg'), W=svg.clientWidth||600, H=svg.clientHeight||500;
+  const C0=(typeof cen==='function')?cen():ptsCentroid(st.pts);
+  const scale=autoScale(st.pts, st.yaw, st.pitch, C0, W, H, 0.72);
+  const proj=p=>project(p,st.yaw,st.pitch,C0,scale,W,H);
+  const P={}; for(const k in st.pts) P[k]=proj(st.pts[k]);
+  let html='';
+  st.faces.forEach((f,i)=>{html+=`<path class="face" d="${polyPath(f.map(k=>P[k]))}" fill="${st.faceCols[i]}"/>`;});
+  st.edges.forEach(([a,b])=>{html+=`<path class="e" d="${linePath(P[a],P[b])}"/>`;});
+  st.cons.forEach(c=>{(c.segs||[]).forEach(([u,v])=>{if(P[u]&&P[v]) html+=`<path class="cs" d="${linePath(P[u],P[v])}"/>`;});
+    if(c.mark&&P[c.mark.at]&&P[c.mark.to]&&P[c.mark.along]){const ra=rightAngleMark(st.pts[c.mark.to],st.pts[c.mark.at],st.pts[c.mark.along],0.25).map(proj);
+      html+=`<path class="ra" d="M${ra[0][0]},${ra[0][1]} L${ra[1][0]},${ra[1][1]} L${ra[2][0]},${ra[2][1]}"/>`;}});
+  const fn=footName();
+  if(fn && st.showHeight){html+=`<path class="cl" d="${linePath(P.D,P[fn])}"/>`;
+    const ra=rightAngleMark(st.pts.D,st.pts[fn],st.pts.A,0.28).map(proj);
+    html+=`<path class="ra" d="M${ra[0][0]},${ra[0][1]} L${ra[1][0]},${ra[1][1]} L${ra[2][0]},${ra[2][1]}"/>`;
+    const mid=proj(V.mid(st.pts.D,st.pts[fn])); html+=`<text class="dim" x="${mid[0]+8}" y="${mid[1]}">h = 2</text>`;}
+  Object.keys(st.pts).forEach(k=>{const p=P[k],col=st.kind[k]==='c'?'var(--yellow)':'var(--ink)';
+    html+=`<circle cx="${p[0]}" cy="${p[1]}" r="5" fill="${col}" stroke="var(--bg)" stroke-width="2"/>`;
+    html+=`<circle class="hit" data-pt="${k}" cx="${p[0]}" cy="${p[1]}" r="16"/>`;
+    html+=`<text class="lab ${st.kind[k]==='c'?'c':''}" x="${p[0]+10}" y="${p[1]-10}">${k}</text>`;});
+  html+=consOverlayHtml(st, P, (typeof proj==='function')?proj:(p=>project(p,st.yaw,st.pitch,[0,0,0],40,600,500)));
+
+  svg.innerHTML=html;
+  svg.querySelectorAll('.hit').forEach(el=>el.addEventListener('click',()=>tap(el.dataset.pt)));
+  renderPanel();
+  $('#ovTop').textContent=(st.uiMode==='scaffold'?'Guided · ':'Explore · ')+(st.answered ? 'Complete' : `Step ${Math.min(st.step+1,STEPS.length)} · scaffold`);
+}
+function tap(n){
+  if(handleToolTap(st,n,redraw)) return;
+}
+function pickMC(opt){
+  /* explore: answers always open */
+  st.unlocked=true; st.picked=opt; st.answered=true;
+  if(opt==='B'){toast('Correct! V = √3 cm³','good'); st.msg={k:'good',t:'Yes — volume = √3 cm³.'};}
+  else {toast('Not quite. Check a = √6 in V = a³√2/12.','bad'); st.msg={k:'bad',t:'Revisit the edge–height relation.'};}
+  advance(); redraw();
+}
+function renderPanel(){
+  const stepsHtml=STEPS.map((s,i)=>`<div class="step ${i<st.step?'ok':(i===st.step?'on':'')}"><div class="n">${i<st.step?'✓':(i+1)}</div><div class="t">${s.t}</div></div>`).join('');
+  const toolKeys=['centroid','footp','foot','mid'];
+  let html=`<div class="head"><div class="brand">Q1 · <i>Tetrahedron volume</i></div><a class="back" href="index.html">← Index</a></div>
+  <div class="card"><div class="eyebrow"><span>Type A · DSE-2012 PII Q40</span><span>MC</span></div>
+  <p class="qtext">If the height of a regular tetrahedron is <span class="mth">2 cm</span>, then the volume is</p></div>`;
+  html+=modeToggleHtml(st);
+  html+=exploreToolsHtml(st);
+  html+=`${st.uiMode==='scaffold'?`<div class="card"><div class="sec">Guided scaffold · optional</div>${stepsHtml}<div class="actions"><button class="btn" id="nextStep">Next step</button><button class="btn" id="backExplore">← Back to Explore</button></div></div>`:''}`;
+  if(st.msg) html+=`<div class="msg ${st.msg.k}">${st.msg.t}</div>`;
+  
+    if(st.uiMode==='scaffold') html+=`<div class="card"><div class="sec">Hints · guided</div>
+  <div class="actions"><button class="btn dark" id="hintBtn">Next hint (${st.hints}/${HINTS.length})</button>
+  <button class="btn" id="unlockBtn">Unlock answers</button></div>
+  <ol class="hints">${HINTS.slice(0,st.hints).map(h=>`<li>${h}</li>`).join('')}</ol></div>`;
+  const cls=o=>st.picked===o?(o==='B'?'picked-good':'picked-bad'):'';
+  html+=`<div class="card"><div class="sec">Answer</div><div class="mc">
+  <button class="btn ${cls('A')}" data-mc="A">A. 2 cm³</button>
+  <button class="btn ${cls('B')}" data-mc="B">B. √3 cm³</button>
+  <button class="btn ${cls('C')}" data-mc="C">C. √6 cm³</button>
+  <button class="btn ${cls('D')}" data-mc="D">D. 3√3 cm³</button></div></div>`;
+  
+
+  html+=`<div class="card"><div class="sec">Solution outline</div>
+  <button class="btn warn" id="solBtn">${st.showSol?'Hide':'Show'} solution outline</button>
+  ${st.showSol?`<div class="explain" style="margin-top:10px"><h3>Solution</h3>
+  <p>Edge <span class="mth">a</span>, height <span class="mth">h = 2</span>.</p>
+  <p class="eq">h = <span class="y">√6 / 3</span> · a ⇒ a = <span class="y">√6</span></p>
+  <p class="eq">V = a³√2 / 12 = (√6)³√2 / 12 = <span class="y">√3</span></p>
+  <p>Or: base = (√3/4)a² = 3√3/2, V = ⅓ × base × h = √3.</p>
+  <p><b>Answer: B</b></p></div>`:''}</div>`;
+  $('#panel').innerHTML=html;
+  wireDualMode(st, redraw);
+  const ns=$('#nextStep'); if(ns) ns.onclick=()=>{if(typeof STEPS!=='undefined'&&st.step<STEPS.length){st.step++;redraw();}else if(st.step<4){st.step++;redraw();}};
+  $('#panel').querySelectorAll('[data-mc]').forEach(b=>b.onclick=()=>pickMC(b.dataset.mc));
+  const ub=$('#undoCons'); if(ub) ub.onclick=()=>{const c=st.cons.pop(); if(c){delete st.pts[c.name];delete st.kind[c.name];} redraw();};
+  const hb=$('#hintBtn'); if(hb) hb.onclick=()=>{if(st.hints<HINTS.length){st.hints++; if(st.hints>=2 && !footName()){st.pts.O=O.slice();st.kind.O='c';st.showHeight=true;} advance(); redraw();}};
+  const un=$('#unlockBtn'); if(un) un.onclick=()=>{st.unlocked=true;st.step=Math.max(st.step,3);toast('Answers unlocked','good');redraw();};
+  const sb=$('#solBtn'); if(sb) sb.onclick=()=>{st.showSol=!st.showSol;st.unlocked=true;redraw();};
+}
+makeDrag($('#stage'),$('#svg'),()=>({yaw:st.yaw,pitch:st.pitch}),(y,p)=>{st.yaw=y;st.pitch=p;},redraw);
+$('#resetView').onclick=()=>{st.yaw=-0.55;st.pitch=0.42;redraw();};
+window.addEventListener('resize',redraw); redraw();
+})();
+
+</script>
+</body>
+</html>

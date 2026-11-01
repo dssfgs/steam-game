@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 120" width="160" height="120">
+  <rect width="160" height="120" rx="10" fill="#0b1020"/>
+  <g stroke="#7dd3fc" stroke-width="1.6" fill="none" stroke-linejoin="round">
+    <!-- cube wireframe -->
+    <path d="M48 78 L48 42 L80 28 L112 42 L112 78 L80 92 Z"/>
+    <path d="M48 42 L80 56 L112 42"/>
+    <path d="M80 56 L80 92"/>
+    <!-- diagonal accent -->
+    <path d="M48 78 L112 42" stroke="#a78bfa" stroke-dasharray="3 3"/>
+    <!-- ground plane hint -->
+    <path d="M28 96 L80 108 L132 96" stroke="#334155" stroke-width="1.2"/>
+  </g>
+  <circle cx="80" cy="56" r="2.4" fill="#fbbf24"/>
+  <circle cx="48" cy="78" r="2" fill="#34d399"/>
+  <circle cx="112" cy="42" r="2" fill="#34d399"/>
+</svg>
