@@ -1,4 +1,4 @@
-/* Shared 3D scaffold core — Explore + Guided dual mode */
+/* Shared 3D scaffold core — Explore + Guided + Exam modes */
 const $=s=>document.querySelector(s);
 const V={
   sub:(a,b)=>[a[0]-b[0],a[1]-b[1],a[2]-b[2]],
@@ -221,6 +221,7 @@ function angleDegrees(A,B,C){
 
 /** SVG snippets for free constructions + measured angle */
 function consOverlayHtml(st, Pj, projFn){
+  if(st.uiMode==='exam') return '';
   let html='';
   const joins=st.joins||[];
   joins.forEach(([a,b])=>{
@@ -250,21 +251,53 @@ function consOverlayHtml(st, Pj, projFn){
   return html;
 }
 
+function modePrefix(st){
+  if(st.uiMode==='exam') return 'Exam · ';
+  if(st.uiMode==='scaffold') return 'Guided · ';
+  return 'Explore · ';
+}
+
+function applyUiModeClass(st){
+  document.body.classList.toggle('exam', st.uiMode==='exam');
+}
+
+function ensureExamStyles(){
+  if(document.getElementById('exam-mode-css')) return;
+  const s=document.createElement('style');
+  s.id='exam-mode-css';
+  s.textContent=`
+body.exam .cs, body.exam .cl, body.exam .arm, body.exam .arc, body.exam .ra{display:none!important}
+body.exam .hl, body.exam .hl2{fill:rgba(180,180,180,.10)!important;stroke:#8a8a8a!important}
+body.exam .face{fill:rgba(180,180,180,.12)!important}
+body.exam .lab.c, body.exam .lab.t{fill:var(--ink)!important}
+body.exam #svg circle:not(.hit){fill:var(--ink)!important}
+body.exam .chip.c{color:var(--ink);border-color:var(--line)}
+body.exam .panel .tools, body.exam .howto, body.exam .cons, body.exam [data-tool]{display:none!important}
+body.exam .mode-card .prompt{color:var(--ink2)}
+`;
+  document.head.appendChild(s);
+}
+
 function modeToggleHtml(st){
-  const ex=st.uiMode!=='scaffold';
+  const m=st.uiMode||'explore';
+  const prompt = m==='explore'
+    ? 'Try your own construction — which line makes the right angle / dihedral clear?'
+    : m==='scaffold'
+      ? 'Follow the steps, or switch back to Explore anytime. Your free points stay.'
+      : 'Exam — monochrome figure only. No tools or coloured hints.';
   return `<div class="card mode-card">
     <div class="sec">Work mode</div>
     <div class="mode-row">
-      <button class="mode ${ex?'on':''}" data-uimode="explore" aria-pressed="${ex}"><b>Explore</b>Free constructions</button>
-      <button class="mode ${!ex?'on':''}" data-uimode="scaffold" aria-pressed="${!ex}"><b>Guided</b>Steps if you need help</button>
+      <button class="mode ${m==='explore'?'on':''}" data-uimode="explore" aria-pressed="${m==='explore'}"><b>Explore</b>Free constructions</button>
+      <button class="mode ${m==='scaffold'?'on':''}" data-uimode="scaffold" aria-pressed="${m==='scaffold'}"><b>Guided</b>Steps if you need help</button>
+      <button class="mode ${m==='exam'?'on':''}" data-uimode="exam" aria-pressed="${m==='exam'}"><b>Exam</b>Figure only</button>
     </div>
-    <p class="prompt">${ex
-      ? 'Try your own construction — which line makes the right angle / dihedral clear?'
-      : 'Follow the steps, or switch back to Explore anytime. Your free points stay.'}</p>
+    <p class="prompt">${prompt}</p>
   </div>`;
 }
 
 function exploreToolsHtml(st, keys){
+  if(st.uiMode==='exam') return '';
   const list=keys||EXPLORE_TOOL_KEYS;
   let html=`<div class="card"><div class="sec">Explore tools · draw your own</div><div class="tools">`;
   list.forEach(k=>{
@@ -292,12 +325,18 @@ function scaffoldStepsHtml(st, STEPS){
 
 function wireDualMode(st, redraw, extra){
   extra=extra||{};
+  ensureExamStyles();
+  applyUiModeClass(st);
   const panel=$('#panel'); if(!panel) return;
   panel.querySelectorAll('[data-uimode]').forEach(b=>b.onclick=()=>{
     const m=b.dataset.uimode;
     if(m===st.uiMode) return;
     st.uiMode=m; st.tool=null; st.tsel=[];
-    toast(m==='explore'?'Explore mode — build freely':'Guided steps on');
+    const msg=m==='explore'?'Explore mode — build freely'
+      : m==='scaffold'?'Guided steps on'
+      : 'Exam mode — figure only';
+    toast(msg);
+    applyUiModeClass(st);
     redraw();
   });
   panel.querySelectorAll('[data-tool]').forEach(b=>b.onclick=()=>{

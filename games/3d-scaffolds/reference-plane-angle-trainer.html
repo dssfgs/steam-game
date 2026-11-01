@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Plane Angle Trainer · 3b1b edition</title>
+<meta name="description" content="Find the angle between two planes in regular tetrahedra, tetrahedra, cuboids and prisms. Dark, Manim-style visuals.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%231C1C1C'/%3E%3Cpath d='M5 26L27 26M5 26L22 8' stroke='%2358C4DD' stroke-width='3' fill='none'/%3E%3Cpath d='M15 26A10 10 0 0 0 12 19' stroke='%23FFFF00' stroke-width='2.5' fill='none'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/aaaakshat/cm-web-fonts@latest/font/Serif/cmun-serif.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/aaaakshat/cm-web-fonts@latest/font/Sans/cmun-sans.css">
+<style>
+:root{
+  --bg:#1C1C1C;--bg2:#141414;--card:#232323;--line:#3a3a3a;--ink:#ECECEC;--ink2:#9a9a9a;
+  --blue:#58C4DD;--green:#83C167;--yellow:#FFFF00;--red:#FC6255;--gold:#F0AC5F;--teal:#5CD0B3;
+  --serif:"Computer Modern Serif","Latin Modern Roman","CMU Serif","Cambria Math",Georgia,serif;
+  --sans:"Computer Modern Sans","CMU Sans Serif","Helvetica Neue",Arial,system-ui,sans-serif;
+  --ease:cubic-bezier(.65,0,.35,1);
+}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%}
+body{background:var(--bg);color:var(--ink);font:15px/1.5 var(--sans)}
+button{font:inherit;color:inherit}
+.app{display:grid;grid-template-columns:minmax(0,1fr) 420px;height:100vh;height:100dvh}
+.stage{position:relative;background:var(--bg);border-right:1px solid var(--line);overflow:hidden;touch-action:none;user-select:none;-webkit-user-select:none;outline:none}
+.stage:focus-visible{box-shadow:inset 0 0 0 2px var(--blue)}
+#svg{width:100%;height:100%;display:block;cursor:grab}
+#svg.drag{cursor:grabbing}
+.ov{position:absolute;left:14px;right:14px;display:flex;gap:8px;pointer-events:none}
+.ov.top{top:14px}
+.ov.bot{bottom:14px;justify-content:space-between;align-items:flex-end}
+.tag{pointer-events:auto;background:rgba(20,20,20,.82);border:1px solid var(--line);border-radius:6px;padding:6px 11px;font-size:13px;max-width:100%;color:var(--ink)}
+.tag.tool{border-color:var(--yellow);color:var(--yellow)}
+.tag .muted{color:var(--ink2)}
+.tag.btnish{cursor:pointer}
+.tag.btnish:hover{border-color:var(--blue);color:var(--blue)}
+.toast{position:absolute;left:50%;bottom:64px;transform:translate(-50%,8px);width:max-content;max-width:min(92%,540px);background:#000;border:1px solid var(--line);color:var(--ink);padding:9px 14px;border-radius:6px;font-size:14px;opacity:0;transition:opacity .35s var(--ease),transform .35s var(--ease);pointer-events:none}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+.toast.bad{border-color:var(--red);color:var(--red)}
+.toast.good{border-color:var(--green);color:var(--green)}
+.panel{overflow-y:auto;padding:16px 16px 30px;background:var(--bg2)}
+.head{display:flex;justify-content:space-between;align-items:baseline;gap:8px;margin-bottom:12px}
+.brand{font-family:var(--serif);font-size:22px;letter-spacing:.01em}
+.brand i{color:var(--blue)}
+.stats{font-size:13px;color:var(--ink2);display:flex;gap:12px}
+.stats b{color:var(--yellow);font-size:15px;font-weight:normal;font-family:var(--serif)}
+.levels{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:12px}
+.mode{border:1px solid var(--line);background:transparent;border-radius:6px;padding:7px 10px;font-size:13px;cursor:pointer;text-align:left;color:var(--ink2);transition:border-color .25s,color .25s}
+.mode b{display:block;font-family:var(--serif);font-weight:normal;font-size:15px;color:var(--ink)}
+.mode:hover{border-color:var(--ink2)}
+.mode[aria-pressed="true"]{border-color:var(--blue);color:var(--blue);background:rgba(88,196,221,.07)}
+.mode[aria-pressed="true"] b{color:var(--blue)}
+.mode.wide{grid-column:1/-1;text-align:center}
+.prog{display:flex;gap:4px;margin-bottom:12px}.prog i{flex:1;height:4px;border-radius:2px;background:#333}.prog i.ok{background:var(--green)}.prog i.meh{background:var(--gold)}.prog i.cur{background:var(--blue)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:13px;margin-bottom:10px}
+.eyebrow{display:flex;justify-content:space-between;font-size:12px;letter-spacing:.06em;color:var(--ink2);margin-bottom:6px;text-transform:uppercase}
+.qtext{margin:0 0 8px;font-size:14.5px}
+.ask{margin:0;font-family:var(--serif);font-size:18px;line-height:1.6}
+.pl{font-style:italic;white-space:nowrap;padding:0 2px}
+.pl.p1{color:var(--blue);border-bottom:2px solid var(--blue)}
+.pl.p2{color:var(--green);border-bottom:2px solid var(--green)}
+.step{display:flex;align-items:center;gap:10px;padding:5px 0;opacity:.4;transition:opacity .4s}
+.step.on,.step.ok{opacity:1}
+.step .n{width:24px;height:24px;border:1px solid var(--ink2);border-radius:50%;display:grid;place-items:center;font-size:13px;flex:none;font-family:var(--serif)}
+.step.on .n{border-color:var(--yellow);color:var(--yellow)}
+.step.ok .n{border-color:var(--green);color:var(--bg);background:var(--green)}
+.step .t{flex:1;font-size:14px}
+.slots{display:inline-flex;gap:4px;align-items:center;font-family:var(--serif);font-style:italic;font-size:19px}
+.slot{width:26px;height:28px;border-bottom:1px solid var(--ink2);display:grid;place-items:center}
+.slot.f{border-color:var(--yellow);color:var(--yellow);animation:pop .35s var(--ease)}
+.sec{font-size:12px;letter-spacing:.06em;color:var(--ink2);margin:0 0 8px;text-transform:uppercase}
+.tools{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.btn{border:1px solid var(--line);background:#1a1a1a;border-radius:6px;padding:8px 10px;cursor:pointer;font-size:14px;text-align:left;transition:border-color .2s,color .2s,background .2s}
+.btn:hover:not(:disabled){border-color:var(--ink2)}
+.btn:disabled{opacity:.35;cursor:not-allowed}
+.btn:focus-visible,.chip:focus-visible,.mode:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+.btn.on{border-color:var(--yellow);color:var(--yellow)}
+.btn.dark{border-color:var(--blue);color:var(--blue)}
+.btn.warn{border-color:var(--red);color:var(--red)}
+.btn .sym{font-family:var(--serif);margin-right:6px;color:var(--yellow)}
+.btn small{display:block;font-size:12px;color:var(--ink2)}
+.howto{margin:10px 0 0;font-size:13px;padding:8px;border:1px dashed var(--yellow);border-radius:6px;display:flex;justify-content:space-between;gap:8px;align-items:center;color:var(--ink)}
+.cons{list-style:none;padding:0;margin:10px 0 0;font-size:13px}
+.cons li{padding:4px 0;border-top:1px solid var(--line)}
+.cons b{font-family:var(--serif);font-style:italic;color:var(--yellow);font-size:16px;font-weight:normal}
+.msg{padding:9px 11px;border:1px solid var(--line);border-left:3px solid var(--ink2);border-radius:6px;background:var(--card);margin-bottom:10px;font-size:14px;animation:fadeup .4s var(--ease)}
+.msg.good{border-left-color:var(--green)}
+.msg.bad{border-left-color:var(--red)}
+.hints{margin:0;padding-left:18px;font-size:14px}
+.hints li{margin:4px 0}
+.actions{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px}
+.actions .btn{text-align:center}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{min-width:36px;height:36px;border:1px solid var(--line);border-radius:50%;background:#1a1a1a;font-family:var(--serif);font-style:italic;font-size:18px;cursor:pointer}
+.chip.a{border-style:dashed;color:var(--ink2)}
+.chip.c{color:var(--yellow);border-color:rgba(255,255,0,.5)}
+.chip.sel{background:var(--yellow);color:#111;border-color:var(--yellow)}
+.chip.tsel{background:rgba(255,255,0,.25);color:var(--yellow)}
+.chip:disabled{opacity:.5;cursor:default}
+.explain{border-left:3px solid var(--red);animation:fadeup .6s var(--ease)}
+.explain h3{margin:0 0 6px;font-family:var(--serif);font-weight:normal;font-size:22px;color:var(--red)}
+.explain p{margin:6px 0;font-size:14px}
+.eq{font-family:var(--serif);font-size:17px;text-align:center;margin:10px 0;color:var(--ink)}
+.eq .r{color:var(--red)}.eq .y{color:var(--yellow)}
+.mth{font-family:var(--serif);font-style:italic;font-size:16px}
+table{width:100%;border-collapse:collapse;font-size:13px}
+td,th{border-bottom:1px solid var(--line);padding:5px 4px;text-align:left;font-weight:normal;color:var(--ink2)}
+td{color:var(--ink)}
+.big{font-family:var(--serif);font-size:44px;color:var(--yellow)}
+@keyframes pop{0%{transform:scale(.4);opacity:0}100%{transform:scale(1);opacity:1}}
+@keyframes fadeup{0%{transform:translateY(6px);opacity:0}100%{transform:none;opacity:1}}
+@keyframes wr{to{stroke-dashoffset:0}}
+@keyframes fade{from{opacity:0}}
+@keyframes ptpop{0%{transform:scale(0)}70%{transform:scale(1.4)}100%{transform:scale(1)}}
+@media (max-width:860px){.app{grid-template-columns:1fr;height:auto}.stage{position:sticky;top:0;z-index:5;height:46vh;height:46svh;border-right:0;border-bottom:1px solid var(--line)}.panel{overflow:visible}.explain{scroll-margin-top:calc(46svh + 10px)}}
+@media (hover:none){.kbd{display:none}}
+/* svg */
+.e{stroke:var(--ink);stroke-width:2.6;stroke-linecap:round}
+.eh{stroke:#8a8a8a;stroke-width:1.6;stroke-dasharray:7 6}
+.gd{stroke:#b0b0b0;stroke-width:1.4;stroke-dasharray:2 5;stroke-linecap:round}
+.cs{stroke:var(--yellow);stroke-width:2;stroke-dasharray:7 5;opacity:.95}
+.ra{fill:none;stroke:var(--yellow);stroke-width:1.6}
+.cl{stroke:var(--yellow);stroke-width:4.5;stroke-linecap:round;opacity:.9}
+.arm{stroke:var(--red);stroke-width:4.5;stroke-linecap:round;stroke-linejoin:round;fill:none}
+.arm.bad{stroke-dasharray:8 6;opacity:.7}
+.arc{fill:none;stroke:var(--red);stroke-width:3}
+.w{stroke-dasharray:1;stroke-dashoffset:1;animation:wr var(--d,.9s) var(--ease) forwards}
+.fd{animation:fade .9s var(--ease) both}
+.pp{transform-box:fill-box;transform-origin:center;animation:ptpop .45s var(--ease) both}
+.lab{font-family:var(--serif);font-style:italic;font-size:20px;fill:var(--ink);paint-order:stroke;stroke:var(--bg);stroke-width:5px;stroke-linejoin:round}
+.lab.a{fill:#c8c8c8}
+.lab.c{fill:var(--yellow)}
+.lab.t{fill:var(--red);font-size:24px;font-family:"Times New Roman",Times,serif;font-style:italic}
+.th{font-family:"Times New Roman",Times,serif;font-style:italic}
+.hit{fill:transparent;cursor:pointer}
+@media (prefers-reduced-motion:reduce){.w{animation:none;stroke-dashoffset:0;stroke-dasharray:none}.fd,.pp,.msg,.explain,.slot.f{animation:none}.toast{transition:none}}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="stage" id="stage" tabindex="0" aria-label="3D diagram. Drag or use arrow keys to rotate.">
+    <svg id="svg" role="img" aria-label="Rotatable 3D solid"></svg>
+    <div class="ov top" id="ovTop"></div>
+    <div class="toast" id="toast" aria-live="polite"></div>
+    <div class="ov bot"><div class="tag"><span class="muted">Drag to rotate<span class="kbd"> · type a letter to pick a point</span></span></div><button class="tag btnish" id="resetView">Reset view</button></div>
+  </div>
+  <div class="panel" id="panel"></div>
+</div>
+<script>
+(()=>{
+const $=s=>document.querySelector(s);
+const V={
+  sub:(a,b)=>[a[0]-b[0],a[1]-b[1],a[2]-b[2]],
+  add:(a,b)=>[a[0]+b[0],a[1]+b[1],a[2]+b[2]],
+  mul:(a,k)=>[a[0]*k,a[1]*k,a[2]*k],
+  dot:(a,b)=>a[0]*b[0]+a[1]*b[1]+a[2]*b[2],
+  cross:(a,b)=>[a[1]*b[2]-a[2]*b[1],a[2]*b[0]-a[0]*b[2],a[0]*b[1]-a[1]*b[0]],
+  len:a=>Math.hypot(a[0],a[1],a[2])
+};
+V.unit=a=>{const l=V.len(a);return l?V.mul(a,1/l):a;};
+const ri=(a,b)=>a+Math.floor(Math.random()*(b-a+1));
+const pick=a=>a[Math.floor(Math.random()*a.length)];
+const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;};
+const fmt=x=>(+x.toFixed(1)).toString();
+const f2=x=>(+x.toFixed(2)).toString();
+const POOL='KMNRSTUWXYZLJOQ';
+const BEST_KEY='pat-3b1b-best-v2';
+const loadBest=()=>{try{return JSON.parse(localStorage.getItem(BEST_KEY))||{};}catch(e){return {};}};
+const saveBest=b=>{try{localStorage.setItem(BEST_KEY,JSON.stringify(b));}catch(e){}};
+const smooth=t=>t*t*t*(10-t*(15-6*t));   // Manim's smooth()
+
+/* ---------- solids (labelling follows the figures) ---------- */
+// Figure 3: tetrahedron ABCD, base ABC on the ground, D on top.
+function tetraABCD(A,B,C,D){return {pts:{A,B,C,D},faces:['ABC','ABD','BCD','CAD'],edges:['AB','BC','CA','AD','BD','CD']};}
+// Cube figure: bottom H C B G, top E D A F (E over H, D over C, A over B, F over G).
+function cuboidFig(a,b,h){return {pts:{H:[0,0,0],C:[a,0,0],B:[a,b,0],G:[0,b,0],E:[0,0,h],D:[a,0,h],A:[a,b,h],F:[0,b,h]},
+  faces:['HCBG','EDAF','HCDE','CBAD','BGFA','GHEF'],edges:['HC','CB','BG','GH','ED','DA','AF','FE','HE','CD','BA','GF']};}
+// Prism figure: base ABC, top EFD with E over A, F over B, D over C.
+function prismFig(A,B,C,h){const up=p=>[p[0],p[1],p[2]+h];return {pts:{A,B,C,E:up(A),F:up(B),D:up(C)},
+  faces:['ABC','EFD','ABFE','BCDF','CAED'],edges:['AB','BC','CA','EF','FD','DE','AE','BF','CD']};}
+function regTetra(s){
+  const r=s/Math.sqrt(3),at=d=>[r*Math.cos(d*Math.PI/180),r*Math.sin(d*Math.PI/180),0];
+  return tetraABCD(at(71.5),at(-48.5),at(191.5),[0,0,s*Math.sqrt(2/3)]);
+}
+
+/* ---------- question bank ---------- */
+const LV=['','Regular tetrahedron','Tetrahedron','Cuboid','Prism'];
+const BANK=[
+/* ===== Level 1 · regular tetrahedron (Figure 3) ===== */
+{lvl:1,make(){
+  const s=ri(4,8),T=regTetra(s);T.pts.P=V.mul(V.add(T.pts.A,T.pts.D),.5);
+  return {solid:T,aux:['P'],guides:[['P','B'],['P','C']],
+   text:`ABCD is a regular tetrahedron with every edge ${s} cm. P is the midpoint of AD.`,p1:'ABD',p2:'ACD',
+   hints:['Both planes contain A and D, so the common line is AD.','Triangles ABD and ACD are equilateral, so the median from B to AD is ⊥ AD. Where does it meet AD?','It meets AD at its midpoint P. The same is true from C. Use P as the vertex.'],
+   note:'In an equilateral triangle the median is also the altitude, so BP ⊥ AD and CP ⊥ AD. By the cosine rule, cos θ = 1/3, so θ ≈ 70.5° for every regular tetrahedron.',
+   sol:{cons:[],line:['A','D'],angle:['B','P','C']}};
+}},
+{lvl:1,make(){
+  const s=ri(4,8);
+  return {solid:regTetra(s),
+   text:`ABCD is a regular tetrahedron with every edge ${s} cm. ABC is on the ground and D is the top vertex.`,p1:'DBC',p2:'ABC',
+   hints:['The two planes share the edge BC.','No labelled point on BC works yet. Construct the foot of the perpendicular from A to BC (“Foot on a line”: A, then B, C).','In a regular tetrahedron that foot is the midpoint of BC, so D to the same point is also ⊥ BC.'],
+   note:'The foot from A is the midpoint M of BC, and DM ⊥ BC too because DB = DC. cos θ = 1/3, θ ≈ 70.5°: the dihedral angle of a regular tetrahedron.',
+   sol:{cons:[['foot','A','B','C']],line:['B','C'],angle:['A','$0','D']}};
+}},
+{lvl:1,make(){
+  const s=ri(4,8),T=regTetra(s);T.pts.P=V.mul(V.add(T.pts.A,T.pts.D),.5);
+  return {solid:T,aux:['P'],guides:[['P','B'],['P','C']],
+   text:`ABCD is a regular tetrahedron with every edge ${s} cm, base ABC on the ground. P is the midpoint of AD.`,p1:'PBC',p2:'ABC',
+   hints:['Plane PBC and plane ABC share BC.','Construct the foot of the perpendicular from A to BC.','PB = PC, so the line from P to the midpoint of BC is ⊥ BC as well.'],
+   note:'PB = PC (by symmetry), so P lies above the perpendicular bisector of BC. The line from P to the midpoint of BC is therefore ⊥ BC, and so is the line from A.',
+   sol:{cons:[['foot','A','B','C']],line:['B','C'],angle:['P','$0','A']}};
+}},
+/* ===== Level 2 · tetrahedron ===== */
+{lvl:2,make(){
+  const c=ri(7,9),ax=ri(2,5),ay=ri(4,6),h=ri(4,7);
+  return {solid:tetraABCD([ax,ay,0],[0,0,0],[c,0,0],[ax,ay,h]),
+   text:`ABCD is a tetrahedron. DA = ${h} cm is vertical, so DA ⊥ plane ABC. In triangle ABC, ∠ABC and ∠ACB are acute.`,p1:'DBC',p2:'ABC',
+   hints:['The common line is BC.','Drop a perpendicular from A to BC with “Foot on a line”.','DA is vertical, so D to that foot is also ⊥ BC (theorem of three perpendiculars).'],
+   note:'DA ⊥ plane ABC and AK ⊥ BC, so DK ⊥ BC. Then tan θ = DA / AK.',
+   sol:{cons:[['foot','A','B','C']],line:['B','C'],angle:['D','$0','A']}};
+}},
+{lvl:2,make(){
+  const c=ri(6,8),ax=-ri(2,3),ay=ri(3,5),h=ri(4,6);
+  return {solid:tetraABCD([ax,ay,0],[0,0,0],[c,0,0],[ax,ay,h]),
+   text:`ABCD is a tetrahedron with DA ⊥ plane ABC and DA = ${h} cm. In triangle ABC, ∠ABC is obtuse.`,p1:'DBC',p2:'ABC',
+   hints:['The common line is BC.','Because ∠ABC is obtuse, the foot from A to BC lands on CB produced, outside the solid.','Join D to that foot. The angle sits outside the tetrahedron.'],
+   note:'The foot from A lies on CB produced. Since DA is vertical, the line from D to it is still ⊥ BC.',
+   sol:{cons:[['foot','A','B','C']],line:['B','C'],angle:['D','$0','A']}};
+}},
+{lvl:2,make(){
+  const c=ri(7,9),ax=ri(2,5),ay=ri(4,6),h=ri(6,8),p=ri(2,h-2);
+  const T=tetraABCD([ax,ay,0],[0,0,0],[c,0,0],[ax,ay,h]);T.pts.P=[ax,ay,p];
+  return {solid:T,aux:['P'],guides:[['P','B'],['P','C']],
+   text:`ABCD is a tetrahedron with DA ⊥ plane ABC, DA = ${h} cm. P is on AD with AP = ${p} cm. Triangle ABC is acute.`,p1:'PBC',p2:'DBC',
+   hints:['Both planes contain B and C. Neither plane is the base!','Construct the foot of the perpendicular from A to BC.','A, P, D are on one vertical line, so both P and D joined to that foot are ⊥ BC.'],
+   note:'P and D both lie on the vertical through A, so PK ⊥ BC and DK ⊥ BC. The angle is ∠DKA − ∠PKA.',
+   sol:{cons:[['foot','A','B','C']],line:['B','C'],angle:['P','$0','D']}};
+}},
+{lvl:2,make(){
+  const c=ri(7,9),bx=ri(5,6),by=ri(5,7),dx=ri(4,5),h=ri(5,7);
+  return {solid:tetraABCD([bx,by,0],[0,0,0],[c,0,0],[dx,2,h]),
+   text:'ABCD is a tetrahedron with base ABC on the ground. D is above the base, but the point directly below D is not labelled.',p1:'DBC',p2:'ABC',
+   hints:['The common line is BC.','Find the point directly below D: “Foot on a plane”, tap D, then A, B, C.','Drop a perpendicular from that new point to BC. The angle joins D, the second foot and the first foot.'],
+   note:'D to its foot is vertical; the perpendicular from that foot to BC makes the line from D ⊥ BC as well.',
+   sol:{cons:[['footp','D','A','B','C'],['foot','$0','B','C']],line:['B','C'],angle:['D','$1','$0']}};
+}},
+/* ===== Level 3 · cuboid (cube figure labelling) ===== */
+{lvl:3,make(){
+  const a=ri(5,8),b=ri(4,7),h=ri(4,7);
+  return {solid:cuboidFig(a,b,h),guides:[['G','A'],['H','A']],
+   text:`HCBG–EDAF is a cuboid with HC = ${a}, CB = ${b} and HE = ${h}. E, D, A, F are directly above H, C, B, G.`,p1:'AGH',p2:'HCBG',
+   hints:['Plane AGH and the base both contain G and H.','In the base, GB ⊥ GH. Is there a line in plane AGH that is ⊥ GH?','GH ⊥ face BGFA, so GA ⊥ GH. Use G as the vertex.'],
+   note:'GH is perpendicular to the whole face BGFA, so it is ⊥ both GB and GA. tan θ = AB / GB.',
+   sol:{cons:[],line:['G','H'],angle:['A','G','B']}};
+}},
+{lvl:3,make(){
+  const a=ri(5,8),b=ri(4,7),h=ri(4,7),front=Math.random()<.5;
+  return {solid:cuboidFig(a,b,h),guides:[['H','F'],['H','A']],
+   text:`HCBG–EDAF is a cuboid with HC = ${a}, CB = ${b} and HE = ${h}. E, D, A, F are directly above H, C, B, G.`,p1:'AFH',p2:front?'HCDE':'HCBG',
+   hints:['Plane AFH looks like a triangle, but it is bigger than that. AF ∥ HC — does plane AFH contain C?','Yes: AFHC is a rectangle, so the common line is HC.',front?'In face HCDE, HE ⊥ HC. In plane AFHC, HF ⊥ HC.':'In the base, HG ⊥ HC. In plane AFHC, HF ⊥ HC.'],
+   note:front?'AF ∥ HC, so A, F, H, C are coplanar. HC ⊥ face GHEF, so HE ⊥ HC and HF ⊥ HC. tan θ = EF / HE.':'AF ∥ HC, so A, F, H, C are coplanar. HC ⊥ face GHEF, so HG ⊥ HC and HF ⊥ HC. tan θ = GF / HG.',
+   sol:{cons:[],line:['H','C'],angle:front?['F','H','E']:['F','H','G']}};
+}},
+{lvl:3,make(){
+  const a=ri(6,9),b=ri(3,5),h=ri(4,7),useD=Math.random()<.5;
+  const top=useD?'D':'F',bot=useD?'C':'G';
+  return {solid:cuboidFig(a,b,h),guides:[['H','B'],[top,'H'],[top,'B']],
+   text:`HCBG–EDAF is a cuboid with HC = ${a}, CB = ${b} and height ${h}. E, D, A, F are directly above H, C, B, G. The base is not a square.`,p1:top+'HB',p2:'HCBG',
+   hints:['Both planes contain H and B, so the common line is the diagonal HB.','Nothing on HB is labelled. Drop a perpendicular from '+bot+' to HB.',top+bot+' is vertical, so '+top+' joined to that foot is ⊥ HB too.'],
+   note:'Because HC ≠ CB, the foot from '+bot+' is not the centre of the base: using the midpoint of HB would be wrong.',
+   sol:{cons:[['foot',bot,'H','B']],line:['H','B'],angle:[top,'$0',bot]}};
+}},
+/* ===== Level 4 · triangular prism (prism figure) ===== */
+{lvl:4,make(){
+  const c=ri(6,8),bx=ri(2,4),by=-ri(3,5),h=ri(6,8),p=ri(2,h-3);
+  const S=prismFig([0,0,0],[bx,by,0],[c,0,0],h);S.pts.P=[0,0,p];
+  return {view:[-0.12,0.32],solid:S,aux:['P'],guides:[['P','B'],['P','D'],['B','D']],
+   text:`ABC–EFD is a right prism. AE, BF, CD are vertical edges of length ${h}. P is on AE with AP = ${p}.`,p1:'PBD',p2:'ABC',
+   hints:['Inside the prism, plane PBD meets the base only at B. You need a second common point.','DP and CA both lie in face CAED. Extend them until they meet (“Extend 2 lines”: D, P, then C, A).','Join B to that point. Then drop a perpendicular from A (directly below P) onto the common line.'],
+   note:'PA is vertical and the foot from A is ⊥ the common line, so P joined to that foot is ⊥ it too.',
+   sol:{cons:[['meet','D','P','C','A'],['foot','A','B','$0']],line:['B','$0'],angle:['P','$1','A']}};
+}},
+{lvl:4,make(){
+  const c=ri(6,8),bx=ri(2,4),by=-ri(3,5),h=ri(6,8),p=ri(2,h-3);
+  const S=prismFig([0,0,0],[bx,by,0],[c,0,0],h);S.pts.P=[0,0,p];
+  return {view:[-0.12,0.32],solid:S,aux:['P'],guides:[['P','B'],['P','D'],['B','D']],
+   text:`ABC–EFD is a right prism. AE, BF, CD are vertical edges of length ${h}. P is on AE with AP = ${p}.`,p1:'PBD',p2:'EFD',
+   hints:['Plane PBD meets the top face at D. Find a second common point.','BP and FE both lie in face ABFE. Extend them to meet.','Join D to that point. E is directly above P: drop a perpendicular from E onto the common line.'],
+   note:'PE is vertical, and the foot from E is ⊥ the common line, so P joined to that foot is ⊥ it too.',
+   sol:{cons:[['meet','B','P','F','E'],['foot','E','D','$0']],line:['D','$0'],angle:['P','$1','E']}};
+}},
+{lvl:4,make(){
+  const c=ri(6,8),bx=ri(2,4),by=-ri(3,5),h=ri(6,8),p=ri(2,h-3);
+  const S=prismFig([0,0,0],[bx,by,0],[c,0,0],h);S.pts.P=[0,0,p];
+  return {view:[-0.12,0.32],solid:S,aux:['P'],guides:[['P','F'],['P','D']],
+   text:`ABC–EFD is a right prism. AE, BF, CD are vertical edges of length ${h}. P is on AE with AP = ${p}.`,p1:'PFD',p2:'ABC',
+   hints:['Plane PFD and the base share no labelled point. Find two common points by extending lines.','FP and BA lie in face ABFE; DP and CA lie in face CAED. Extend each pair to meet.','Join the two new points. Then drop a perpendicular from A (directly below P) onto that line.'],
+   note:'PA is vertical; the perpendicular from A to the common line makes the line from P to that foot ⊥ it too.',
+   sol:{cons:[['meet','F','P','B','A'],['meet','D','P','C','A'],['foot','A','$0','$1']],line:['$0','$1'],angle:['P','$2','A']}};
+}}
+];
+
+/* ---------- geometry helpers ---------- */
+function adj(f,a,b){const i=f.indexOf(a),j=f.indexOf(b);if(i<0||j<0)return false;const d=Math.abs(i-j);return d===1||d===f.length-1;}
+function planeOf(q,name){const P=name.split('').map(k=>q.pts[k]);return {n:V.unit(V.cross(V.sub(P[1],P[0]),V.sub(P[2],P[0]))),p:P[0]};}
+const onPlane=(pl,X)=>Math.abs(V.dot(pl.n,V.sub(X,pl.p)))<1e-5;
+const onLine=(X,A,B)=>V.len(V.cross(V.sub(X,A),V.unit(V.sub(B,A))))<1e-5;
+const perp=(X,Q,u)=>Math.abs(V.dot(V.unit(V.sub(X,Q)),u))<1e-5;
+
+function prep(T){
+  const q=T.make();q.lvl=T.lvl;q.pts={};q.kind={};
+  const aux=q.aux||[];
+  for(const k in q.solid.pts){q.pts[k]=q.solid.pts[k].slice();q.kind[k]=aux.includes(k)?'a':'v';}
+  const vn=Object.keys(q.pts).filter(k=>q.kind[k]==='v');
+  q.cen=V.mul(vn.reduce((s,k)=>V.add(s,q.pts[k]),[0,0,0]),1/vn.length);
+  q.faces=q.solid.faces.map(f=>{const P=f.split('').map(k=>q.pts[k]);let n=V.unit(V.cross(V.sub(P[1],P[0]),V.sub(P[2],P[0])));if(V.dot(n,V.sub(P[0],q.cen))<0)n=V.mul(n,-1);return {f,n};});
+  q.edges=q.solid.edges.map(e=>({a:e[0],b:e[1],fs:q.faces.map((F,i)=>adj(F.f,e[0],e[1])?i:-1).filter(i=>i>=0)}));
+  q.guides=q.guides||[];
+  q.pl1=planeOf(q,q.p1);q.pl2=planeOf(q,q.p2);
+  return q;
+}
+
+
+
+/* ---------- state ---------- */
+const st={mode:'l1',round:[],qi:0,q:null,score:0,streak:0,hist:[],summary:false,
+  step:1,sel:[],line:null,wrong1:0,wrong2:0,hints:0,revealed:false,done:false,
+  tool:null,tsel:[],cons:[],msg:null,lock:false,bad:false,tok:0,lastPts:0,yaw:-0.55,pitch:0.42,best:loadBest(),newBest:false,confirmReveal:false,
+  anim:{write:false,cons:null,line:false,done:false}};
+
+const TOOLS={
+  foot:{n:3,sym:'⊥',name:'Foot on a line',sub:'point → line',how:'Tap the point, then 2 points on the line.'},
+  footp:{n:4,sym:'⊥',name:'Foot on a plane',sub:'point → plane',how:'Tap the point, then 3 points in the plane.'},
+  meet:{n:4,sym:'×',name:'Extend 2 lines',sub:'find where they meet',how:'Tap 2 points on the first line, then 2 points on the second line.'},
+  par:{n:3,sym:'∥',name:'Parallel line',sub:'through a point',how:'Tap the point, then 2 points on the line to copy.'}
+};
+
+function construct(type,a){
+  const q=st.q,P=a.map(n=>q.pts[n]);let X,segs=[],mark=null,desc;
+  if(type==='foot'||type==='par'){
+    const [p,l1,l2]=P;
+    if(onLine(p,l1,l2))return {err:type==='foot'?`${a[0]} is already on line ${a[1]}${a[2]}. Pick a point off the line.`:`${a[0]} is already on ${a[1]}${a[2]}, so the parallel line would just be ${a[1]}${a[2]}.`};
+    const u=V.unit(V.sub(l2,l1));
+    if(type==='foot'){
+      const t=V.dot(V.sub(p,l1),u),L=V.len(V.sub(l2,l1));X=V.add(l1,V.mul(u,t));
+      const out=t<-1e-6||t>L+1e-6;
+      segs.push([a[0],'@']);if(t<-1e-6)segs.push([a[1],'@']);else if(t>L+1e-6)segs.push([a[2],'@']);
+      mark={to:a[0],along:V.len(V.sub(l1,X))>V.len(V.sub(l2,X))?a[1]:a[2]};
+      desc=`foot of ⊥ from ${a[0]} to ${a[1]}${a[2]}${out?' produced':''}`;
+    }else{X=V.add(p,V.mul(u,4));segs.push([a[0],'@','par']);desc=`point on the line through ${a[0]} ∥ ${a[1]}${a[2]}`;}
+  }else if(type==='footp'){
+    const [p,a1,a2,a3]=P,nn=V.cross(V.sub(a2,a1),V.sub(a3,a1));
+    if(V.len(nn)<1e-6)return {err:`${a[1]}, ${a[2]}, ${a[3]} are on one line, so they don't fix a plane.`};
+    const n=V.unit(nn),dd=V.dot(V.sub(p,a1),n);
+    if(Math.abs(dd)<1e-5)return {err:`${a[0]} already lies in plane ${a[1]}${a[2]}${a[3]}.`};
+    X=V.sub(p,V.mul(n,dd));segs.push([a[0],'@']);desc=`foot of ⊥ from ${a[0]} to plane ${a[1]}${a[2]}${a[3]}`;
+  }else{
+    const [l1,l2,m1,m2]=P,d=V.sub(l2,l1),e=V.sub(m2,m1),c=V.cross(d,e),w=V.sub(m1,l1);
+    if(V.len(c)<1e-6*V.len(d)*V.len(e))return {err:`${a[0]}${a[1]} and ${a[2]}${a[3]} are parallel (or the same line), so they never meet in one point.`};
+    if(Math.abs(V.dot(w,c))/V.len(c)>1e-5)return {err:`${a[0]}${a[1]} and ${a[2]}${a[3]} are skew (not in one plane), so they never meet. Choose two lines in the same face or plane.`};
+    const cc=V.dot(c,c),s=V.dot(V.cross(w,e),c)/cc,t=V.dot(V.cross(w,d),c)/cc;X=V.add(l1,V.mul(d,s));
+    if(s<-1e-6||s>1+1e-6)segs.push([Math.abs(s)<Math.abs(s-1)?a[0]:a[1],'@']);
+    if(t<-1e-6||t>1+1e-6)segs.push([Math.abs(t)<Math.abs(t-1)?a[2]:a[3],'@']);
+    desc=`where ${a[0]}${a[1]} meets ${a[2]}${a[3]}${segs.length?' (lines extended)':''}`;
+  }
+  return {X,segs,mark,desc};
+}
+function ensure(type,args){
+  const r=construct(type,args);if(r.err)return r;const q=st.q;
+  for(const k in q.pts)if(V.len(V.sub(q.pts[k],r.X))<1e-5)return {name:k,existed:true};
+  const name=POOL.split('').find(c=>!(c in q.pts));
+  if(!name)return {err:'No letters left. Undo a construction first.'};
+  q.pts[name]=r.X;q.kind[name]='c';st.anim.cons=name;
+  st.cons.push({name,type,args:args.slice(),desc:r.desc,segs:r.segs.map(s=>s.map(x=>x==='@'?name:x)),mark:r.mark?{at:name,to:r.mark.to,along:r.mark.along}:null});
+  return {name};
+}
+
+
+
+/* ---------- rounds ---------- */
+const MODES={l1:{label:'Level 1',sub:LV[1],lvl:1},l2:{label:'Level 2',sub:LV[2],lvl:2},l3:{label:'Level 3',sub:LV[3],lvl:3},l4:{label:'Level 4',sub:LV[4],lvl:4},mixed:{label:'Mixed round',sub:'2 from every level'}};
+const PER_LEVEL=5;
+function newRound(){
+  const by=l=>shuffle(BANK.filter(b=>b.lvl===l));let r=[];
+  if(st.mode==='mixed'){for(let l=1;l<=4;l++)r=r.concat(by(l).slice(0,2));}
+  else{const L=MODES[st.mode].lvl;while(r.length<PER_LEVEL){let s=by(L);if(r.length&&s[0]===r[r.length-1])s.push(s.shift());r=r.concat(s);}r=r.slice(0,PER_LEVEL);}
+  st.round=r;st.qi=0;st.score=0;st.streak=0;st.hist=[];st.summary=false;loadQ();
+}
+function loadQ(){
+  st.q=prep(st.round[st.qi]);
+  Object.assign(st,{step:1,sel:[],line:null,wrong1:0,wrong2:0,hints:0,revealed:false,done:false,tool:null,tsel:[],cons:[],msg:null,lock:false,bad:false,confirmReveal:false});const vw=st.q.view||[-0.55,0.42];st.yaw=vw[0];st.pitch=vw[1];st.tok++;
+  st.anim={write:true,cons:null,line:false,done:false};
+  render();
+}
+function setMode(m){
+  if(m===st.mode)return;
+  if(!st.summary&&(st.qi>0||st.sel.length||st.cons.length)){
+    const ok=confirm('Start a new round? Progress in this round will be lost.');
+    if(!ok)return;
+  }
+  st.mode=m;newRound();
+}
+
+/* ---------- interaction ---------- */
+function toast(t,kind){const el=$('#toast');el.textContent=t;el.className='toast show '+(kind||'');clearTimeout(toast.h);toast.h=setTimeout(()=>el.className='toast',2600);}
+function failFlash(){st.bad=true;st.lock=true;const t=++st.tok;render();setTimeout(()=>{if(t!==st.tok)return;st.bad=false;st.lock=false;st.sel=[];render();},950);}
+function tap(n){
+  if(st.lock||st.done||st.summary)return;
+  if(st.tool){
+    const i=st.tsel.indexOf(n);
+    if(i>=0)st.tsel.splice(i,1);else st.tsel.push(n);
+    if(st.tsel.length===TOOLS[st.tool].n){
+      const r=ensure(st.tool,st.tsel);
+      if(r.err){toast(r.err,'bad');st.tsel=[];}
+      else if(r.existed){toast('That point is already labelled '+r.name+'.');st.tsel=[];st.tool=null;}
+      else{const c=st.cons[st.cons.length-1];toast('New point '+r.name+': '+c.desc,'good');st.tsel=[];st.tool=null;}
+    }
+    render();return;
+  }
+  if(st.sel.includes(n)){
+    if(st.sel[st.sel.length-1]===n)st.sel.pop();else{toast(n+' is already chosen.');return;}
+    render();return;
+  }
+  st.sel.push(n);
+  if(st.step===1&&st.sel.length===2)return check1();
+  if(st.step===2&&st.sel.length===3)return check2();
+  render();
+}
+function check1(){
+  const q=st.q,[a,b]=st.sel;
+  for(const x of [a,b]){
+    const i1=onPlane(q.pl1,q.pts[x]),i2=onPlane(q.pl2,q.pts[x]);
+    if(!i1||!i2){
+      st.wrong1++;
+      st.msg={k:'bad',t:`${x} is not in plane ${!i1?q.p1:q.p2}. A point on the common line must lie in both planes.`+(st.cons.length?'':' If no labelled point works, construct one first (see Tools).')};
+      return failFlash();
+    }
+  }
+  st.line=[a,b];st.step=2;st.sel=[];st.anim.line=true;
+  st.msg={k:'good',t:`Common line: ${a}${b}. Now build the angle: arm end, vertex on ${a}${b}, other arm end.`};
+  render();
+}
+function lineU(){const q=st.q;return V.unit(V.sub(q.pts[st.line[1]],q.pts[st.line[0]]));}
+function angleErr(X,Q,Y){
+  const q=st.q,P=q.pts,L0=P[st.line[0]],L1=P[st.line[1]],u=lineU(),ln=st.line.join('');
+  if(!onLine(P[Q],L0,L1))return `The vertex ${Q} is not on the common line ${ln}.`;
+  for(const z of [X,Y])if(onLine(P[z],L0,L1))return `${z} is on ${ln}, so the arm ${Q}${z} runs along the common line.`;
+  const a1=onPlane(q.pl1,P[X]),a2=onPlane(q.pl2,P[X]),b1=onPlane(q.pl1,P[Y]),b2=onPlane(q.pl2,P[Y]);
+  for(const [z,i,j] of [[X,a1,a2],[Y,b1,b2]])if(!i&&!j)return `${z} is in neither plane ${q.p1} nor plane ${q.p2}.`;
+  if(!((a1&&b2)||(a2&&b1)))return `Both arms lie in plane ${a1?q.p1:q.p2}. Take one arm in each plane.`;
+  for(const z of [X,Y])if(!perp(P[z],P[Q],u))return `${Q}${z} is not perpendicular to ${ln}. Each arm must be ⊥ the common line. You may need to construct a foot of perpendicular.`;
+  if(V.dot(V.sub(P[X],P[Q]),V.sub(P[Y],P[Q]))<-1e-6)return `Good construction, but this angle is obtuse. The angle between two planes is the acute one.`;
+  return null;
+}
+function check2(){
+  const e=angleErr(...st.sel);
+  if(e){st.wrong2++;st.msg={k:'bad',t:e};return failFlash();}
+  finish();
+}
+function deg(X,Q,Y){const P=st.q.pts;return Math.acos(Math.max(-1,Math.min(1,V.dot(V.unit(V.sub(P[X],P[Q])),V.unit(V.sub(P[Y],P[Q]))))))*180/Math.PI;}
+function finish(){
+  const pts=st.revealed?0:Math.max(0,Math.max(2,10-4*st.wrong1)+Math.max(4,20-6*st.wrong2)-4*st.hints);
+  const clean=!st.wrong1&&!st.wrong2&&!st.hints&&!st.revealed;
+  st.streak=clean?st.streak+1:0;st.score+=pts;st.lastPts=pts;
+  const [X,Q,Y]=st.sel;
+  st.hist.push({p:st.q.p1+' / '+st.q.p2,ans:'∠'+X+Q+Y,pts,clean});
+  st.done=true;st.anim.done=true;st.msg=null;st.tool=null;st.tsel=[];st.confirmReveal=false;render();
+  if(!st.revealed)toast(clean?`Correct, first try! +${pts} points`:`Correct! +${pts} points`,'good');
+  if(matchMedia('(max-width:860px)').matches){const ex=document.querySelector('.explain');if(ex)ex.scrollIntoView({block:'start',behavior:matchMedia('(prefers-reduced-motion:reduce)').matches?'auto':'smooth'});}
+}
+function reveal(){
+  st.tok++;st.lock=false;st.bad=false;
+  const q=st.q,map=[],res=x=>x[0]==='$'?map[+x.slice(1)]:x;
+  for(const c of q.sol.cons){const r=ensure(c[0],c.slice(1).map(res));if(r.err){toast(r.err,'bad');return;}map.push(r.name);}
+  st.line=q.sol.line.map(res);st.anim.line=true;st.step=2;st.sel=q.sol.angle.map(res);st.revealed=true;finish();
+}
+function undoCons(){
+  const c=st.cons.pop();if(!c)return;delete st.q.pts[c.name];delete st.q.kind[c.name];
+  if(st.line&&st.line.includes(c.name)){st.line=null;st.step=1;st.msg={k:'bad',t:`Point ${c.name} was on your common line, so the line has been cleared. Choose the common line again.`};}
+  st.sel=[];st.tsel=[];render();
+}
+function others(){
+  const q=st.q,P=q.pts,names=Object.keys(P),u=lineU(),L0=P[st.line[0]],L1=P[st.line[1]],out=[];
+  const me=st.sel.join(''),me2=st.sel.slice().reverse().join('');
+  for(const Q of names){if(!onLine(P[Q],L0,L1))continue;
+    for(const X of names)for(const Y of names){
+      if(X===Y||X===Q||Y===Q||onLine(P[X],L0,L1)||onLine(P[Y],L0,L1))continue;
+      if(!(onPlane(q.pl1,P[X])&&onPlane(q.pl2,P[Y])))continue;
+      if(!perp(P[X],P[Q],u)||!perp(P[Y],P[Q],u))continue;
+      if(V.dot(V.sub(P[X],P[Q]),V.sub(P[Y],P[Q]))<-1e-6)continue;
+      const s=X+Q+Y;if(s!==me&&s!==me2)out.push('∠'+s);
+    }}
+  return out.slice(0,4);
+}
+
+
+
+/* ---------- drawing ---------- */
+function hull(p){p=p.slice().sort((a,b)=>a[0]-b[0]||a[1]-b[1]);if(p.length<3)return p;const cr=(o,a,b)=>(a[0]-o[0])*(b[1]-o[1])-(a[1]-o[1])*(b[0]-o[0]);const lo=[],up=[];for(const x of p){while(lo.length>1&&cr(lo[lo.length-2],lo[lo.length-1],x)<=0)lo.pop();lo.push(x);}for(let i=p.length-1;i>=0;i--){const x=p[i];while(up.length>1&&cr(up[up.length-2],up[up.length-1],x)<=0)up.pop();up.push(x);}up.pop();lo.pop();return lo.concat(up);}
+function draw(){
+  const svg=$('#svg'),W=svg.clientWidth||600,H=svg.clientHeight||400,q=st.q;if(!q)return;
+  svg.setAttribute('viewBox',`0 0 ${W} ${H}`);
+  const A=st.anim,P=q.pts,names=Object.keys(P);
+  const base=Object.keys(q.solid.pts);
+  const mn=[0,1,2].map(i=>Math.min(...names.map(k=>P[k][i]))),mx=[0,1,2].map(i=>Math.max(...names.map(k=>P[k][i])));
+  const c0=mn.map((v,i)=>(v+mx[i])/2),R=Math.max(1,...names.map(k=>V.len(V.sub(P[k],c0))));
+  const sc=Math.min(W,H)*0.42/R,cy=Math.cos(st.yaw),sy=Math.sin(st.yaw),cp=Math.cos(st.pitch),sp=Math.sin(st.pitch);
+  const pr=p=>{const x=p[0]-c0[0],y=p[1]-c0[1],z=p[2]-c0[2],x1=x*cy-y*sy,y1=x*sy+y*cy;return [W/2+x1*sc,H/2-(z*cp+y1*sp)*sc];};
+  const S={};names.forEach(k=>S[k]=pr(P[k]));
+  const vis=q.faces.map(F=>{const n=F.n;return ((n[0]*sy+n[1]*cy)*cp-n[2]*sp)<0;});
+  const fx=v=>v.toFixed(1);
+  const L=(a,b,c,extra)=>`<line x1="${fx(a[0])}" y1="${fx(a[1])}" x2="${fx(b[0])}" y2="${fx(b[1])}" class="${c}" ${extra||''}/>`;
+  const wr=(i,d)=>` pathLength="1" style="animation-delay:${i}ms;--d:${d||900}ms"`;
+  let o='',ei=0;
+  // the two planes: blue & green, like Manim's BLUE_C / GREEN_C
+  [[q.pl1,'#58C4DD'],[q.pl2,'#83C167']].forEach(([pl,col],j)=>{
+    const h=hull(names.filter(k=>onPlane(pl,P[k])).map(k=>S[k]));
+    if(h.length>2)o+=`<polygon points="${h.map(p=>p.map(fx).join(',')).join(' ')}" fill="${col}" fill-opacity=".2" stroke="${col}" stroke-opacity=".85" stroke-width="1.5" ${A.write?`class="fd" style="animation-delay:${600+j*350}ms"`:''}/>`;
+  });
+  q.edges.forEach(e=>{if(e.fs.length&&e.fs.every(i=>!vis[i]))o+=L(S[e.a],S[e.b],'eh'+(A.write?' fd':''),A.write?`style="animation-delay:${(ei++)*60}ms"`:'');});
+  q.edges.forEach(e=>{if(!(e.fs.length&&e.fs.every(i=>!vis[i])))o+=A.write?L(S[e.a],S[e.b],'e w',wr((ei++)*60)):L(S[e.a],S[e.b],'e');});
+  q.guides.forEach((g,i)=>o+=L(S[g[0]],S[g[1]],'gd'+(A.write?' fd':''),A.write?`style="animation-delay:${700+i*120}ms"`:''));
+  st.cons.forEach(c=>{
+    const nw=A.cons===c.name;
+    c.segs.forEach(s=>{const cls='cs'+(nw?' fd':'');if(s[2]==='par'){const a=P[s[0]],b=P[s[1]],u=V.unit(V.sub(b,a));o+=L(pr(V.sub(a,V.mul(u,3))),pr(V.add(b,V.mul(u,1))),cls);}else o+=L(S[s[0]],S[s[1]],cls);});
+    if(c.mark){const X=P[c.mark.at],a=V.unit(V.sub(P[c.mark.to],X)),b=V.unit(V.sub(P[c.mark.along],X)),m=R*0.06;
+      const p1=pr(V.add(X,V.mul(a,m))),p2=pr(V.add(X,V.add(V.mul(a,m),V.mul(b,m)))),p3=pr(V.add(X,V.mul(b,m)));
+      o+=`<path d="M${p1}L${p2}L${p3}" class="ra${nw?' fd':''}" ${nw?'style="animation-delay:500ms"':''}/>`;}
+  });
+  if(st.line){const a=P[st.line[0]],b=P[st.line[1]],u=V.unit(V.sub(b,a)),ex=R*0.4;o+=L(pr(V.sub(a,V.mul(u,ex))),pr(V.add(b,V.mul(u,ex))),'cl'+(A.line?' w':''),A.line?wr(0,800):'');}
+  else if(st.step===1&&st.sel.length===2)o+=L(S[st.sel[0]],S[st.sel[1]],'arm'+(st.bad?' bad':''));
+  if(st.step===2&&st.sel.length>=2)o+=`<polyline points="${st.sel.map(k=>S[k].map(fx).join(',')).join(' ')}" class="arm${st.bad?' bad':''}${A.done?' w':''}" ${A.done?wr(0,900):''}/>`;
+  if(st.done){
+    const [X,Q,Y]=st.sel,q0=P[Q],a=V.unit(V.sub(P[X],q0)),b=V.unit(V.sub(P[Y],q0)),r=Math.min(V.len(V.sub(P[X],q0)),V.len(V.sub(P[Y],q0)))*0.3;
+    const ang=Math.acos(Math.max(-1,Math.min(1,V.dot(a,b)))),w=V.unit(V.sub(b,V.mul(a,V.dot(a,b)))),arc=[];
+    for(let i=0;i<=24;i++){const t=ang*i/24;arc.push(pr(V.add(q0,V.mul(V.add(V.mul(a,Math.cos(t)),V.mul(w,Math.sin(t))),r))));}
+    o+=`<polyline points="${arc.map(p=>p.map(fx).join(',')).join(' ')}" class="arc${A.done?' w':''}" ${A.done?wr(800,700):''}/>`;
+    const lp=pr(V.add(q0,V.mul(V.unit(V.add(a,b)),r*1.4)));o+=`<text x="${fx(lp[0])}" y="${fx(lp[1])}" class="lab t${A.done?' fd':''}" text-anchor="middle" dy=".35em" ${A.done?'style="animation-delay:1300ms"':''}>θ</text>`;
+  }
+  const cs=pr(q.cen);
+  names.forEach((k,i)=>{
+    const s=S[k],kd=q.kind[k],nw=A.cons===k,bi=base.indexOf(k);
+    const pa=nw?'class="pp" style="animation-delay:350ms"':A.write?`class="pp" style="animation-delay:${200+Math.max(0,bi)*70}ms"`:'';
+    if(st.sel.includes(k)||(st.line&&st.line.includes(k)&&!st.done))o+=`<circle cx="${fx(s[0])}" cy="${fx(s[1])}" r="11" fill="none" stroke="${st.sel.includes(k)?'#FC6255':'#FFFF00'}" stroke-width="2"/>`;
+    if(st.tsel.includes(k))o+=`<circle cx="${fx(s[0])}" cy="${fx(s[1])}" r="12" fill="#FFFF00" fill-opacity=".25" stroke="#FFFF00" stroke-width="1.5"/>`;
+    o+=`<circle cx="${fx(s[0])}" cy="${fx(s[1])}" r="${kd==='v'?4.5:4}" fill="${kd==='v'?'#ECECEC':kd==='c'?'#FFFF00':'#1C1C1C'}" stroke="${kd==='c'?'#FFFF00':'#ECECEC'}" stroke-width="1.8" ${pa}/>`;
+    let dx=s[0]-cs[0],dy=s[1]-cs[1],dl=Math.hypot(dx,dy);if(dl<1){dx=0;dy=-1;dl=1;}
+    o+=`<text x="${fx(s[0]+dx/dl*22)}" y="${fx(s[1]+dy/dl*22)}" class="lab ${kd==='v'?'':kd}${nw||A.write?' fd':''}" text-anchor="middle" dy=".35em" ${nw?'style="animation-delay:400ms"':A.write?`style="animation-delay:${300+Math.max(0,bi)*70}ms"`:''}>${k}</text>`;
+  });
+  names.forEach(k=>o+=`<circle cx="${fx(S[k][0])}" cy="${fx(S[k][1])}" r="18" class="hit" data-pt="${k}"><title>${k}</title></circle>`);
+  svg.innerHTML=o;
+  st.anim={write:false,cons:null,line:false,done:false};   // each animation plays once
+  let ov='';
+  if(st.tool){const T=TOOLS[st.tool];ov=`<div class="tag tool">${T.sym} ${T.name}: <span class="muted">${T.how}</span> ${st.tsel.length}/${T.n}</div>`;}
+  else if(!st.done&&!st.summary)ov=`<div class="tag">${st.step===1?'Step 1 · tap 2 points on the common line':'Step 2 · tap arm end, vertex, arm end'} <span class="muted">(<span style="color:var(--blue)">${q.p1}</span> &amp; <span style="color:var(--green)">${q.p2}</span>)</span></div>`;
+  $('#ovTop').innerHTML=ov;
+}
+// smooth camera move back to the default view (Manim-style ease)
+function resetView(){
+  const vw=(st.q&&st.q.view)||[-0.55,0.42],y0=st.yaw,p0=st.pitch,y1=vw[0],p1=vw[1],T0=performance.now(),D=900;
+  if(matchMedia('(prefers-reduced-motion:reduce)').matches){st.yaw=y1;st.pitch=p1;return draw();}
+  const step=t=>{const k=smooth(Math.min(1,(t-T0)/D));st.yaw=y0+(y1-y0)*k;st.pitch=p0+(p1-p0)*k;draw();if(k<1)requestAnimationFrame(step);};
+  requestAnimationFrame(step);
+}
+
+/* ---------- panel ---------- */
+const lvlStr=l=>'●'.repeat(l)+'○'.repeat(4-l)+' '+LV[l];
+const plh=(n,i)=>`<span class="pl p${i}">${n}</span>`;
+function modeRow(){return `<div class="levels" role="group" aria-label="Level">${Object.keys(MODES).map(m=>`<button class="mode ${m==='mixed'?'wide':''}" data-mode="${m}" data-fk="m${m}" aria-pressed="${st.mode===m}"><b>${MODES[m].label}</b>${MODES[m].sub}</button>`).join('')}</div>`;}
+function working(X,Q,Y){
+  const P=st.q.pts,d=(a,b)=>V.len(V.sub(P[a],P[b])),ang=(a,b,c)=>Math.acos(Math.max(-1,Math.min(1,V.dot(V.unit(V.sub(P[a],P[b])),V.unit(V.sub(P[c],P[b]))))))*180/Math.PI;
+  const t=deg(X,Q,Y);
+  for(const [R,O] of [[Y,X],[X,Y]]){ // right angle at R: tan θ = R O / Q R
+    if(Math.abs(ang(Q,R,O)-90)<1e-4)return `<div class="eq">∠<i>${Q}${R}${O}</i> = 90°, so &nbsp; tan <span class="r th">θ</span> = <i>${R}${O}</i> / <i>${Q}${R}</i> = ${f2(d(R,O))} / ${f2(d(Q,R))}</div><div class="eq"><span class="r th">θ</span> ≈ <span class="r">${fmt(t)}°</span></div>`;
+  }
+  const a=d(Q,X),b=d(Q,Y),c=d(X,Y);
+  return `<div class="eq">cos <span class="r th">θ</span> = (<i>${Q}${X}</i>² + <i>${Q}${Y}</i>² − <i>${X}${Y}</i>²) / (2 · <i>${Q}${X}</i> · <i>${Q}${Y}</i>)</div><div class="eq">= (${f2(a)}² + ${f2(b)}² − ${f2(c)}²) / (2 · ${f2(a)} · ${f2(b)}) ≈ ${f2((a*a+b*b-c*c)/(2*a*b))}</div><div class="eq"><span class="r th">θ</span> ≈ <span class="r">${fmt(t)}°</span></div>`;
+}
+function render(){
+  const fk=document.activeElement&&document.activeElement.dataset?document.activeElement.dataset.fk:null;
+  const pn=$('#panel');let h=`<div class="head"><div class="brand">Plane <i>Angle</i> Trainer</div><div class="stats"><span>Score <b>${st.score}</b></span>${st.best[st.mode]!=null?`<span>Best <b>${st.best[st.mode]}</b></span>`:''}<span>Streak <b>${st.streak}</b></span></div></div>`+modeRow();
+  if(st.summary){
+    const n=st.round.length,cl=st.hist.filter(x=>x.clean).length,bst=st.best[st.mode];
+    h+=`<div class="card"><div class="eyebrow"><span>Round complete · ${MODES[st.mode].sub}</span></div><div class="big">${st.score}</div><p>${st.newBest?'<b>New best for this level.</b>':bst!=null?`Best for this level: <b>${bst}</b>`:''}</p><p>${cl} of ${n} solved cleanly (no mistakes, no hints). ${cl===n?'Excellent work.':cl>=n/2?'Good. Try for a clean sweep.':'Review the hints and try again.'}</p>
+    <table><thead><tr><th>#</th><th>Planes</th><th>Answer</th><th>Pts</th></tr></thead><tbody>${st.hist.map((x,i)=>`<tr><td>${i+1}</td><td>${x.p}</td><td class="mth">${x.ans}</td><td>${x.pts}</td></tr>`).join('')}</tbody></table></div>
+    <div class="actions"><button class="btn dark" data-act="again" data-fk="again">New round</button>${st.mode!=='mixed'&&MODES[st.mode].lvl<4?`<button class="btn" data-mode="l${MODES[st.mode].lvl+1}" data-fk="nextlvl">Next level →</button>`:''}</div>`;
+    pn.innerHTML=h;draw();return;
+  }
+  const q=st.q;
+  h+=`<div class="prog" aria-hidden="true">${st.round.map((_,i)=>`<i class="${i<st.hist.length?(st.hist[i].clean?'ok':'meh'):i===st.qi?'cur':''}"></i>`).join('')}</div>`;
+  h+=`<div class="card"><div class="eyebrow"><span>Question ${st.qi+1} / ${st.round.length}</span><span aria-label="Level ${q.lvl}">${lvlStr(q.lvl)}</span></div><p class="qtext">${q.text}</p><p class="ask">Name the angle between plane ${plh(q.p1,1)} and plane ${plh(q.p2,2)}.</p></div>`;
+  const l=st.line||(st.step===1?st.sel:[]),ang=st.step===2?st.sel:[];
+  const sl=(arr,n)=>Array.from({length:n},(_,i)=>`<span class="slot ${arr[i]?'f':''}">${arr[i]||''}</span>`).join('');
+  h+=`<div class="card"><div class="step ${st.step===1?'on':'ok'}"><span class="n">${st.step>1?'✓':'1'}</span><span class="t">Common line</span><span class="slots">${sl(l,2)}</span></div>
+  <div class="step ${st.done?'ok':st.step===2?'on':''}"><span class="n">${st.done?'✓':'2'}</span><span class="t">Angle</span><span class="slots">∠${sl(ang,3)}</span></div></div>`;
+  if(!st.done||st.cons.length){h+=`<div class="card">`;if(!st.done)h+=`<p class="sec">Construction tools</p><div class="tools">${Object.keys(TOOLS).map(k=>{const T=TOOLS[k];return `<button class="btn ${st.tool===k?'on':''}" data-tool="${k}" data-fk="t${k}" ${st.done?'disabled':''} aria-pressed="${st.tool===k}"><span class="sym">${T.sym}</span>${T.name}<small>${T.sub}</small></button>`;}).join('')}</div>`;else h+=`<p class="sec">Your constructions</p>`;
+  if(st.tool)h+=`<div class="howto"><span>${TOOLS[st.tool].how} <b>${st.tsel.join(', ')||'…'}</b></span><button class="btn" data-act="cancelTool" data-fk="ct">Cancel</button></div>`;
+  if(st.cons.length)h+=`<ul class="cons">${st.cons.map(c=>`<li><b>${c.name}</b> = ${c.desc}</li>`).join('')}</ul>${st.done?'':'<div class="actions" style="margin:8px 0 0"><button class="btn" data-act="undoCons" data-fk="uc">Undo last point</button></div>'}`;
+  h+=`</div>`;}
+  if(st.msg)h+=`<div class="msg ${st.msg.k}" role="status">${st.msg.t}</div>`;
+  if(st.hints)h+=`<div class="card"><p class="sec">Hints</p><ol class="hints">${q.hints.slice(0,st.hints).map(x=>`<li>${x}</li>`).join('')}</ol></div>`;
+  if(st.done){
+    const [X,Q,Y]=st.sel,o=others(),in1=onPlane(q.pl1,q.pts[X]);
+    h+=`<div class="card explain"><h3>∠<i>${X}${Q}${Y}</i> ≈ ${fmt(deg(X,Q,Y))}°</h3>
+    <p>Common line <span class="mth">${st.line.join('')}</span>. In plane <span style="color:${in1?'var(--blue)':'var(--green)'}">${in1?q.p1:q.p2}</span>, <span class="mth">${Q}${X}</span> ⊥ <span class="mth">${st.line.join('')}</span>; in plane <span style="color:${in1?'var(--green)':'var(--blue)'}">${in1?q.p2:q.p1}</span>, <span class="mth">${Q}${Y}</span> ⊥ <span class="mth">${st.line.join('')}</span>.</p>${working(X,Q,Y)}<p>${q.note}</p>
+    ${o.length?`<p>Also accepted: <span class="mth">${o.join(', ')}</span></p>`:''}<p><b>${st.revealed?'Answer shown: 0 points.':'+'+st.lastPts+' points'}</b></p></div>`;
+  }
+  h+=`<div class="actions">`;
+  if(!st.done)h+=`<button class="btn" data-act="hint" data-fk="hint" ${st.hints>=q.hints.length?'disabled':''}>Hint (−4)</button><button class="btn" data-act="undo" data-fk="undo" ${st.sel.length?'':'disabled'}>Undo tap</button><button class="btn ${st.confirmReveal?'warn':''}" data-act="reveal" data-fk="rev">${st.confirmReveal?'Sure? 0 points':'Show answer'}</button>`;
+  else h+=`<button class="btn dark" data-act="next" data-fk="next">${st.qi+1<st.round.length?'Next question':'See results'}</button>`;
+  h+=`</div>`;if(!st.done)h+=`<div class="card"><p class="sec">Points (tap here or on the diagram)</p><div class="chips">${Object.keys(q.pts).map(k=>`<button class="chip ${q.kind[k]} ${st.sel.includes(k)?'sel':''} ${st.tsel.includes(k)?'tsel':''}" data-pt="${k}" data-fk="p${k}" ${st.done||st.lock?'disabled':''}>${k}</button>`).join('')}</div></div>`;
+  pn.innerHTML=h;
+  if(fk){const el=pn.querySelector(`[data-fk="${fk}"]`);if(el&&!el.disabled)el.focus();}
+  draw();
+}
+
+/* ---------- events ---------- */
+$('#panel').addEventListener('click',e=>{
+  const b=e.target.closest('button');if(!b||b.disabled)return;
+  if(b.dataset.mode)return setMode(b.dataset.mode);
+  if(b.dataset.pt)return tap(b.dataset.pt);
+  if(b.dataset.tool){if(st.lock)return;st.tool=st.tool===b.dataset.tool?null:b.dataset.tool;st.tsel=[];return render();}
+  const a=b.dataset.act;
+  if(st.lock&&a!=='next'&&a!=='again')return;
+  if(a!=='reveal'&&st.confirmReveal)st.confirmReveal=false;
+  if(a==='cancelTool'){st.tool=null;st.tsel=[];render();}
+  else if(a==='undoCons')undoCons();
+  else if(a==='hint'){st.hints++;st.streak=0;render();}
+  else if(a==='undo'){st.sel.pop();render();}
+  else if(a==='reveal'){if(!st.confirmReveal){st.confirmReveal=true;render();}else{st.streak=0;reveal();}}
+  else if(a==='next'){if(st.qi+1<st.round.length){st.qi++;loadQ();}else{st.summary=true;const b0=st.best[st.mode];st.newBest=b0==null||st.score>b0;if(st.newBest){st.best[st.mode]=st.score;saveBest(st.best);}render();}}
+  else if(a==='again')newRound();
+});
+const svg=$('#svg');let drag=null;
+svg.addEventListener('pointerdown',e=>{drag={x:e.clientX,y:e.clientY,moved:false,t:e.target};svg.setPointerCapture(e.pointerId);});
+svg.addEventListener('pointermove',e=>{if(!drag)return;const dx=e.clientX-drag.x,dy=e.clientY-drag.y;
+  if(!drag.moved&&Math.hypot(dx,dy)<6)return;drag.moved=true;svg.classList.add('drag');
+  st.yaw+=dx*0.009;st.pitch=Math.max(-0.2,Math.min(1.45,st.pitch+dy*0.009));drag.x=e.clientX;drag.y=e.clientY;draw();});
+svg.addEventListener('pointerup',e=>{if(!drag)return;svg.classList.remove('drag');const d=drag;drag=null;
+  if(!d.moved){const pt=d.t&&d.t.dataset&&d.t.dataset.pt;if(pt)tap(pt);}});
+svg.addEventListener('pointercancel',()=>{drag=null;svg.classList.remove('drag');});
+$('#stage').addEventListener('keydown',e=>{const k=e.key;
+  if(k==='ArrowLeft')st.yaw-=0.1;else if(k==='ArrowRight')st.yaw+=0.1;
+  else if(k==='ArrowUp')st.pitch=Math.min(1.45,st.pitch+0.1);else if(k==='ArrowDown')st.pitch=Math.max(-0.2,st.pitch-0.1);else return;
+  e.preventDefault();draw();});
+document.addEventListener('keydown',e=>{
+  if(e.key==='Escape'){if(st.confirmReveal){st.confirmReveal=false;render();}else if(st.tool){st.tool=null;st.tsel=[];render();}return;}
+  if(e.metaKey||e.ctrlKey||e.altKey||!st.q||st.summary)return;
+  const k=e.key.length===1?e.key.toUpperCase():'';
+  if(k&&k in st.q.pts){e.preventDefault();tap(k);}
+  else if(e.key==='Backspace'&&!st.lock&&!st.done){e.preventDefault();if(st.tool&&st.tsel.length)st.tsel.pop();else st.sel.pop();render();}
+});
+$('#resetView').addEventListener('click',resetView);
+new ResizeObserver(()=>draw()).observe($('#stage'));
+
+newRound();
+})();
+</script>
+</body>
+</html>

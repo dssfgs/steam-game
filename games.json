@@ -2,20 +2,21 @@
   {
     "id": "3d-scaffolds",
     "folder": "3d-scaffolds",
-    "title": "3D 立體幾何互動練習（Explore／Guided）",
+    "title": "3D 立體幾何互動練習（Explore／Guided／Exam）",
     "subject": [
       "數學"
     ],
     "year": "2026",
     "author": "",
-    "desc": "Overleaf「3D by section」Q1–Q23：每題獨立 HTML，可自由畫線／點探索，亦可開 Guided 提示；深色 3D 可旋轉、含 midpoint 等構造工具。",
+    "desc": "Overleaf「3D by section」Q1–Q23：Explore 自由構造、Guided 提示、Exam 單色圖形（無工具／色提示）；深色 3D 可旋轉。",
     "thumb": "games/3d-scaffolds/thumb.svg",
     "tags": [
       "立體幾何",
       "線面角",
       "二面角",
       "Explore",
-      "Guided"
+      "Guided",
+      "Exam"
     ],
     "updated": "2026-11-01"
   },

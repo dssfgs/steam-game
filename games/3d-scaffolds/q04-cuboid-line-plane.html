@@ -112,7 +112,7 @@ a{color:var(--blue)}
 @media (prefers-reduced-motion:reduce){.toast{transition:none}}
 
 
-.mode-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px}
+.mode-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:8px}
 .mode{border:1px solid var(--line);background:transparent;border-radius:6px;padding:8px 10px;font-size:12px;cursor:pointer;text-align:left;color:var(--ink2);transition:border-color .25s,color .25s,background .25s}
 .mode b{display:block;font-family:var(--serif);font-weight:normal;font-size:15px;color:var(--ink);margin-bottom:2px}
 .mode:hover{border-color:var(--ink2)}
@@ -133,7 +133,7 @@ a{color:var(--blue)}
   </div>
   <div class="panel" id="panel"></div>
 </div>
-<script src="scaffold-core.js?v=2"></script>
+<script src="scaffold-core.js?v=3"></script>
 <script>
 /* core: scaffold-core.js */
 (()=>{
@@ -165,6 +165,7 @@ const HINTS=[
 ];
 function cen(){return [6,4,6.5];}
 function redraw(){
+  applyUiModeClass(st);
   const svg=$('#svg'), W=svg.clientWidth||600, H=svg.clientHeight||500;
   const C0=(typeof cen==='function')?cen():ptsCentroid(st.pts);
   const scale=autoScale(st.pts, st.yaw, st.pitch, C0, W, H, 0.72);
@@ -204,7 +205,7 @@ function redraw(){
   svg.innerHTML=html;
   svg.querySelectorAll('.hit').forEach(el=>el.addEventListener('click',()=>tap(el.dataset.pt)));
   renderPanel();
-  $('#ovTop').textContent=(st.uiMode==='scaffold'?'Guided · ':'Explore · ')+(st.answered?'Complete':`Step ${Math.min(st.step+1,4)} · cuboid line–plane`);
+  $('#ovTop').textContent=modePrefix(st)+(st.answered?'Complete':`Step ${Math.min(st.step+1,4)} · cuboid line–plane`);
 }
 function advance(){
   if(st.hints>=1) st.step=Math.max(st.step,1);
@@ -236,7 +237,7 @@ function renderPanel(){
   <div class="card"><div class="eyebrow"><span>Type A · DSE-2018 PII Q41</span><span>MC</span></div>
   <p class="qtext">Cuboid <span class="mth">ABCDEFGH</span>. X on DE with DX = 9, EX = 4. AB = 12, BC = 8. Find cos θ for the angle between <span class="mth">BX</span> and plane <span class="mth">ABGF</span>.</p></div>`;
   html+=modeToggleHtml(st);
-  html+=exploreToolsHtml(st);
+  if(st.uiMode!=='exam') html+=exploreToolsHtml(st);
   html+=`${st.uiMode==='scaffold'?`<div class="card"><div class="sec">Guided scaffold · optional</div>${stepsHtml}<div class="actions"><button class="btn" id="nextStep">Next step</button><button class="btn" id="backExplore">← Back to Explore</button></div></div>`:''}`;
   if(st.msg) html+=`<div class="msg ${st.msg.k}">${st.msg.t}</div>`;
   
