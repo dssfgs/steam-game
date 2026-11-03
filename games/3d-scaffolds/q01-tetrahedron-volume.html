@@ -133,7 +133,7 @@ a{color:var(--blue)}
   </div>
   <div class="panel" id="panel"></div>
 </div>
-<script src="scaffold-core.js?v=4"></script>
+<script src="scaffold-core.js?v=5"></script>
 <script>
 /* core: scaffold-core.js */
 (()=>{
@@ -213,7 +213,7 @@ function pickMC(opt){
 }
 function renderPanel(){
   const stepsHtml=STEPS.map((s,i)=>`<div class="step ${i<st.step?'ok':(i===st.step?'on':'')}"><div class="n">${i<st.step?'✓':(i+1)}</div><div class="t">${s.t}</div></div>`).join('');
-  const toolKeys=['centroid','footp','foot','mid'];
+  const toolKeys=['join','line','mid','foot','footp','centroid','dist'];
   let html=`<div class="head"><div class="brand">Q1 · <i>Tetrahedron volume</i></div><a class="back" href="index.html">← Index</a></div>
   <div class="card"><div class="eyebrow"><span>Type A · DSE-2012 PII Q40</span><span>MC</span></div>
   <p class="qtext">If the height of a regular tetrahedron is <span class="mth">2 cm</span>, then the volume is</p></div>`;

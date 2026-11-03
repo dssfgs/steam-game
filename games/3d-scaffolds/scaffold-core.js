@@ -76,16 +76,22 @@ const TOOLS={
   centroid:{n:3,sym:'G',name:'Centroid of △',sub:'average of 3 pts',how:'Tap the 3 vertices of the triangle.'},
   meet:{n:4,sym:'×',name:'Extend 2 lines',sub:'find where they meet',how:'Tap 2 points on each line.'},
   par:{n:3,sym:'∥',name:'Parallel',sub:'through a point',how:'Tap the point, then 2 points on the line to copy.'},
-  join:{n:2,sym:'—',name:'Join / Draw',sub:'segment between pts',how:'Tap 2 existing points to draw the segment.'},
+  join:{n:2,sym:'—',name:'Line segment',sub:'A–B',how:'Tap 2 points to draw segment AB.'},
+  seg:{n:2,sym:'—',name:'Line segment',sub:'A–B',how:'Tap 2 points to draw segment AB.'},
+  line:{n:2,sym:'⧸',name:'Line',sub:'through A,B',how:'Tap 2 points — draws the infinite line through them.'},
+  ray:{n:2,sym:'→',name:'Ray',sub:'from A thru B',how:'Tap start A, then B — half-line from A through B.'},
+  dist:{n:2,sym:'| |',name:'Distance',sub:'length |AB|',how:'Tap 2 points to measure the length.'},
+  tri:{n:3,sym:'△',name:'Triangle',sub:'3 vertices',how:'Tap 3 points to draw △ABC.'},
   onedge:{n:3,sym:'·',name:'Point on edge',sub:'label a point on AB',how:'Tap endpoint A, endpoint B, then a guide point near where you want it (projection onto AB).'},
   angle:{n:3,sym:'∠',name:'Measure angle',sub:'3 points A–V–B',how:'Tap arm end, vertex, other arm end. Shows the angle at the vertex.'}
 };
 
-const EXPLORE_TOOL_KEYS=['foot','footp','meet','par','mid','join','onedge','angle','centroid'];
+const EXPLORE_TOOL_KEYS=['join','line','ray','mid','foot','footp','par','meet','onedge','tri','dist','angle','centroid'];
 
 function construct(type,names,pts){
+  if(type==='seg') type='join';
   const P=names.map(n=>pts[n]);
-  let X,desc,segs=[],mark=null,joinOnly=false,angleOnly=false,deg=null;
+  let X,desc,segs=[],mark=null,joinOnly=false,angleOnly=false,lineOnly=false,rayOnly=false,distOnly=false,triOnly=false,deg=null,len=null;
   if(type==='foot'){
     const [p,l1,l2]=P;
     if(V.len(V.cross(V.sub(p,l1),V.unit(V.sub(l2,l1))))<1e-6)
@@ -133,6 +139,27 @@ function construct(type,names,pts){
     X=null;
     segs.push([names[0],names[1]]);
     desc=`segment ${names[0]}${names[1]}`;
+  }else if(type==='line'){
+    lineOnly=true;
+    X=null;
+    segs.push([names[0],names[1]]);
+    desc=`line ${names[0]}${names[1]}`;
+  }else if(type==='ray'){
+    rayOnly=true;
+    X=null;
+    segs.push([names[0],names[1]]);
+    desc=`ray ${names[0]}${names[1]}`;
+  }else if(type==='dist'){
+    distOnly=true;
+    X=null;
+    len=V.len(V.sub(P[0],P[1]));
+    segs.push([names[0],names[1]]);
+    desc=`|${names[0]}${names[1]}| = ${f2(len)}`;
+  }else if(type==='tri'){
+    triOnly=true;
+    X=null;
+    segs.push([names[0],names[1]],[names[1],names[2]],[names[2],names[0]]);
+    desc=`△${names[0]}${names[1]}${names[2]}`;
   }else if(type==='onedge'){
     const [a,b,g]=P;
     const u=V.unit(V.sub(b,a));
@@ -151,10 +178,11 @@ function construct(type,names,pts){
     segs.push([names[0],names[1]],[names[1],names[2]]);
     desc=`∠${names[0]}${names[1]}${names[2]} = ${f2(deg)}°`;
   }else return {err:'Unknown tool'};
-  return {X,desc,segs,mark,joinOnly,angleOnly,deg};
+  return {X,desc,segs,mark,joinOnly,angleOnly,lineOnly,rayOnly,distOnly,triOnly,deg,len};
 }
 
 function ensurePoint(type,args,st){
+  if(type==='seg') type='join';
   const r=construct(type,args,st.pts);
   if(r.err)return r;
   if(r.angleOnly){
@@ -167,10 +195,41 @@ function ensurePoint(type,args,st){
     const exists=st.cons.some(c=>c.type==='join'&&((c.args[0]===a&&c.args[1]===b)||(c.args[0]===b&&c.args[1]===a)));
     if(exists)return {name:a+b,existed:true};
     st.cons.push({name:null,type:'join',args:args.slice(),desc:r.desc,segs:r.segs,mark:null,joinOnly:true});
-    // also track as free edge for redraw
     if(!st.joins) st.joins=[];
     st.joins.push([a,b]);
     return {name:a+b,joined:true};
+  }
+  if(r.lineOnly){
+    const a=args[0],b=args[1];
+    const exists=st.cons.some(c=>c.type==='line'&&((c.args[0]===a&&c.args[1]===b)||(c.args[0]===b&&c.args[1]===a)));
+    if(exists)return {name:a+b,existed:true};
+    st.cons.push({name:null,type:'line',args:args.slice(),desc:r.desc,segs:r.segs,mark:null,lineOnly:true});
+    return {name:a+b,lined:true};
+  }
+  if(r.rayOnly){
+    const a=args[0],b=args[1];
+    const exists=st.cons.some(c=>c.type==='ray'&&c.args[0]===a&&c.args[1]===b);
+    if(exists)return {name:a+b,existed:true};
+    st.cons.push({name:null,type:'ray',args:args.slice(),desc:r.desc,segs:r.segs,mark:null,rayOnly:true});
+    return {name:a+b,rayed:true};
+  }
+  if(r.distOnly){
+    const a=args[0],b=args[1];
+    st.cons.push({name:null,type:'dist',args:args.slice(),desc:r.desc,segs:r.segs,mark:null,distOnly:true,len:r.len});
+    return {name:a+b,dist:true,len:r.len};
+  }
+  if(r.triOnly){
+    const [a,b,c]=args;
+    if(a===b||b===c||a===c) return {err:'Need 3 distinct points.'};
+    if(!st.joins) st.joins=[];
+    const edges=[[a,b],[b,c],[c,a]];
+    const addedJoins=[];
+    const hasJoin=(x,y)=>st.joins.some(([p,q])=>(p===x&&q===y)||(p===y&&q===x));
+    for(const [x,y] of edges){
+      if(!hasJoin(x,y)){ st.joins.push([x,y]); addedJoins.push([x,y]); }
+    }
+    st.cons.push({name:null,type:'tri',args:args.slice(),desc:r.desc,segs:r.segs,mark:null,triOnly:true,addedJoins});
+    return {name:a+b+c,tri:true};
   }
   for(const k in st.pts)if(V.len(V.sub(st.pts[k],r.X))<1e-4)return {name:k,existed:true};
   const name=POOL.split('').find(c=>!(c in st.pts));
@@ -191,6 +250,11 @@ function undoLastCons(st){
   if(c.type==='join' && st.joins){
     const [a,b]=c.args;
     st.joins=st.joins.filter(([x,y])=>!((x===a&&y===b)||(x===b&&y===a)));
+  }
+  if(c.type==='tri' && st.joins && c.addedJoins){
+    for(const [a,b] of c.addedJoins){
+      st.joins=st.joins.filter(([x,y])=>!((x===a&&y===b)||(x===b&&y===a)));
+    }
   }
   if(c.type==='angle'){
     st.measured=null;
@@ -228,12 +292,39 @@ function consOverlayHtml(st, Pj, projFn){
     if(Pj[a]&&Pj[b]) html+=`<path class="cs" d="${linePath(Pj[a],Pj[b])}"/>`;
   });
   (st.cons||[]).forEach(c=>{
-    (c.segs||[]).forEach(s=>{
-      if(s.length>=2 && s[0] in Pj && s[1] in Pj){
-        const cls=s[2]==='par'?'cs':'cs';
-        html+=`<path class="${cls}" d="${linePath(Pj[s[0]],Pj[s[1]])}"/>`;
-      }
-    });
+    if(c.type==='line' && c.args && c.args[0] in st.pts && c.args[1] in st.pts){
+      const A=st.pts[c.args[0]], B=st.pts[c.args[1]];
+      const u=V.unit(V.sub(B,A));
+      const t=Math.max(8, V.len(V.sub(B,A))*0.85);
+      const P0=V.sub(A,V.mul(u,t)), P1=V.add(B,V.mul(u,t));
+      html+=`<path class="cs" d="${linePath(projFn(P0),projFn(P1))}"/>`;
+    }else if(c.type==='ray' && c.args && c.args[0] in st.pts && c.args[1] in st.pts){
+      const A=st.pts[c.args[0]], B=st.pts[c.args[1]];
+      const u=V.unit(V.sub(B,A));
+      const t=Math.max(8, V.len(V.sub(B,A))*0.85);
+      const P1=V.add(B,V.mul(u,t));
+      html+=`<path class="cs" d="${linePath(projFn(A),projFn(P1))}"/>`;
+    }else if(c.type==='tri' && c.args && c.args.length===3 && c.args.every(n=>n in Pj)){
+      const [a,b,d]=c.args;
+      html+=`<path class="hl" d="${polyPath([Pj[a],Pj[b],Pj[d]])}"/>`;
+      (c.segs||[]).forEach(s=>{
+        if(s.length>=2 && s[0] in Pj && s[1] in Pj)
+          html+=`<path class="cs" d="${linePath(Pj[s[0]],Pj[s[1]])}"/>`;
+      });
+    }else if(c.type==='dist' && c.args && c.args[0] in Pj && c.args[1] in Pj){
+      const a=c.args[0], b=c.args[1];
+      html+=`<path class="arm" d="${linePath(Pj[a],Pj[b])}"/>`;
+      const mid=[(Pj[a][0]+Pj[b][0])/2,(Pj[a][1]+Pj[b][1])/2];
+      const lab=(c.len!=null)?f2(c.len):(c.desc||'');
+      html+=`<text class="lab t dim" x="${mid[0]}" y="${mid[1]-8}">${lab}</text>`;
+    }else{
+      (c.segs||[]).forEach(s=>{
+        if(s.length>=2 && s[0] in Pj && s[1] in Pj){
+          const cls=s[2]==='par'?'cs':'cs';
+          html+=`<path class="${cls}" d="${linePath(Pj[s[0]],Pj[s[1]])}"/>`;
+        }
+      });
+    }
     if(c.mark && c.mark.at in st.pts && c.mark.to in st.pts && c.mark.along in st.pts){
       const rm=rightAngleMark(st.pts[c.mark.to], st.pts[c.mark.at], st.pts[c.mark.along], 0.4);
       const pp=rm.map(p=>projFn(p));
@@ -398,7 +489,11 @@ function handleToolTap(st, n, redraw){
     if(r.err) toast(r.err,'bad');
     else if(r.existed) toast('Already '+r.name);
     else if(r.measured) toast(r.deg!=null?`∠ = ${f2(r.deg)}°`:'Angle measured','good');
-    else if(r.joined) toast('Drew '+r.name,'good');
+    else if(r.joined) toast('Segment '+r.name,'good');
+    else if(r.lined) toast('Line '+r.name,'good');
+    else if(r.rayed) toast('Ray '+r.name,'good');
+    else if(r.dist) toast('|'+r.name+'| = '+f2(r.len),'good');
+    else if(r.tri) toast('△'+r.name,'good');
     else toast('New '+r.name,'good');
     st.tsel=[]; st.tool=null;
   }

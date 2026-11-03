@@ -8,7 +8,7 @@
     ],
     "year": "2026",
     "author": "",
-    "desc": "Q1–Q23 DSE 3D scaffolds：Explore／Guided／Exam；bugfix（Guided Back）、手機大圖觸控、Exam 單色圖。",
+    "desc": "Q1–Q23 DSE 3D scaffolds：Explore／Guided／Exam；more Explore tools (segment, line, ray, triangle, distance)；手機大圖觸控、Exam 單色圖。",
     "thumb": "games/3d-scaffolds/thumb.svg",
     "tags": [
       "立體幾何",
