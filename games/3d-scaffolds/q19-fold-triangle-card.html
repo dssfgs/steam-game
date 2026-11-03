@@ -133,7 +133,7 @@ a{color:var(--blue)}
   </div>
   <div class="panel" id="panel"></div>
 </div>
-<script src="scaffold-core.js?v=5"></script>
+<script src="scaffold-core.js?v=6"></script>
 <script>
 /* core: scaffold-core.js */
 (()=>{
@@ -184,7 +184,7 @@ function redraw(){
   html+=consOverlayHtml(st, Pj, (typeof proj==='function')?proj:(p=>project(p,st.yaw,st.pitch,[0,0,0],40,600,500)));
 
   svg.innerHTML=html;
-  svg.querySelectorAll('.hit').forEach(el=>el.addEventListener('click',()=>tap(el.dataset.pt)));
+  wirePointHits(svg, tap);
   renderPanel();
   $('#ovTop').textContent=st.uiMode==='exam'?'Exam · figure only':modePrefix(st)+(st.claim!==null?'Complete':(st.a3?'Claim ∠ANM':(st.a1?'Folded AC':'Flat ∠BCM & CM')));
 }

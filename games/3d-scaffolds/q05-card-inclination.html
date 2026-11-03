@@ -133,7 +133,7 @@ a{color:var(--blue)}
   </div>
   <div class="panel" id="panel"></div>
 </div>
-<script src="scaffold-core.js?v=5"></script>
+<script src="scaffold-core.js?v=6"></script>
 <script>
 /* core: scaffold-core.js */
 (()=>{
@@ -197,14 +197,15 @@ function redraw(){
   // dims on card
   const mPQ=proj(V.mid(P,Q)); html+=`<text class="dim" x="${mPQ[0]}" y="${mPQ[1]+16}">30</text>`;
   const mPR=proj(V.mid(P,R)); html+=`<text class="dim" x="${mPR[0]-18}" y="${mPR[1]}">25</text>`;
+  html+=consOverlayHtml(st, PP, (typeof proj==='function')?proj:(p=>project(p,st.yaw,st.pitch,[0,0,0],40,600,500)));
+  // Hits last so Line segment / Line on plane points stay tappable over fills & overlays
   Object.keys(st.pts).forEach(k=>{const p=PP[k],col=st.kind[k]==='c'?'var(--yellow)':'var(--ink)';
     html+=`<circle cx="${p[0]}" cy="${p[1]}" r="6" fill="${col}" stroke="var(--bg)" stroke-width="2"/>`;
-    html+=`<circle class="hit" data-pt="${k}" cx="${p[0]}" cy="${p[1]}" r="26"/>`;
+    html+=`<circle class="hit" data-pt="${k}" cx="${p[0]}" cy="${p[1]}" r="28"/>`;
     html+=`<text class="lab ${st.kind[k]==='c'?'c':''}" x="${p[0]+10}" y="${p[1]-10}">${k}</text>`;});
-  html+=consOverlayHtml(st, PP, (typeof proj==='function')?proj:(p=>project(p,st.yaw,st.pitch,[0,0,0],40,600,500)));
 
   svg.innerHTML=html;
-  svg.querySelectorAll('.hit').forEach(el=>el.addEventListener('click',()=>tap(el.dataset.pt)));
+  wirePointHits(svg, tap);
   renderPanel();
   $('#ovTop').textContent=st.uiMode==='exam'?'Exam · figure only':modePrefix(st)+(PARTS[Math.min(st.part,2)].title);
 }
@@ -219,7 +220,7 @@ function renderPanel(){
   <div class="card"><div class="eyebrow"><span>Type A · DSE 2022-18</span><span>Long</span></div>
   <p class="qtext">Triangular card <span class="mth">PQR</span> with <span class="mth">PQ</span> on the ground. PQ = 30 cm, PR = 25 cm, ∠QPR = 95°.</p></div>`;
   html+=modeToggleHtml(st);
-  if(st.uiMode!=='exam') html+=exploreToolsHtml(st);
+  if(st.uiMode!=='exam') html+=exploreToolsHtml(st, ['join','line','ray','mid','foot','footp','onedge','par','meet','tri','dist','angle','centroid']);
   if(st.msg) html+=`<div class="msg ${st.msg.k}">${st.msg.t}</div>`;
 
   // Part a i

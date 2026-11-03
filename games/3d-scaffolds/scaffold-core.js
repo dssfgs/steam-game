@@ -47,16 +47,25 @@ function toast(t,kind){
 }
 
 function makeDrag(stage,svg,getAngles,setAngles,redraw){
-  let down=null;
+  let down=null; // {x,y,yaw,pitch,dragging}
+  const THRESH=6;
   const onDown=e=>{
+    // Ignore presses that start on a point hit — those are taps for tools
+    const t=e.target;
+    if(t && t.closest && t.closest('.hit')) return;
     const p=e.touches?e.touches[0]:e;
-    down={x:p.clientX,y:p.clientY,yaw:getAngles().yaw,pitch:getAngles().pitch};
-    svg.classList.add('drag');
+    down={x:p.clientX,y:p.clientY,yaw:getAngles().yaw,pitch:getAngles().pitch,dragging:false};
   };
   const onMove=e=>{
     if(!down)return;
     const p=e.touches?e.touches[0]:e;
-    setAngles(down.yaw+(p.clientX-down.x)*0.008, Math.max(-1.2,Math.min(1.2,down.pitch+(p.clientY-down.y)*0.008)));
+    const dx=p.clientX-down.x, dy=p.clientY-down.y;
+    if(!down.dragging){
+      if(Math.hypot(dx,dy)<THRESH) return;
+      down.dragging=true;
+      svg.classList.add('drag');
+    }
+    setAngles(down.yaw+dx*0.008, Math.max(-1.2,Math.min(1.2,down.pitch+dy*0.008)));
     redraw();
     e.preventDefault();
   };
@@ -67,6 +76,44 @@ function makeDrag(stage,svg,getAngles,setAngles,redraw){
   stage.addEventListener('touchstart',onDown,{passive:true});
   window.addEventListener('touchmove',onMove,{passive:false});
   window.addEventListener('touchend',onUp);
+}
+
+/** Bind fat hit targets so taps select points without starting a rotate-drag. */
+function wirePointHits(svg, tapFn){
+  if(!svg) return;
+  svg.querySelectorAll('.hit').forEach(el=>{
+    let pending=false, x0=0, y0=0, lastTap=0;
+    const pt=ev=>(ev.changedTouches&&ev.changedTouches[0])||(ev.touches&&ev.touches[0])||ev;
+    const down=ev=>{
+      pending=true;
+      const p=pt(ev);
+      x0=p.clientX; y0=p.clientY;
+      ev.stopPropagation();
+    };
+    const up=ev=>{
+      if(!pending) return;
+      pending=false;
+      const p=pt(ev);
+      if(Math.hypot(p.clientX-x0, p.clientY-y0)>8) return;
+      const now=Date.now();
+      if(now-lastTap<40) return; // dedupe pointer+mouse double delivery
+      lastTap=now;
+      if(ev.cancelable) ev.preventDefault();
+      ev.stopPropagation();
+      tapFn(el.dataset.pt);
+    };
+    const cancel=()=>{pending=false;};
+    if(window.PointerEvent){
+      el.addEventListener('pointerdown', down);
+      el.addEventListener('pointerup', up);
+      el.addEventListener('pointercancel', cancel);
+    }else{
+      el.addEventListener('mousedown', down);
+      el.addEventListener('mouseup', up);
+      el.addEventListener('touchstart', down, {passive:true});
+      el.addEventListener('touchend', up);
+    }
+  });
 }
 
 const TOOLS={
@@ -385,7 +432,9 @@ function ensureMobileChrome(){
 .tools.tools-strip .btn .sym{display:block;margin:0 0 2px;font-size:16px}
 .tools.tools-strip .btn small{display:none}
 .tag.btnish{padding:10px 14px;font-size:14px;min-height:40px}
-.hit{touch-action:manipulation}
+.hit{touch-action:manipulation;pointer-events:all;cursor:pointer}
+.hl,.hl2,.face,#svg path[fill^="rgba"]{pointer-events:none}
+.e,.eh,.gd,.cs,.cl,.arm,.arc,.ra,.dim{pointer-events:none}
 @media (max-width:860px){
   .app{grid-template-columns:1fr;height:auto;min-height:100dvh}
   .stage{position:sticky;top:0;z-index:5;height:56vh;height:56svh;min-height:280px;border-right:0;border-bottom:1px solid var(--line)}
