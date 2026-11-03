@@ -108,7 +108,7 @@ a{color:var(--blue)}
 .dim{font-family:var(--sans);font-size:12px;fill:var(--ink2);paint-order:stroke;stroke:var(--bg);stroke-width:4px}
 .hit{fill:transparent;cursor:pointer}
 .face{stroke:none;opacity:.22}
-@media (max-width:860px){.app{grid-template-columns:1fr;height:auto}.stage{position:sticky;top:0;z-index:5;height:46vh;height:46svh;border-right:0;border-bottom:1px solid var(--line)}.panel{overflow:visible}.explain{scroll-margin-top:calc(46svh + 10px)}}
+@media (max-width:860px){.app{grid-template-columns:1fr;height:auto}.stage{position:sticky;top:0;z-index:5;height:56vh;height:56svh;border-right:0;border-bottom:1px solid var(--line)}.panel{overflow:visible}.explain{scroll-margin-top:calc(56svh + 10px)}}
 @media (prefers-reduced-motion:reduce){.toast{transition:none}}
 
 
@@ -133,7 +133,7 @@ a{color:var(--blue)}
   </div>
   <div class="panel" id="panel"></div>
 </div>
-<script src="scaffold-core.js?v=3"></script>
+<script src="scaffold-core.js?v=4"></script>
 <script>
 /* core: scaffold-core.js */
 (()=>{
@@ -165,6 +165,7 @@ const STEPS=[
   {t:'Join A to that foot — by 3-perpendiculars, AM ⊥ CD in plane ACD. θ = ∠AMB.', check:()=>st.showAngle||st.step>=3},
   {t:'Compute BM from area of △BCD, then tan θ = AB/BM. Choose the option.', check:()=>st.answered}
 ];
+st.stepMax=STEPS.length;
 function footOK(){
   // any constructed point near M
   for(const k in st.pts){ if(st.kind[k]==='c' && V.len(V.sub(st.pts[k],M))<0.15) return true; }
@@ -185,7 +186,7 @@ function redraw(){
   applyUiModeClass(st);
   const svg=$('#svg'), W=svg.clientWidth||600, H=svg.clientHeight||500;
   const C0=(typeof cen==='function')?cen():ptsCentroid(st.pts);
-  const scale=autoScale(st.pts, st.yaw, st.pitch, C0, W, H, 0.72);
+  const scale=autoScale(st.pts, st.yaw, st.pitch, C0, W, H, 0.82);
   const proj=p=>project(p,st.yaw,st.pitch,C0,scale,W,H);
   const P={}; for(const k in st.pts) P[k]=proj(st.pts[k]);
   let html='';
@@ -215,8 +216,8 @@ function redraw(){
   html+=`<text class="dim" x="${mBC[0]}" y="${mBC[1]+14}">8</text>`;
   html+=`<text class="dim" x="${mBD[0]+8}" y="${mBD[1]}">15</text>`;
   Object.keys(st.pts).forEach(k=>{const p=P[k],col=st.kind[k]==='c'?'var(--yellow)':'var(--ink)';
-    html+=`<circle cx="${p[0]}" cy="${p[1]}" r="5" fill="${col}" stroke="var(--bg)" stroke-width="2"/>`;
-    html+=`<circle class="hit" data-pt="${k}" cx="${p[0]}" cy="${p[1]}" r="16"/>`;
+    html+=`<circle cx="${p[0]}" cy="${p[1]}" r="6" fill="${col}" stroke="var(--bg)" stroke-width="2"/>`;
+    html+=`<circle class="hit" data-pt="${k}" cx="${p[0]}" cy="${p[1]}" r="26"/>`;
     html+=`<text class="lab ${st.kind[k]==='c'?'c':''}" x="${p[0]+10}" y="${p[1]-10}">${k}</text>`;});
   html+=consOverlayHtml(st, P, (typeof proj==='function')?proj:(p=>project(p,st.yaw,st.pitch,[0,0,0],40,600,500)));
 
@@ -278,10 +279,10 @@ function renderPanel(){
   <p class="eq">tan θ = 8 / (120/17) = <span class="y">17/15</span></p>
   <p><b>Answer: D</b></p></div>`:''}</div>`;
   $('#panel').innerHTML=html;
-  wireDualMode(st, redraw);
+  wireDualMode(st, redraw, {steps:STEPS});
   const ns=$('#nextStep'); if(ns) ns.onclick=()=>{if(typeof STEPS!=='undefined'&&st.step<STEPS.length){st.step++;redraw();}else if(st.step<4){st.step++;redraw();}};
   $('#panel').querySelectorAll('[data-mc]').forEach(b=>b.onclick=()=>pickMC(b.dataset.mc));
-  const ub=$('#undoCons'); if(ub) ub.onclick=()=>{const c=st.cons.pop(); if(c){delete st.pts[c.name];delete st.kind[c.name];} redraw();};
+
   const hb=$('#hintBtn'); if(hb) hb.onclick=()=>{if(st.hints<HINTS.length){st.hints++;
     if(st.hints>=1 && !st.common){st.common=['C','D'];}
     if(st.hints>=2 && !footOK()){const r=ensurePoint('foot',['B','C','D'],st); if(r.name) toast('Constructed '+r.name,'good');}

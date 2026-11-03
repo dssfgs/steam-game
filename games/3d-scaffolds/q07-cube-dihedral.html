@@ -108,7 +108,7 @@ a{color:var(--blue)}
 .dim{font-family:var(--sans);font-size:12px;fill:var(--ink2);paint-order:stroke;stroke:var(--bg);stroke-width:4px}
 .hit{fill:transparent;cursor:pointer}
 .face{stroke:none;opacity:.22}
-@media (max-width:860px){.app{grid-template-columns:1fr;height:auto}.stage{position:sticky;top:0;z-index:5;height:46vh;height:46svh;border-right:0;border-bottom:1px solid var(--line)}.panel{overflow:visible}.explain{scroll-margin-top:calc(46svh + 10px)}}
+@media (max-width:860px){.app{grid-template-columns:1fr;height:auto}.stage{position:sticky;top:0;z-index:5;height:56vh;height:56svh;border-right:0;border-bottom:1px solid var(--line)}.panel{overflow:visible}.explain{scroll-margin-top:calc(56svh + 10px)}}
 @media (prefers-reduced-motion:reduce){.toast{transition:none}}
 
 
@@ -133,7 +133,7 @@ a{color:var(--blue)}
   </div>
   <div class="panel" id="panel"></div>
 </div>
-<script src="scaffold-core.js?v=3"></script>
+<script src="scaffold-core.js?v=4"></script>
 <script>
 /* core: scaffold-core.js */
 (()=>{
@@ -153,6 +153,7 @@ const STEPS=[
   {t:'For β (△AFH vs △FGH): common line is FH; build arms ⊥ FH.'},
   {t:'Compare α and β with 60°, then choose the option.'}
 ];
+st.stepMax=STEPS.length;
 const HINTS=[
   'α uses planes AFG and AFH — they share AF.',
   'In a cube, drop perpendiculars from G and H to AF. By symmetry the feet meet at the midpoint M of AF, and ∠GMH = α = 45°.',
@@ -165,7 +166,7 @@ function redraw(){
   applyUiModeClass(st);
   const svg=$('#svg'), W=svg.clientWidth||600, Hgt=svg.clientHeight||500;
   const C0=(typeof cen==='function')?cen():ptsCentroid(st.pts);
-  const scale=autoScale(st.pts, st.yaw, st.pitch, C0, W, Hgt, 0.72);
+  const scale=autoScale(st.pts, st.yaw, st.pitch, C0, W, Hgt, 0.82);
   const proj=p=>project(p,st.yaw,st.pitch,C0,scale,W,Hgt);
   const P={}; for(const k in st.pts) P[k]=proj(st.pts[k]);
   let html='';
@@ -184,22 +185,22 @@ function redraw(){
     html+=`<path class="${cls}" d="${linePath(P[a],P[b])}"/>`;
   });
   // show M midpoint AF and arms when ready
-  if(st.showAlpha || st.hints>=2){
-    if(!('M' in st.pts)){st.pts.M=V.mid(A,F); st.kind.M='c'; P.M=proj(st.pts.M);}
-    else P.M=proj(st.pts.M);
+  if(st.uiMode!=='exam' && (st.showAlpha || st.hints>=2)){
+    const Mpt=('M' in st.pts)?st.pts.M:V.mid(A,F);
+    P.M=proj(Mpt);
     html+=`<path class="arm" d="${linePath(P.G,P.M)}"/><path class="arm" d="${linePath(P.H,P.M)}"/>`;
     html+=`<text class="lab t" x="${P.M[0]+8}" y="${P.M[1]-18}">α</text>`;
   }
-  if(st.showBeta || st.hints>=3){
-    if(!('N' in st.pts)){st.pts.N=V.mid(F,H); st.kind.N='c';}
-    P.N=proj(st.pts.N);
+  if(st.uiMode!=='exam' && (st.showBeta || st.hints>=3)){
+    const Npt=('N' in st.pts)?st.pts.N:V.mid(F,H);
+    P.N=proj(Npt);
     html+=`<path class="arm" d="${linePath(P.A,P.N)}"/><path class="arm" d="${linePath(P.G,P.N)}"/>`;
     html+=`<text class="lab t" x="${P.N[0]-18}" y="${P.N[1]-10}">β</text>`;
   }
   st.cons.forEach(c=>{(c.segs||[]).forEach(([u,v])=>{if(P[u]&&P[v]) html+=`<path class="cs" d="${linePath(P[u],P[v])}"/>`;});});
   Object.keys(st.pts).forEach(k=>{const p=P[k]||proj(st.pts[k]); const col=st.kind[k]==='c'?'var(--yellow)':'var(--ink)';
-    html+=`<circle cx="${p[0]}" cy="${p[1]}" r="4.5" fill="${col}" stroke="var(--bg)" stroke-width="2"/>`;
-    html+=`<circle class="hit" data-pt="${k}" cx="${p[0]}" cy="${p[1]}" r="14"/>`;
+    html+=`<circle cx="${p[0]}" cy="${p[1]}" r="6" fill="${col}" stroke="var(--bg)" stroke-width="2"/>`;
+    html+=`<circle class="hit" data-pt="${k}" cx="${p[0]}" cy="${p[1]}" r="26"/>`;
     html+=`<text class="lab ${st.kind[k]==='c'?'c':''}" x="${p[0]+8}" y="${p[1]-8}">${k}</text>`;});
   html+=consOverlayHtml(st, P, (typeof proj==='function')?proj:(p=>project(p,st.yaw,st.pitch,[0,0,0],40,600,500)));
 
@@ -232,7 +233,9 @@ function renderPanel(){
   <p class="qtext">Cube <span class="mth">ABCDEFGH</span>. α = angle between △AFG and △AFH; β between △AFH and △FGH. Compare with 60°.</p>
   ${st.step===0||st.step===2?`<p class="ask" style="color:var(--yellow)">Tap two points for the common line.</p>`:''}</div>
   ${st.uiMode==='scaffold'?`<div class="card"><div class="sec">Guided scaffold · optional</div>${stepsHtml}
-  <div class="actions"><button class="btn" id="markAlpha">Mark α construction</button>
+  <div class="actions"><button class="btn" id="nextStep">Next step</button>
+  <button class="btn" id="backExplore">← Back to Explore</button>
+  <button class="btn" id="markAlpha">Mark α construction</button>
   <button class="btn" id="markBeta">Mark β construction</button></div></div>`:''}`;
   if(st.msg) html+=`<div class="msg ${st.msg.k}">${st.msg.t}</div>`;
   html+=modeToggleHtml(st);
@@ -258,7 +261,7 @@ function renderPanel(){
   <p class="eq">α = 45° &lt; 60° &lt; 90° = β</p>
   <p><b>Answer: A</b></p></div>`:''}</div>`;
   $('#panel').innerHTML=html;
-  wireDualMode(st, redraw);
+  wireDualMode(st, redraw, {steps:STEPS});
   $('#panel').querySelectorAll('[data-mc]').forEach(b=>b.onclick=()=>pickMC(b.dataset.mc));
   const ha=$('#markAlpha'); if(ha) ha.onclick=()=>{st.showAlpha=true;st.common1=['A','F'];st.step=Math.max(st.step,2);toast('α = 45° construction','good');redraw();};
   const hb=$('#markBeta'); if(hb) hb.onclick=()=>{st.showBeta=true;st.common2=['F','H'];st.step=Math.max(st.step,3);toast('β = 90° construction','good');redraw();};

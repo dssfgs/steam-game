@@ -30,7 +30,7 @@ function ptsCentroid(ptsMap){
   return V.mul(s,1/keys.length);
 }
 function autoScale(ptsMap, yaw, pitch, cen, W, H, fill){
-  fill = fill==null ? 0.72 : fill;
+  fill = fill==null ? 0.82 : fill;
   let maxR = 1e-6;
   for (const k in ptsMap){
     const s = project(ptsMap[k], yaw, pitch, cen, 1, W, H);
@@ -266,14 +266,44 @@ function ensureExamStyles(){
   const s=document.createElement('style');
   s.id='exam-mode-css';
   s.textContent=`
-body.exam .cs, body.exam .cl, body.exam .arm, body.exam .arc, body.exam .ra{display:none!important}
-body.exam .hl, body.exam .hl2{fill:rgba(180,180,180,.10)!important;stroke:#8a8a8a!important}
-body.exam .face{fill:rgba(180,180,180,.12)!important}
-body.exam .lab.c, body.exam .lab.t{fill:var(--ink)!important}
+/* Exam · monochrome figure */
+body.exam .cs, body.exam .cl, body.exam .arm, body.exam .arc, body.exam .ra,
+body.exam .gd, body.exam .eh{stroke:#9a9a9a!important}
+body.exam .cs, body.exam .cl, body.exam .arm, body.exam .arc, body.exam .ra{opacity:.85}
+body.exam .hl, body.exam .hl2, body.exam .face,
+body.exam #svg path[fill^="rgba"]{fill:rgba(180,180,180,.12)!important;stroke:#8a8a8a!important}
+body.exam .lab.c, body.exam .lab.t, body.exam .dim{fill:var(--ink)!important;stroke:var(--bg)!important}
 body.exam #svg circle:not(.hit){fill:var(--ink)!important}
 body.exam .chip.c{color:var(--ink);border-color:var(--line)}
 body.exam .panel .tools, body.exam .howto, body.exam .cons, body.exam [data-tool]{display:none!important}
 body.exam .mode-card .prompt{color:var(--ink2)}
+/* Hide construction colour cues in exam — keep solid edges */
+body.exam .lab.t{display:none!important}
+`;
+  document.head.appendChild(s);
+}
+
+/** GeoGebra-like phone chrome: large stage, fat hits, compact tool strip */
+function ensureMobileChrome(){
+  if(document.getElementById('ggb-mobile-css')) return;
+  const s=document.createElement('style');
+  s.id='ggb-mobile-css';
+  s.textContent=`
+.tools.tools-strip{display:flex;flex-wrap:nowrap;gap:6px;overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:4px;scrollbar-width:thin}
+.tools.tools-strip .btn{flex:0 0 auto;min-width:72px;max-width:110px;padding:8px 8px;font-size:12px;text-align:center}
+.tools.tools-strip .btn .sym{display:block;margin:0 0 2px;font-size:16px}
+.tools.tools-strip .btn small{display:none}
+.tag.btnish{padding:10px 14px;font-size:14px;min-height:40px}
+.hit{touch-action:manipulation}
+@media (max-width:860px){
+  .app{grid-template-columns:1fr;height:auto;min-height:100dvh}
+  .stage{position:sticky;top:0;z-index:5;height:56vh;height:56svh;min-height:280px;border-right:0;border-bottom:1px solid var(--line)}
+  .panel{overflow:visible;padding-bottom:48px}
+  .explain{scroll-margin-top:calc(56svh + 10px)}
+  .mode b{font-size:14px}
+  .mode{padding:8px 6px;font-size:11px}
+  .lab{font-size:18px}
+}
 `;
   document.head.appendChild(s);
 }
@@ -299,7 +329,7 @@ function modeToggleHtml(st){
 function exploreToolsHtml(st, keys){
   if(st.uiMode==='exam') return '';
   const list=keys||EXPLORE_TOOL_KEYS;
-  let html=`<div class="card"><div class="sec">Explore tools · draw your own</div><div class="tools">`;
+  let html=`<div class="card"><div class="sec">Explore tools</div><div class="tools tools-strip">`;
   list.forEach(k=>{
     const T=TOOLS[k]; if(!T) return;
     html+=`<button class="btn ${st.tool===k?'on':''}" data-tool="${k}"><span class="sym">${T.sym}</span>${T.name}<small>${T.sub}</small></button>`;
@@ -326,6 +356,7 @@ function scaffoldStepsHtml(st, STEPS){
 function wireDualMode(st, redraw, extra){
   extra=extra||{};
   ensureExamStyles();
+  ensureMobileChrome();
   applyUiModeClass(st);
   const panel=$('#panel'); if(!panel) return;
   panel.querySelectorAll('[data-uimode]').forEach(b=>b.onclick=()=>{
@@ -342,16 +373,18 @@ function wireDualMode(st, redraw, extra){
   panel.querySelectorAll('[data-tool]').forEach(b=>b.onclick=()=>{
     st.tool=st.tool===b.dataset.tool?null:b.dataset.tool; st.tsel=[]; redraw();
   });
-  const u=$('#undoCons'); if(u) u.onclick=()=>{const c=undoLastCons(st); if(c) toast('Undid: '+(c.desc||c.name)); redraw();};
+  const u=$('#undoCons'); if(u) u.onclick=()=>{const c=undoLastCons(st); if(c) toast('Undid: '+(c.desc||c.name||'')); redraw();};
   const cl=$('#clearCons'); if(cl) cl.onclick=()=>{
     if(!st.cons.length) return;
     if(!confirm('Clear all free constructions? Guided progress is kept.')) return;
     clearCons(st); toast('Constructions cleared'); redraw();
   };
-  const be=$('#backExplore'); if(be) be.onclick=()=>{st.uiMode='explore';toast('Back to Explore');redraw();};
+  const be=$('#backExplore'); if(be) be.onclick=()=>{st.uiMode='explore'; applyUiModeClass(st); toast('Back to Explore'); redraw();};
   const ns=$('#nextStep'); if(ns) ns.onclick=()=>{
-    const max = (typeof STEPS!=='undefined' && STEPS.length) ? STEPS.length : (st.stepMax||4);
-    if(st.step < max){ st.step++; if(st.step>=3) st.unlocked=true; redraw(); }
+    const steps = extra.steps || st.STEPS || null;
+    const max = (steps && steps.length) ? steps.length
+      : (st.stepMax!=null ? st.stepMax : 4);
+    if(st.step < max){ st.step++; if(st.step>=Math.min(3,max-1)) st.unlocked=true; redraw(); }
   };
   if(extra.after) extra.after();
 }
@@ -376,4 +409,16 @@ function handleToolTap(st, n, redraw){
 /** Soft gate: Explore can always answer; Guided may still prefer steps but Unlock always works */
 function canSubmit(st){
   return true; // pedagogy: never block exploration of answers after try
+}
+
+/** GeoGebra-like point + fat hit target */
+function pointMarkersHtml(k, p, kind, opts){
+  opts=opts||{};
+  const r = opts.r!=null?opts.r:6;
+  const hit = opts.hit!=null?opts.hit:26;
+  const col = kind==='c'?'var(--yellow)':(kind==='a'?'#c8c8c8':'var(--ink)');
+  const lab = kind==='c'?'c':(kind==='a'?'a':'');
+  return `<circle cx="${p[0]}" cy="${p[1]}" r="${r}" fill="${col}" stroke="var(--bg)" stroke-width="2"/>`+
+    `<circle class="hit" data-pt="${k}" cx="${p[0]}" cy="${p[1]}" r="${hit}"/>`+
+    `<text class="lab ${lab}" x="${p[0]+10}" y="${p[1]-10}">${k}</text>`;
 }

@@ -8,7 +8,7 @@
     ],
     "year": "2026",
     "author": "",
-    "desc": "Overleaf「3D by section」Q1–Q23：Explore 自由構造、Guided 提示、Exam 單色圖形（無工具／色提示）；深色 3D 可旋轉。",
+    "desc": "Q1–Q23 DSE 3D scaffolds：Explore／Guided／Exam；bugfix（Guided Back）、手機大圖觸控、Exam 單色圖。",
     "thumb": "games/3d-scaffolds/thumb.svg",
     "tags": [
       "立體幾何",
@@ -18,7 +18,7 @@
       "Guided",
       "Exam"
     ],
-    "updated": "2026-11-01"
+    "updated": "2026-11-03"
   },
   {
     "id": "dse-math-p1",

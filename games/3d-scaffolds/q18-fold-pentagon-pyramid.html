@@ -108,7 +108,7 @@ a{color:var(--blue)}
 .dim{font-family:var(--sans);font-size:12px;fill:var(--ink2);paint-order:stroke;stroke:var(--bg);stroke-width:4px}
 .hit{fill:transparent;cursor:pointer}
 .face{stroke:none;opacity:.22}
-@media (max-width:860px){.app{grid-template-columns:1fr;height:auto}.stage{position:sticky;top:0;z-index:5;height:46vh;height:46svh;border-right:0;border-bottom:1px solid var(--line)}.panel{overflow:visible}.explain{scroll-margin-top:calc(46svh + 10px)}}
+@media (max-width:860px){.app{grid-template-columns:1fr;height:auto}.stage{position:sticky;top:0;z-index:5;height:56vh;height:56svh;border-right:0;border-bottom:1px solid var(--line)}.panel{overflow:visible}.explain{scroll-margin-top:calc(56svh + 10px)}}
 @media (prefers-reduced-motion:reduce){.toast{transition:none}}
 
 
@@ -133,7 +133,7 @@ a{color:var(--blue)}
   </div>
   <div class="panel" id="panel"></div>
 </div>
-<script src="scaffold-core.js?v=3"></script>
+<script src="scaffold-core.js?v=4"></script>
 <script>
 /* core: scaffold-core.js */
 (()=>{
@@ -172,7 +172,7 @@ function redraw(){
   applyUiModeClass(st);
   const svg=$('#svg'), W=svg.clientWidth||600, H=svg.clientHeight||500;
   const C0=(typeof cen==='function')?cen():ptsCentroid(st.pts);
-  const scale=autoScale(st.pts, st.yaw, st.pitch, C0, W, H, 0.72);
+  const scale=autoScale(st.pts, st.yaw, st.pitch, C0, W, H, 0.82);
   const proj=p=>project(p,st.yaw,st.pitch,C0,scale,W,H);
   const Pj={}; for(const k in st.pts) Pj[k]=proj(st.pts[k]);
   let html='';
@@ -192,8 +192,8 @@ function redraw(){
   Object.keys(st.pts).forEach(k=>{
     const p=Pj[k]; const lab=k==='Bp'?"B'":k;
     const col=st.kind[k]==='c'?'var(--yellow)':'var(--ink)';
-    html+=`<circle cx="${p[0]}" cy="${p[1]}" r="5" fill="${col}" stroke="var(--bg)" stroke-width="2"/>`;
-    html+=`<circle class="hit" data-pt="${k}" cx="${p[0]}" cy="${p[1]}" r="14"/>`;
+    html+=`<circle cx="${p[0]}" cy="${p[1]}" r="6" fill="${col}" stroke="var(--bg)" stroke-width="2"/>`;
+    html+=`<circle class="hit" data-pt="${k}" cx="${p[0]}" cy="${p[1]}" r="26"/>`;
     html+=`<text class="lab" x="${p[0]+8}" y="${p[1]-8}">${lab}</text>`;
   });
   html+=consOverlayHtml(st, Pj, (typeof proj==='function')?proj:(p=>project(p,st.yaw,st.pitch,[0,0,0],40,600,500)));
@@ -235,7 +235,9 @@ function renderPanel(){
   <button class="btn dark" id="chkVol" ${st.a3?'':'disabled'}>Check</button></div>
   ${st.vol?`<p class="eq">Volume ≈ <span class="y">${VOL.toFixed(0)}</span> cm³</p>`:''}</div>`;
     if(st.uiMode==='scaffold') html+=`<div class="card"><div class="sec">Hints · guided</div>
-  <div class="actions"><button class="btn dark" id="hintBtn">Next hint (${st.hints}/${HINTS.length})</button></div>
+  <p class="prompt">Reveal hints one by one, then return to Explore when ready.</p>
+  <div class="actions"><button class="btn dark" id="hintBtn">Next hint (${st.hints}/${HINTS.length})</button>
+  <button class="btn" id="backExplore">← Back to Explore</button></div>
   <ol class="hints">${HINTS.slice(0,st.hints).map(h=>`<li>${h}</li>`).join('')}</ol></div>`;
   html+=`<div class="card"><div class="sec">Solution outline</div>
   <button class="btn warn" id="solBtn">${st.showSol?'Hide':'Show'} solution outline</button>
