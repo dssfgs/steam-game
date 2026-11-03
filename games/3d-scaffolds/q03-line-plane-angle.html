@@ -133,7 +133,7 @@ a{color:var(--blue)}
   </div>
   <div class="panel" id="panel"></div>
 </div>
-<script src="scaffold-core.js?v=6"></script>
+<script src="scaffold-core.js?v=7"></script>
 <script>
 /* core: scaffold-core.js */
 (()=>{
@@ -146,6 +146,7 @@ const st={
   pts:{A:A.slice(),B:B.slice(),C:C.slice(),D:D.slice()},
   kind:{A:'v',B:'v',C:'v',D:'v'},
   edges:[['A','D'],['A','B'],['A','C'],['B','D'],['C','D'],['B','C']],
+  planes:[['A','C','D'],['A','B','C'],['A','B','D'],['B','C','D']],
   yaw:-0.85,pitch:0.45, step:0, hints:0, cons:[], tool:null, tsel:[], uiMode:'explore', joins:[], measured:null,
   unlocked:false, answered:false, picked:null, showSol:false, msg:null,
   showBD:false, showRight:false
@@ -201,6 +202,7 @@ function redraw(){
 
   svg.innerHTML=html;
   wirePointHits(svg, tap);
+  wirePlaneTap(svg, st, ()=>P, redraw);
   renderPanel();
   $('#ovTop').textContent=st.uiMode==='exam'?'Exam · figure only':modePrefix(st)+(st.answered?'Complete':`Step ${Math.min(st.step+1,4)} · line–plane angle`);
 }

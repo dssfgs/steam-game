@@ -133,7 +133,7 @@ a{color:var(--blue)}
   </div>
   <div class="panel" id="panel"></div>
 </div>
-<script src="scaffold-core.js?v=6"></script>
+<script src="scaffold-core.js?v=7"></script>
 <script>
 /* core: scaffold-core.js */
 (()=>{
@@ -143,6 +143,7 @@ const st={
   pts:{P:P.slice(),Q:Q.slice(),R:R.slice(),S:S.slice()},
   kind:{P:'v',Q:'v',R:'v',S:'v'},
   edges:[['Q','R'],['R','S'],['S','Q'],['P','Q'],['P','R'],['P','S']],
+  planes:[['Q','R','S'],['P','R','S'],['P','Q','R'],['P','Q','S']],
   yaw:-0.7,pitch:0.4, step:0, hints:0, cons:[], tool:null, tsel:[], uiMode:'explore', joins:[], measured:null,
   unlocked:false, answered:false, picked:null, showSol:false, msg:null, showRPS:false
 };
@@ -187,6 +188,7 @@ function redraw(){
 
   svg.innerHTML=html;
   wirePointHits(svg, tap);
+  wirePlaneTap(svg, st, ()=>Pj, redraw);
   renderPanel();
   $('#ovTop').textContent=st.uiMode==='exam'?'Exam · figure only':modePrefix(st)+(st.answered?'Complete':`Step ${Math.min(st.step+1,4)} · ∠RPS`);
 }

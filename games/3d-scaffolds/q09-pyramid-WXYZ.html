@@ -133,7 +133,7 @@ a{color:var(--blue)}
   </div>
   <div class="panel" id="panel"></div>
 </div>
-<script src="scaffold-core.js?v=6"></script>
+<script src="scaffold-core.js?v=7"></script>
 <script>
 /* core: scaffold-core.js */
 (()=>{
@@ -143,6 +143,7 @@ const st={
   pts:{W:W.slice(),X:X.slice(),Y:Y.slice(),Z:Z.slice()},
   kind:{W:'v',X:'v',Y:'v',Z:'v'},
   edges:[['W','X'],['X','Y'],['Y','W'],['W','Z'],['X','Z'],['Y','Z']],
+  planes:[['W','X','Y'],['X','Y','Z'],['W','X','Z'],['W','Y','Z']],
   yaw:-0.4,pitch:0.55, part:0, hints:0, cons:[], tool:null, tsel:[], uiMode:'explore', joins:[], measured:null,
   showSol:false, msg:null, a:null, claim:null, showDih:false
 };
@@ -181,6 +182,7 @@ function redraw(){
 
   svg.innerHTML=html;
   wirePointHits(svg, tap);
+  wirePlaneTap(svg, st, ()=>P, redraw);
   renderPanel();
   $('#ovTop').textContent=st.uiMode==='exam'?'Exam · figure only':modePrefix(st)+(st.a?(st.claim?'Complete':'Part (b) · dihedral claim'):'Part (a) · ∠XWY');
 }

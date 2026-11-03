@@ -133,7 +133,7 @@ a{color:var(--blue)}
   </div>
   <div class="panel" id="panel"></div>
 </div>
-<script src="scaffold-core.js?v=6"></script>
+<script src="scaffold-core.js?v=7"></script>
 <script>
 /* core: scaffold-core.js */
 (()=>{
@@ -146,6 +146,7 @@ const st={
   pts:{A:A.slice(),B:B.slice(),C:C.slice(),D:D.slice(),E:E.slice(),F:F.slice()},
   kind:{A:'v',B:'v',C:'v',D:'a',E:'a',F:'a'},
   edges:[['A','B'],['B','C'],['C','A'],['A','D'],['C','E'],['C','F'],['D','E'],['E','F'],['B','F'],['B','D']],
+  planes:[['A','B','C'],['A','B','F'],['B','D','F'],['D','E','F']],
   yaw:-0.65,pitch:0.5, part:0, hints:0, cons:[], tool:null, tsel:[], uiMode:'explore', joins:[], measured:null,
   showSol:false, msg:null,
   a:null, b1:null, b2:null, b3:null, b4:null
@@ -191,6 +192,7 @@ function redraw(){
 
   svg.innerHTML=html;
   wirePointHits(svg, tap);
+  wirePlaneTap(svg, st, ()=>P, redraw);
   renderPanel();
   const labels=['Part (a) · AC','(b)(i) CF','(b)(ii) area ABF','(b)(iii) inclination','(b)(iv) claim'];
   let idx=0; if(st.a) idx=1; if(st.b1) idx=2; if(st.b2) idx=3; if(st.b3) idx=4;

@@ -133,7 +133,7 @@ a{color:var(--blue)}
   </div>
   <div class="panel" id="panel"></div>
 </div>
-<script src="scaffold-core.js?v=6"></script>
+<script src="scaffold-core.js?v=7"></script>
 <script>
 /* core: scaffold-core.js */
 (()=>{
@@ -153,6 +153,7 @@ const st={
   pts:{P:P.slice(),Q:Q.slice(),R:R.slice()},
   kind:{P:'v',Q:'v',R:'v'},
   edges:[['P','Q'],['Q','R'],['R','P']],
+  planes:[['P','Q','R']],
   yaw:-0.4,pitch:0.55, part:0, hints:0, cons:[], tool:null, tsel:[], uiMode:'explore', joins:[], measured:null,
   unlocked:false, showSol:false, msg:null,
   a1:null, a2:null, claim:null, showM:false, showFeet:false
@@ -206,6 +207,7 @@ function redraw(){
 
   svg.innerHTML=html;
   wirePointHits(svg, tap);
+  wirePlaneTap(svg, st, ()=>PP, redraw);
   renderPanel();
   $('#ovTop').textContent=st.uiMode==='exam'?'Exam · figure only':modePrefix(st)+(PARTS[Math.min(st.part,2)].title);
 }
@@ -220,7 +222,7 @@ function renderPanel(){
   <div class="card"><div class="eyebrow"><span>Type A · DSE 2022-18</span><span>Long</span></div>
   <p class="qtext">Triangular card <span class="mth">PQR</span> with <span class="mth">PQ</span> on the ground. PQ = 30 cm, PR = 25 cm, ∠QPR = 95°.</p></div>`;
   html+=modeToggleHtml(st);
-  if(st.uiMode!=='exam') html+=exploreToolsHtml(st, ['join','line','ray','mid','foot','footp','onedge','par','meet','tri','dist','angle','centroid']);
+  if(st.uiMode!=='exam') html+=exploreToolsHtml(st, ['onplane','join','line','ray','mid','foot','footp','onedge','par','meet','tri','dist','angle','centroid']);
   if(st.msg) html+=`<div class="msg ${st.msg.k}">${st.msg.t}</div>`;
 
   // Part a i

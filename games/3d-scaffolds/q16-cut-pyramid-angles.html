@@ -133,7 +133,7 @@ a{color:var(--blue)}
   </div>
   <div class="panel" id="panel"></div>
 </div>
-<script src="scaffold-core.js?v=6"></script>
+<script src="scaffold-core.js?v=7"></script>
 <script>
 /* core: scaffold-core.js */
 (()=>{
@@ -143,6 +143,7 @@ const st={
   pts:{A:A.slice(),B:B.slice(),C:C.slice(),D:D.slice(),V:Vv.slice(),P:P.slice(),Q:Q.slice()},
   kind:{A:'v',B:'v',C:'v',D:'v',V:'v',P:'a',Q:'a'},
   edges:[['A','B'],['B','C'],['C','D'],['D','A'],['V','A'],['V','B'],['V','C'],['V','D'],['P','B'],['P','Q'],['Q','C'],['B','C']],
+  planes:[['A','B','C','D'],['P','B','C','Q'],['V','A','B'],['V','B','C'],['V','C','D'],['V','D','A']],
   yaw:-0.6,pitch:0.5, hints:0, cons:[], tool:null, tsel:[], uiMode:'explore', joins:[], measured:null,
   showSol:false, msg:null, a1:null, a2:null, cmp:null, showCut:true, showAlpha:false
 };
@@ -182,6 +183,7 @@ function redraw(){
 
   svg.innerHTML=html;
   wirePointHits(svg, tap);
+  wirePlaneTap(svg, st, ()=>Pj, redraw);
   renderPanel();
   $('#ovTop').textContent=st.uiMode==='exam'?'Exam · figure only':modePrefix(st)+(st.cmp?'Complete':(st.a2?'Compare α & β':(st.a1?'Find α':'Find AP')));
 }

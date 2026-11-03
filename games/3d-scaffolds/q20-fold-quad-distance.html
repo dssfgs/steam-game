@@ -133,7 +133,7 @@ a{color:var(--blue)}
   </div>
   <div class="panel" id="panel"></div>
 </div>
-<script src="scaffold-core.js?v=6"></script>
+<script src="scaffold-core.js?v=7"></script>
 <script>
 /* core: scaffold-core.js */
 (()=>{
@@ -143,6 +143,7 @@ const st={
   pts:{P:P.slice(),Q:Q.slice(),R:R.slice(),S:S.slice()},
   kind:{P:'v',Q:'v',R:'v',S:'v'},
   edges:[['P','Q'],['Q','S'],['S','P'],['Q','R'],['R','S']],
+  planes:[['P','Q','S'],['Q','R','S']],
   yaw:-0.85,pitch:0.4, hints:0, cons:[], tool:null, tsel:[], uiMode:'explore', joins:[], measured:null,
   showSol:false, msg:null, a1:null, a2:null, claim:null, showH:false
 };
@@ -184,6 +185,7 @@ function redraw(){
 
   svg.innerHTML=html;
   wirePointHits(svg, tap);
+  wirePlaneTap(svg, st, ()=>Pj, redraw);
   renderPanel();
   $('#ovTop').textContent=st.uiMode==='exam'?'Exam · figure only':modePrefix(st)+(st.claim!==null?'Complete':(st.a2?'Claim PX > 8':(st.a1?'Distance R→PQS':'QS & ∠RQS')));
 }

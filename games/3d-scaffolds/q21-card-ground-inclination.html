@@ -133,7 +133,7 @@ a{color:var(--blue)}
   </div>
   <div class="panel" id="panel"></div>
 </div>
-<script src="scaffold-core.js?v=6"></script>
+<script src="scaffold-core.js?v=7"></script>
 <script>
 /* core: scaffold-core.js */
 (()=>{
@@ -143,6 +143,7 @@ const st={
   pts:{P:P.slice(),Q:Q.slice(),R:R.slice(),S:S.slice()},
   kind:{P:'v',Q:'v',R:'v',S:'v'},
   edges:[['P','Q'],['Q','R'],['R','S'],['S','P'],['P','R']],
+  planes:[['P','Q','R','S']],
   yaw:-0.5,pitch:0.55, hints:0, cons:[], tool:null, tsel:[], uiMode:'explore', joins:[], measured:null,
   showSol:false, msg:null, a1:null, a2:null, a3:null, claim:null
 };
@@ -178,6 +179,7 @@ function redraw(){
 
   svg.innerHTML=html;
   wirePointHits(svg, tap);
+  wirePlaneTap(svg, st, ()=>Pj, redraw);
   renderPanel();
   $('#ovTop').textContent=st.uiMode==='exam'?'Exam · figure only':modePrefix(st)+(st.claim!==null?'Complete':(st.a3?'RS inclination claim':(st.a2?'Height of P':'RS & area')));
 }

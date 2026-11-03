@@ -133,7 +133,7 @@ a{color:var(--blue)}
   </div>
   <div class="panel" id="panel"></div>
 </div>
-<script src="scaffold-core.js?v=6"></script>
+<script src="scaffold-core.js?v=7"></script>
 <script>
 /* core: scaffold-core.js */
 (()=>{
@@ -143,6 +143,7 @@ const st={
   kind:Object.fromEntries('ABCDEFGH'.split('').map(k=>[k,'v'])),
   edges:[['H','C'],['C','B'],['B','G'],['G','H'],['E','D'],['D','A'],['A','F'],['F','E'],['H','E'],['C','D'],['B','A'],['G','F'],
          ['A','G'],['A','H'],['F','G'],['F','H'],['G','H']],
+  planes:[['A','F','G'],['A','F','H'],['F','G','H'],['A','B','G','F'],['A','D','E','F'],['A','B','C','D'],['E','F','G','H']],
   yaw:-0.7,pitch:0.45, step:0, hints:0, cons:[], tool:null, tsel:[], uiMode:'explore', joins:[], measured:null,
   unlocked:false, answered:false, picked:null, showSol:false, msg:null,
   common1:null, common2:null, showAlpha:false, showBeta:false
@@ -206,6 +207,7 @@ function redraw(){
 
   svg.innerHTML=html;
   wirePointHits(svg, tap);
+  wirePlaneTap(svg, st, ()=>P, redraw);
   renderPanel();
   $('#ovTop').textContent=st.uiMode==='exam'?'Exam · figure only':modePrefix(st)+(st.answered?'Complete':`Step ${Math.min(st.step+1,4)} · cube dihedral`);
 }

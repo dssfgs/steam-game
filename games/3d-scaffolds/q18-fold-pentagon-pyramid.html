@@ -133,7 +133,7 @@ a{color:var(--blue)}
   </div>
   <div class="panel" id="panel"></div>
 </div>
-<script src="scaffold-core.js?v=6"></script>
+<script src="scaffold-core.js?v=7"></script>
 <script>
 /* core: scaffold-core.js */
 (()=>{
@@ -144,6 +144,7 @@ const st={
   pts:{A:A.slice(),B:B.slice(),C:C.slice(),D:D.slice()},
   kind:{A:'v',B:'v',C:'v',D:'v'},
   edges:[['A','B'],['B','C'],['C','D'],['D','A'],['A','C'],['B','D']],
+  planes:[['A','B','C'],['A','C','D'],['B','C','D'],['A','B','C','D','Bp']],
   yaw:-0.9,pitch:0.55, mode:'fold', hints:0, cons:[], tool:null, tsel:[], uiMode:'explore', joins:[], measured:null,
   showSol:false, msg:null, a1:null, a2:null, a3:null, vol:null
 };
@@ -200,6 +201,7 @@ function redraw(){
 
   svg.innerHTML=html;
   wirePointHits(svg, tap);
+  wirePlaneTap(svg, st, ()=>Pj, redraw);
   renderPanel();
   $('#ovTop').textContent=st.uiMode==='exam'?'Exam · figure only':modePrefix(st)+(st.vol?'Complete':(st.mode==='flat'?'Net ABCDB′':'Folded pyramid ABCD'));
 }

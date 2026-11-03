@@ -133,7 +133,7 @@ a{color:var(--blue)}
   </div>
   <div class="panel" id="panel"></div>
 </div>
-<script src="scaffold-core.js?v=6"></script>
+<script src="scaffold-core.js?v=7"></script>
 <script>
 /* core: scaffold-core.js */
 (()=>{
@@ -143,6 +143,7 @@ const st={
   pts:{A:A.slice(),B:B.slice(),C:C.slice(),M:M.slice(),N:N.slice()},
   kind:{A:'v',B:'v',C:'v',M:'a',N:'a'},
   edges:[['A','B'],['B','C'],['C','A'],['B','M'],['A','M'],['C','M'],['M','N']],
+  planes:[['A','B','C'],['B','C','M']],
   yaw:-0.7,pitch:0.45, hints:0, cons:[], tool:null, tsel:[], uiMode:'explore', joins:[], measured:null,
   showSol:false, msg:null, a1:null, a2:null, a3:null, claim:null, showN:true
 };
@@ -185,6 +186,7 @@ function redraw(){
 
   svg.innerHTML=html;
   wirePointHits(svg, tap);
+  wirePlaneTap(svg, st, ()=>Pj, redraw);
   renderPanel();
   $('#ovTop').textContent=st.uiMode==='exam'?'Exam · figure only':modePrefix(st)+(st.claim!==null?'Complete':(st.a3?'Claim ∠ANM':(st.a1?'Folded AC':'Flat ∠BCM & CM')));
 }

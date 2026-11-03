@@ -116,6 +116,138 @@ function wirePointHits(svg, tapFn){
   });
 }
 
+function clientToSvgXY(svg, clientX, clientY){
+  const r=svg.getBoundingClientRect();
+  const w=Math.max(1,r.width), h=Math.max(1,r.height);
+  return {
+    x:(clientX-r.left)*(svg.clientWidth||w)/w,
+    y:(clientY-r.top)*(svg.clientHeight||h)/h
+  };
+}
+
+function barycentric2d(px,py,ax,ay,bx,by,cx,cy){
+  const v0x=bx-ax, v0y=by-ay, v1x=cx-ax, v1y=cy-ay, v2x=px-ax, v2y=py-ay;
+  const den=v0x*v1y-v1x*v0y;
+  if(Math.abs(den)<1e-12) return null;
+  const v=(v2x*v1y-v1x*v2y)/den;
+  const w=(v0x*v2y-v2x*v0y)/den;
+  const u=1-v-w;
+  return {u,v,w};
+}
+
+/** Map a screen tap to a 3D point on the front-most plane under the cursor. */
+function screenToPlanePoint(st, svgX, svgY, projMap){
+  const planes=st.planes||st.faces||[];
+  if(!planes.length||!projMap) return null;
+  let best=null;
+  for(const face of planes){
+    if(!face||face.length<3) continue;
+    const tris=[];
+    for(let i=1;i<face.length-1;i++) tris.push([face[0],face[i],face[i+1]]);
+    for(const [na,nb,nc] of tris){
+      if(!(na in st.pts&&nb in st.pts&&nc in st.pts)) continue;
+      const A=projMap[na], B=projMap[nb], C=projMap[nc];
+      if(!A||!B||!C) continue;
+      const bc=barycentric2d(svgX,svgY,A[0],A[1],B[0],B[1],C[0],C[1]);
+      if(!bc) continue;
+      const eps=-1e-4;
+      if(bc.u<eps||bc.v<eps||bc.w<eps) continue;
+      const area2=Math.abs((B[0]-A[0])*(C[1]-A[1])-(C[0]-A[0])*(B[1]-A[1]));
+      if(area2<4) continue; // degenerate / edge-on
+      const X=V.add(V.add(V.mul(st.pts[na],bc.u),V.mul(st.pts[nb],bc.v)),V.mul(st.pts[nc],bc.w));
+      const depth=((A[2]||0)+(B[2]||0)+(C[2]||0))/3;
+      if(!best || depth<best.depth-1e-6 || (Math.abs(depth-best.depth)<1e-6 && area2>best.area)){
+        best={X, depth, area:area2, face:face.slice(), tri:[na,nb,nc]};
+      }
+    }
+  }
+  return best;
+}
+
+function placePointOnPlane(st, X, faceNames){
+  for(const k in st.pts){
+    if(V.len(V.sub(st.pts[k],X))<0.08) return {name:k, existed:true};
+  }
+  const name=POOL.split('').find(c=>!(c in st.pts));
+  if(!name) return {err:'No letters left. Undo a construction.'};
+  st.pts[name]=X;
+  st.kind[name]='c';
+  const label=(faceNames&&faceNames.length)?faceNames.join(''):'';
+  st.cons.push({name, type:'onplane', args:(faceNames||[]).slice(), desc:`point on plane${label?' '+label:''}`, segs:[]});
+  return {name};
+}
+
+/**
+ * GeoGebra-like: short-tap empty figure → drop a free point on a shaded plane.
+ * Wired once per SVG; getProjMap refreshed each redraw via st._getProjMap.
+ */
+function wirePlaneTap(svg, st, getProjMap, redraw){
+  if(!svg) return;
+  st._getProjMap=getProjMap;
+  st._planeRedraw=redraw;
+  if(svg.dataset.planeTap==='1') return;
+  svg.dataset.planeTap='1';
+  const THRESH=8;
+  let pending=null; // {x,y}
+  let lastTap=0;
+  const pt=ev=>(ev.changedTouches&&ev.changedTouches[0])||(ev.touches&&ev.touches[0])||ev;
+  const isHit=t=>t&&t.closest&&t.closest('.hit');
+  const onDown=ev=>{
+    if(st.uiMode==='exam') return;
+    const t=ev.target;
+    if(isHit(t)){ pending=null; return; }
+    const p=pt(ev);
+    pending={x:p.clientX,y:p.clientY};
+  };
+  const onUp=ev=>{
+    if(!pending) return;
+    const start=pending; pending=null;
+    if(st.uiMode==='exam') return;
+    if(isHit(ev.target)) return;
+    const p=pt(ev);
+    if(Math.hypot(p.clientX-start.x, p.clientY-start.y)>THRESH) return;
+    const now=Date.now();
+    if(now-lastTap<40) return;
+    lastTap=now;
+    const getMap=st._getProjMap;
+    const rd=st._planeRedraw||redraw;
+    if(typeof getMap!=='function') return;
+    const projMap=getMap();
+    if(!projMap) return;
+    const xy=clientToSvgXY(svg, p.clientX, p.clientY);
+    const hit=screenToPlanePoint(st, xy.x, xy.y, projMap);
+    if(!hit) return;
+    if(ev.cancelable) ev.preventDefault();
+    const r=placePointOnPlane(st, hit.X, hit.face);
+    if(r.err){ toast(r.err,'bad'); return; }
+    const collecting=st.tool && st.tool!=='onplane' && TOOLS[st.tool] && TOOLS[st.tool].n>0;
+    if(r.existed){
+      if(collecting){ handleToolTap(st, r.name, rd); }
+      else toast('Already '+r.name);
+      return;
+    }
+    if(collecting){
+      // keep tool howto; selection advances via handleToolTap
+      handleToolTap(st, r.name, rd);
+      return;
+    }
+    if(st.tool==='onplane') st.tool=null;
+    toast('New '+r.name+' on plane','good');
+    rd();
+  };
+  const onCancel=()=>{pending=null;};
+  if(window.PointerEvent){
+    svg.addEventListener('pointerdown', onDown);
+    svg.addEventListener('pointerup', onUp);
+    svg.addEventListener('pointercancel', onCancel);
+  }else{
+    svg.addEventListener('mousedown', onDown);
+    svg.addEventListener('mouseup', onUp);
+    svg.addEventListener('touchstart', onDown, {passive:true});
+    svg.addEventListener('touchend', onUp);
+  }
+}
+
 const TOOLS={
   foot:{n:3,sym:'⊥',name:'Foot on a line',sub:'point → line',how:'Tap the point, then 2 points on the line.'},
   footp:{n:4,sym:'⊥',name:'Foot on a plane',sub:'point → plane',how:'Tap the point, then 3 points in the plane.'},
@@ -130,10 +262,11 @@ const TOOLS={
   dist:{n:2,sym:'| |',name:'Distance',sub:'length |AB|',how:'Tap 2 points to measure the length.'},
   tri:{n:3,sym:'△',name:'Triangle',sub:'3 vertices',how:'Tap 3 points to draw △ABC.'},
   onedge:{n:3,sym:'·',name:'Point on edge',sub:'label a point on AB',how:'Tap endpoint A, endpoint B, then a guide point near where you want it (projection onto AB).'},
+  onplane:{n:0,sym:'·',name:'Point on plane',sub:'tap a face',how:'Tap anywhere on a shaded face to drop a point.'},
   angle:{n:3,sym:'∠',name:'Measure angle',sub:'3 points A–V–B',how:'Tap arm end, vertex, other arm end. Shows the angle at the vertex.'}
 };
 
-const EXPLORE_TOOL_KEYS=['join','line','ray','mid','foot','footp','par','meet','onedge','tri','dist','angle','centroid'];
+const EXPLORE_TOOL_KEYS=['onplane','join','line','ray','mid','foot','footp','par','meet','onedge','tri','dist','angle','centroid'];
 
 function construct(type,names,pts){
   if(type==='seg') type='join';
@@ -531,8 +664,9 @@ function wireDualMode(st, redraw, extra){
 
 function handleToolTap(st, n, redraw){
   if(!st.tool) return false;
-  const i=st.tsel.indexOf(n); if(i>=0) st.tsel.splice(i,1); else st.tsel.push(n);
   const T=TOOLS[st.tool];
+  if(!T || !T.n) return false; // onplane / n=0 → use plane tap
+  const i=st.tsel.indexOf(n); if(i>=0) st.tsel.splice(i,1); else st.tsel.push(n);
   if(st.tsel.length===T.n){
     const r=ensurePoint(st.tool, st.tsel, st);
     if(r.err) toast(r.err,'bad');

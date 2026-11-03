@@ -133,7 +133,7 @@ a{color:var(--blue)}
   </div>
   <div class="panel" id="panel"></div>
 </div>
-<script src="scaffold-core.js?v=6"></script>
+<script src="scaffold-core.js?v=7"></script>
 <script>
 /* core: scaffold-core.js */
 (()=>{
@@ -144,6 +144,7 @@ const st={
   pts:{A:A.slice(),B:B.slice(),C:C.slice(),D:D.slice(),V:Vv.slice(),P:P.slice(),Q:Q.slice(),M:M.slice(),N:N.slice()},
   kind:{A:'v',B:'v',C:'v',D:'v',V:'v',P:'a',Q:'a',M:'a',N:'a'},
   edges:[['A','B'],['B','C'],['C','D'],['D','A'],['V','A'],['V','B'],['V','C'],['V','D'],['P','Q'],['M','N'],['P','M'],['Q','N']],
+  planes:[['A','B','C','D'],['P','Q','N','M'],['V','A','B'],['V','B','C'],['V','C','D'],['V','D','A']],
   yaw:-0.55,pitch:0.48, hints:0, cons:[], tool:null, tsel:[], uiMode:'explore', joins:[], measured:null,
   showSol:false, msg:null, a1:null, claim:null, showTrap:true
 };
@@ -182,6 +183,7 @@ function redraw(){
 
   svg.innerHTML=html;
   wirePointHits(svg, tap);
+  wirePlaneTap(svg, st, ()=>Pj, redraw);
   renderPanel();
   $('#ovTop').textContent=st.uiMode==='exam'?'Exam · figure only':modePrefix(st)+(st.claim!==null?'Complete':(st.a1?'Trapezium PQNM claim':'Find ∠VBA'));
 }

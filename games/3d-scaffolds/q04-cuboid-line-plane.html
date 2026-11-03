@@ -133,7 +133,7 @@ a{color:var(--blue)}
   </div>
   <div class="panel" id="panel"></div>
 </div>
-<script src="scaffold-core.js?v=6"></script>
+<script src="scaffold-core.js?v=7"></script>
 <script>
 /* core: scaffold-core.js */
 (()=>{
@@ -146,6 +146,7 @@ const st={
   pts:{A:A.slice(),B:B.slice(),C:C.slice(),D:D.slice(),E:E.slice(),F:F.slice(),G:G.slice(),H:H.slice(),X:X.slice()},
   kind:Object.fromEntries('ABCDEFGHX'.split('').map(k=>[k,k==='X'?'a':'v'])),
   edges:[['A','B'],['B','C'],['C','D'],['D','A'],['E','F'],['F','G'],['G','H'],['H','E'],['A','F'],['B','G'],['C','H'],['D','E'],['B','X'],['D','X'],['E','X']],
+  planes:[['A','B','G','F'],['A','B','C','D'],['E','F','G','H'],['A','D','E','F'],['B','C','H','G'],['D','C','H','E']],
   yaw:-0.55,pitch:0.4, step:0, hints:0, cons:[], tool:null, tsel:[], uiMode:'explore', joins:[], measured:null,
   unlocked:false, answered:false, picked:null, showSol:false, msg:null, showN:false, showPerp:false
 };
@@ -205,6 +206,7 @@ function redraw(){
 
   svg.innerHTML=html;
   wirePointHits(svg, tap);
+  wirePlaneTap(svg, st, ()=>P, redraw);
   renderPanel();
   $('#ovTop').textContent=st.uiMode==='exam'?'Exam · figure only':modePrefix(st)+(st.answered?'Complete':`Step ${Math.min(st.step+1,4)} · cuboid line–plane`);
 }
