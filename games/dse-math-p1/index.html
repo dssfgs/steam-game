@@ -93,6 +93,7 @@ function uuid(){
 function nowISO(){ return new Date().toISOString(); }
 function esc(s){ return String(s==null?'':s).replace(/[&<>\"]/g,function(c){return {'&':'&','<':'<','>':'>','\"':'"'}[c];}); }
 function papers(){ var custom=LS(K.papers,[]); var map={}; PAPERS.forEach(function(p){map[p.year]=p;}); custom.forEach(function(p){map[p.year]=p;}); return Object.keys(map).map(Number).sort(function(a,b){return b-a;}).map(function(y){return map[y];}); }
+function paperLabel(p){ if(!p) return ''; return (p.paperName && p.paperName!=='卷一（傳統題）') ? p.paperName : (p.year+' 卷一'); }
 function getPaper(year){ return papers().filter(function(p){return +p.year===+year;})[0]; }
 function clampScore(v,full){ if(!isFinite(v)||v<0) return 0; return Math.min(full, Math.round(v*2)/2); }
 function estimateGrade(pct,cut){ if(!cut) return 'U'; for(var i=0;i<GRADE_DESC.length;i++){ var g=GRADE_DESC[i]; if(g==='U') continue; var v=cut[g]; if(v!=null && pct+1e-9>=v) return g; } return 'U'; }
@@ -266,7 +267,7 @@ window.commitStu=commitStu;
 function pgNew(m){
   var d=draft(); var list=papers();
   m.innerHTML=studentFieldsHTML()+'<div class="card"><h2>② 選擇年份</h2><label>試卷</label><select id="yr"><option value="">— 請選擇 —</option>'+
-    list.map(function(p){return '<option value="'+p.year+'"'+(d.year===p.year?' selected':'')+'>'+p.year+' 卷一'+(p.custom?'（自訂）':'')+' · '+p.questions.length+' 題 / '+p.fullMarks+' 分</option>';}).join('')+
+    list.map(function(p){return '<option value="'+p.year+'"'+(d.year===p.year?' selected':'')+'>'+esc(paperLabel(p))+(p.custom?'（自訂）':'')+' · '+p.questions.length+' 題 / '+p.fullMarks+' 分</option>';}).join('')+
     '</select><div class="row" style="margin-top:10px">'+
     '<label class="badge" style="padding:8px 12px"><input type="radio" name="md" value="questions"'+(d.mode==='questions'?' checked':'')+'> 逐題輸入</label>'+
     '<label class="badge" style="padding:8px 12px"><input type="radio" name="md" value="sections"'+(d.mode==='sections'?' checked':'')+'> 只填分部總分</label></div>'+
@@ -297,7 +298,7 @@ function pgNew(m){
         var sum=items.reduce(function(a,q){return a+q.fullMarks;},0);
         var got=items.reduce(function(a,q){return a+(d.scores[q.q]==null?0:d.scores[q.q]);},0);
         var n=items.filter(function(q){return d.scores[q.q]!=null;}).length;
-        html+='<div class="card"><h2>'+paper.year+' '+SECTION_LABEL[sec]+' <span class="muted" id="secSum-'+sec+'">已輸入 '+got+' / '+sum+'（'+n+'/'+items.length+' 題）</span></h2>';
+        html+='<div class="card"><h2>'+esc(paperLabel(paper))+' '+SECTION_LABEL[sec]+' <span class="muted" id="secSum-'+sec+'">已輸入 '+got+' / '+sum+'（'+n+'/'+items.length+' 題）</span></h2>';
         items.forEach(function(q){
           var sc=d.scores[q.q]; sc = (sc===undefined? null: sc);
           html+='<div class="qrow"><div><b>Q'+q.q+'</b> <span class="muted">'+esc(q.topic)+'</span><div class="muted">滿分 '+q.fullMarks+(q.hkAvg!=null?' 全港平均 '+q.hkAvg:'')+'</div>'+
@@ -440,7 +441,7 @@ function saveAttempt(){
   updateWeak(rec, paper);
   saveDraft({year:paper.year,mode:d.mode,scores:{},sections:{},notes:'',practicedOn:d.practicedOn});
   if(rec.syncStatus==='pending') enqueue(rec.attemptId);
-  toast('已儲存 '+paper.year+' 卷一　'+c.raw+'/'+paper.fullMarks+'　'+c.grade);
+  toast('已儲存 '+paperLabel(paper)+'　'+c.raw+'/'+paper.fullMarks+'　'+c.grade);
   syncOnce(); SS('hkdse_p1_last', rec.attemptId); go('result');
 }
 function updateWeak(rec,paper){
@@ -513,7 +514,7 @@ function pgResult(m){
     });
     qhtml+='</table>';
   } else qhtml='<p class="muted">此筆只記錄分部總分。</p>';
-  m.innerHTML='<div class="card"><h2>📊 計算結果　'+a.year+' 卷一</h2>'+
+  m.innerHTML='<div class="card"><h2>📊 計算結果　'+esc(paperLabel(paper||{year:a.year,paperName:a.paperName}))+'</h2>'+
     '<p>'+(stu?('<b>'+esc(stu.form+' '+stu.cls)+'</b>　學號 '+stu.classNo+(stu.displayName?'　'+esc(stu.displayName):'')):'未填學生資料')+'</p>'+
     '<div class="grid"><div><div class="muted">得分</div><b style="font-size:22px">'+a.rawScore+' / '+a.totalMarks+'</b></div>'+
     '<div><div class="muted">百分比</div><b style="font-size:22px">'+a.percentage+'%</b></div>'+
@@ -657,7 +658,7 @@ window.toggleWeak=toggleWeak; window.markAllWeak=markAllWeak;
 function pgPapers(m){
   var list=papers();
   m.innerHTML='<div class="card"><h2>試卷資料（'+list.length+' 年）</h2><p class="muted">內建 2012–2026 各題滿分與課題。不含試題原文。</p><table><tr><th>年份</th><th>題數</th><th>滿分</th><th>臨界</th></tr>'+
-    list.map(function(p){return '<tr><td>'+p.year+(p.custom?'（自訂）':'')+'</td><td>'+p.questions.length+'</td><td>'+p.fullMarks+'</td><td>'+esc(p.cutoffVersion||'')+'</td></tr>';}).join('')+'</table></div>';
+    list.map(function(p){return '<tr><td>'+esc(paperLabel(p))+(p.custom?'（自訂）':'')+'</td><td>'+p.questions.length+'</td><td>'+p.fullMarks+'</td><td>'+esc(p.cutoffVersion||'')+'</td></tr>';}).join('')+'</table></div>';
 }
 
 function pgBackup(m){
