@@ -583,6 +583,43 @@ window.APP_CONFIG = {
       },
       cutoffVersion: "2026-P2-estimate-v1-from-historical-avg",
       note: "答案取自 mathseasy.hk 2026 P2 題解；臨界分數為 2021–2025 歷史平均推算之粗略估算，並非考評局官方界線。"
+    },
+
+    /* ==========================================================
+       26-27 F6 1st mock 卷二（year key 2627）
+       答案來源：F6 1st mock 成績表標準答案
+       臨界分數：暫時借用 2023 官方百分比（與卷一 mock 相同做法）
+       ========================================================== */
+    {
+      year: 2627,
+      paperId: "mock-26-27-f6-1st",
+      paperName: "26-27 F6 1st mock",
+      mcq: {
+        questionCount: 45,
+        options: ["A", "B", "C", "D"],
+        marksPerQuestion: 1,
+        allowMultiple: false,
+        answers: [
+          "A","D","B","C","B","D","B","B","B","B",             // Q1–10
+          "A","D","D","A","A","A","C","B","D","C",             // Q11–20
+          "A","C","C","D","D","D","A","C","C","A",             // Q21–30
+          "A","A","D","C","B","A","B","A","C","D",             // Q31–40
+          "D","C","C","B","B"                                 // Q41–45
+        ]
+      },
+      writtenSections: [],
+      mcqWeight: 1,
+      cutoffs: {
+        "5**": 90,
+        "5*": 82,
+        "5": 74,
+        "4": 59,
+        "3": 47,
+        "2": 31,
+        "1": 20
+      },
+      cutoffVersion: "mock-provisional-from-2023",
+      note: "26-27 F6 1st mock 卷二；答案取自成績表標準答案；臨界分數暫時借用 2023，僅供粗略估算，並非官方界線。"
     }
 
     /* ----------------------------------------------------------

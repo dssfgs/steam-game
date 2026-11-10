@@ -3,7 +3,7 @@
  * 先用快取即時渲染，背景抓取新版寫回快取，下次開啟生效。
  * 取得新版時以 postMessage 通知頁面顯示 toast (D-011)。
  */
-const CACHE_NAME = 'hkdse-math-p2-v1';
+const CACHE_NAME = 'hkdse-math-p2-v2';
 const PRECACHE = [
   './',
   './index.html',
